@@ -1,0 +1,11 @@
+<div>
+    <div class="clearfix">
+        <span class="h4">{{title}}</span>
+        <div class="btn-group pull-right" role="group" aria-label="...">
+            <button *ngFor="let action of actions" type="button" class="btn btn-default" (click)="onAction(action)">{{action.name}}</button>
+        </div>  
+    </div>
+  
+    <table id="jqGrid"></table>
+    <div id="jqGridPager"></div>
+</div>

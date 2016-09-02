@@ -3,3 +3,9 @@
 *.iws
 .idea/
 target/
+*.classpath
+*.project
+src/main/webapp/angularrc5/node_modules/
+src/main/webapp/dist/assets/js/shared/component/jqgrid.component.js.map
+src/main/webapp/dist/
+.settings/

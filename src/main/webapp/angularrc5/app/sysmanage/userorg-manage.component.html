@@ -1,0 +1,12 @@
+<div class="container-fluid">
+  <div class="row">
+  	<div class="col-sm-3">
+  		<my-panel title="机构树" [actions]="_orgtree_actions" style="height:100%">
+				<my-ztree #panelcontent_ref #orgtree_ref treeId="orgtree" rootNodeName="机构" [actions]="_orgtree_actions" dataUrl="tree/orgtreenojob" (zevent)="onZtreeAction($event)"></my-ztree>			
+  		</my-panel>
+			<my-modal modalId="orgmodal" [actions]="_orgmodal_actions" (modalevent)="onModalAction($event)">
+				<my-orginfo #modalcontent_ref [model]="_model.org" [params]="_orginfo_params"></my-orginfo>
+			</my-modal>			
+    </div>
+  </div>
+</div>
