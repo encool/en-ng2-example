@@ -8,6 +8,8 @@ import { TopnavComponent } from './topnav.component';
 import { MenusidebarComponent } from './menusidebar.component'
 import { routing,appRoutingProviders } from './app.routing';
 
+import { SecurityService } from './service/security.service'
+import { UserService } from './service/user.service'
 import { JobService } from './service/job.service'
 import { MenuService } from './service/menu.service'
 import { OrgService } from './service/org.service'
@@ -39,7 +41,10 @@ import { ModalService } from './service/modal.service'
       MenuService,
       OrgService,
       JobService,
-      ModalService
+      ModalService,
+      UserService,
+      { provide: 'Window',  useValue: window },
+      SecurityService
   ]
 })
 export class AppModule { }

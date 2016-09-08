@@ -7,12 +7,31 @@ import { FieldBase } from './field-base';
 export class FieldControlService {
   constructor() { }
 
-  toFormGroup(fields: FieldBase<any>[] ) {
+  toFormGroup(fields: FieldBase<any>[]) {
     let group: any = {};
 
     fields.forEach(field => {
-      group[field.key] = field.required ? new FormControl(field.value || '', Validators.required)
-                                              : new FormControl(field.value || '');
+      var validators = [];
+      var asyncValidators = [];
+      if(field.required){
+        validators.push(Validators.required)
+      }
+      if (field.validator) {
+        validators.push(field.validator)
+      }
+      if (field.asyncValidator) {
+        asyncValidators.push(field.asyncValidator)
+      }
+      if (validators.length > 0 && asyncValidators.length > 0) {
+        group[field.key] = new FormControl(field.value || '', validators, asyncValidators)
+      } else if (validators.length > 0) {
+        group[field.key] = new FormControl(field.value || '', validators)
+      } else if (asyncValidators.length > 0) {
+        group[field.key] = new FormControl(field.value || '', null, asyncValidators)
+      } else {
+        group[field.key] = new FormControl(field.value || '')
+      }
+
     });
     return new FormGroup(group);
   }

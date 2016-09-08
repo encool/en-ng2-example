@@ -17,8 +17,8 @@ export class MyModalComponent implements OnInit {
     @Output() modalevent = new EventEmitter();
 
     @Input() actions:Array<ModalAction> = [
-        new ModalAction("cancel","取消",1,true),
-        new ModalAction("save","保存",2) 
+        new ModalAction({ key: "cancel", name: "取消", order: 1, cancel: true }),
+        new ModalAction({ key: "save", name: "保存", order: 2 })
     ]
     // @Input() set actions(actions:Array<BaseAction>){debugger
     //     // actions == undefined?[]:actions
@@ -52,7 +52,7 @@ export class MyModalComponent implements OnInit {
     }
 
     setDataDismiss(action:ModalAction){
-        return action.isCancel?"modal":""
+        return action.cancel?"modal":""
     }
 
     ngAfterContentInit() {

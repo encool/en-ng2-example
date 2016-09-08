@@ -1,26 +1,19 @@
-import { Component ,OnInit, ViewChild, ViewContainerRef, Compiler } from '@angular/core';
+import { Component ,OnInit, ViewChild, ViewContainerRef, Compiler, Type } from '@angular/core';
 import { Headers, Http, URLSearchParams, RequestOptions } from '@angular/http';
 
-import { TreeNode } from '../shared/object/treenode'
-import { TreeEvent } from '../shared/object/treeevent'
-import { ZtreeComponent } from '../shared/component/ztree.component'
-import { JqgridComponent } from '../shared/component/jqgrid.component'
+import { SysmanageModule } from './sysmanage.module'
 import { SharedModule } from '../shared/shared.module'
-import { TreeAction } from '../shared/object/tree-action'
 import { ModalAction } from '../shared/object/modal-action'
-import { JqgridAction } from '../shared/object/jqgrid-action'
-import { JqgridEvent } from '../shared/object/jqgrid-event'
 import { ModalEvent } from '../shared/object/modal-event'
-import { ColModel } from '../shared/object/col-model'
+
+import { JqgridSetting, JqgridAction, JqgridEvent, JqgridCallback, DefaultJqgridCallback, ColModel, JqgridComponent} from '../shared/jqgrid.module'
+import { TreeEvent, ZtreeSetting, ZtreeComponent, onZtreeAction, TreeAction, TreeNode, ZtreeCallback, DefaultZtreeCallBack} from '../shared/ztree.module'
+
 
 import { MenuService } from '../service/menu.service'
 import { OrgService } from '../service/org.service'
 import { JobService } from '../service/job.service'
 import { ModalService } from '../service/modal.service'
-
-import { onZtreeAction } from '../shared/interface/ztree_hook'
-import { ZtreeCallback } from '../shared/interface/ztree.callback'
-import { JqgridCallback } from '../shared/interface/jqgrid.callback'
 
 @Component({
     moduleId: module.id,
@@ -39,45 +32,74 @@ export class ResourcemanageComponent implements OnInit,onZtreeAction{
     _menuinfo_params:any = {}
     _jobinfo_params:any = {}
 
+    _modalContext: {
+        vcRef: ViewContainerRef,
+        compiler: Compiler,
+        ngModule: Type
+    }
+
     _menutree_autoParam = ["id","pid","type","checked","virtual"];
 
     _menumodal_actions:Array<ModalAction> = [
-        new ModalAction("cancel","取消",1,true),
-        new ModalAction("save","保存",2)
+        new ModalAction({key:"cancel",name:"取消",order:1,cancel:true}),
+        new ModalAction({key:"save",name:"保存",order:2})
     ]
     _orgmodal_actions:Array<ModalAction> = [
-        new ModalAction("cancel","取消",1,true),
-        new ModalAction("save","保存",2) 
+        new ModalAction({key:"cancel",name:"取消",order:1,cancel:true}),
+        new ModalAction({key:"save",name:"保存",order:2})
     ]
 
     _menutree_actions:Array<TreeAction> = [
-        new TreeAction("refresh","刷新",1),
-        new TreeAction("add","新增",2),
-        new TreeAction("edit","编辑",3),
-        new TreeAction("set","设置",4),
-        new TreeAction("sort","排序",5),
-        new TreeAction("delete","删除",6),
+        new TreeAction({key:"refresh",name:"刷新",order:1}),
+        new TreeAction({key:"add",name:"新增",order:2}),
+        new TreeAction({key:"edit",name:"编辑",order:3}),
+        new TreeAction({key:"set",name:"设置",order:4}),
+        new TreeAction({key:"sort",name:"排序",order:5}),
+        new TreeAction({key:"delete",name:"删除",order:6}),
     ]
+    _menutree_setting = new ZtreeSetting({
+        dataUrl: "tree/restreecontent",
+        treeId: "menutree",
+        autoParam: this._menutree_autoParam,
+        selectedMulti: true, 
+        checkEnable: true,
+        autoCheckTrigger: true,
+        actions: this._menutree_actions
+    })
+
     _orgtree_actions:Array<TreeAction> = [
-        new TreeAction("refresh","刷新",1),
-        new TreeAction("add","新增",2),
-        new TreeAction("edit","编辑",3),
-        new TreeAction("set","设置",4),
-        new TreeAction("sort","排序",5),
-        new TreeAction("delete","删除",6),
+        new TreeAction({key:"refresh",name:"刷新",order:1}),
+        new TreeAction({key:"add",name:"新增",order:2}),
+        new TreeAction({key:"edit",name:"编辑",order:3}),
+        new TreeAction({key:"set",name:"设置",order:4}),
+        new TreeAction({key:"sort",name:"排序",order:5}),
+        new TreeAction({key:"delete",name:"删除",order:6}),
     ]
+    _orgtree_setting = new ZtreeSetting({
+        dataUrl:"tree/orgtreecontent",
+        treeId:"orgtree",
+        // dataUrl:"tree/orgtreenojob",
+        actions:this._orgtree_actions
+    })
 
     _job_col_model = [
-        new ColModel("岗位名称","jobName","50%"),
-        new ColModel("岗位描述","jobDesc","50%"),
-        new ColModel("ID","jobId",null,null,true,true)
+        new ColModel({label:"岗位名称",name:"jobName",width:"50%"}),
+        new ColModel({label:"岗位描述",name:"jobDesc",width:"50%"}),
+        new ColModel({label:"ID",name:"jobId",key:true,hidden:true})
     ]
     _job_grid_actions = [
-        new JqgridAction("add","新增",2),
-        new JqgridAction("edit","编辑",3),
-        new JqgridAction("refresh","刷新",1),
-        new JqgridAction("delete","删除",6),
+        new JqgridAction({key:"add",name:"新增",order:2}),
+        new JqgridAction({key:"edit",name:"编辑",order:3}),
+        new JqgridAction({key:"refresh",name:"刷新",order:1}),
+        new JqgridAction({key:"delete",name:"删除",order:6}),
     ]
+    _job_grid_setting = new JqgridSetting({
+        primaryKey:"jobId",
+        title:"岗位管理",
+        actions:this._job_grid_actions,
+        url:"list/jobdatacontent",
+        gridId:"jobmanage"
+    })
 
     _model:any = {
         menu:{
@@ -93,6 +115,11 @@ export class ResourcemanageComponent implements OnInit,onZtreeAction{
     constructor(private http:Http,private vcRef: ViewContainerRef, private compiler:Compiler,
                     private menuService:MenuService,private orgService:OrgService,
                     private jobService:JobService,private modalService:ModalService){
+        this._modalContext = {
+            vcRef: vcRef,
+            compiler: compiler,
+            ngModule: SysmanageModule
+        }                        
     }
  
     ngOnInit(){
@@ -211,9 +238,9 @@ export class ResourcemanageComponent implements OnInit,onZtreeAction{
                         this.orgTree.refreshNode(null,treeEvent.node.pid,null)
                     })                    
                     break;   
-                case "onclick":
-                    this.jobGrid.refresh({orgId:treeEvent.node.id})
-                    break                                                         
+                // case "onclick":
+                //     this.jobGrid.refresh({orgId:treeEvent.node.id})
+                //     break                                                         
                 default:
                     break;
             }     
@@ -275,27 +302,16 @@ export class ResourcemanageComponent implements OnInit,onZtreeAction{
                     }
                 });        	
         }else{
-            // Messenger.post({
-            //     'message': "请选择需要设置资源的岗位！",
-            //     'type': 'error',
-            // });
+            toastr.warning('请选择需要设置资源的岗位！')
             return;
         }
         if(delErrMess.length>0){
-                // Messenger.post({
-                //         'message': delErrMess.substring(0,delErrMess.length-1) + "不能设置资源！",
-                //         'type': 'error',
-                //     });
+                toastr.warning(delErrMess.substring(0,delErrMess.length-1) + "不能设置资源！")
                 return;
         }
-        
         var resTreeNodeChecded = this.$model.resTreeNodeChecded;
-        
         if(_.isUndefined(resTreeNodeChecded)){
-            // Messenger.post({
-            //     'message': "资源勾选没有变化，请选择需要设置的资源！",
-            //     'type': 'error',
-            // });
+            toastr.warning('资源勾选没有变化，请选择需要设置的资源！')
             return;
         }
         var isEmpty = true;
@@ -317,27 +333,23 @@ export class ResourcemanageComponent implements OnInit,onZtreeAction{
         });	
         
         if(isEmpty){
-            // Messenger.post({
-            //     'message': "资源勾选没有变化，请选择需要设置的资源！",
-            //     'type': 'error',
-            // });
+            toastr.warning('资源勾选没有变化，请选择需要设置的资源！')
             return;
         }else{
             jobNames = jobNames.length>0?jobNames.substring(0, jobNames.length-1):"";
             addResNames = addResNames.length>0?"<br>待新增资源："+addResNames.substring(0, addResNames.length-1):"";
             delResNames = delResNames.length>0?"<br>待删除资源："+delResNames.substring(0, delResNames.length-1):"";
         }
-        this.modalService.openConfirm(this.vcRef,this.compiler,{message:"是否确认岗位设置资源?<br>待设置岗位："+jobNames+addResNames+delResNames},()=>{
-            debugger
-            this.http.post("jobresmgt/setprivileges",{"jobIds":jobIds,"addPrivileges":addResIds,"delPrivileges":delResIds}).toPromise()
-                    .then(function(response){ 
-                        // Messenger.post({
-                        //     'message': "设置资源成功！",
-                        //     'type': 'success',
-                        // });	           
-                    });
-            
-        });        
+        this.modalService.openConfirm(
+            this._modalContext,
+            {message:"是否确认岗位设置资源?<br>待设置岗位："+jobNames+addResNames+delResNames},
+            ()=>{
+                debugger
+                this.http.post("jobresmgt/setprivileges",{"jobIds":jobIds,"addPrivileges":addResIds,"delPrivileges":delResIds}).toPromise()
+                        .then(function(response){ 
+                            toastr.success('设置资源成功！')	           
+                        });
+            });        
     }
 
     getAdministratorJobId(){
@@ -347,25 +359,23 @@ export class ResourcemanageComponent implements OnInit,onZtreeAction{
     resTreeCallback:ZtreeCallback = {
         onCheck:(event, treeId, treeNode)=>{
             var resTreeNodeChecded = this.$model.resTreeNodeChecded;
-            
             if(_.isUndefined(resTreeNodeChecded)){
                 resTreeNodeChecded = {};
             }
-            
             var privilegeId = treeNode.privilegeId;
             var resName = treeNode.noteTitle;
             var resChecked = treeNode.checked;
-            
             if(treeNode.checkedOld==treeNode.checked){
                 delete resTreeNodeChecded[privilegeId];
             }else{		
                 resTreeNodeChecded[privilegeId] = {"id":privilegeId,"name":resName,"resChecked":resChecked};
             }
-            
             this.$model.resTreeNodeChecded = resTreeNodeChecded;  
             console.log("this.$model.resTreeNodeChecded",this.$model.resTreeNodeChecded)     
         },
-        onSelectRow:(rowid,status,e)=>{}
+        onClick(){
+            
+        }
     }
  
     jobgridcall:JqgridCallback = {
@@ -378,6 +388,16 @@ export class ResourcemanageComponent implements OnInit,onZtreeAction{
             }
         }        
     }
+
+    orgTreeCall = _.assign(this.orgTreeCall, DefaultZtreeCallBack, {
+        onClick: (event, treeId, treeNode, clickFlag) => {
+            var selected = this.orgTree.getSelectedNodes()
+            this.jobGrid.refresh({orgId:selected[0].id})
+        },
+        onCheck: (event, treeId, treeNode, clickFlag) => {
+            // this.userGrid.refresh({ orgId: treeNode.id })
+        }
+    })
 
     // 带参数刷新资源树
     refreshResTree(obj){

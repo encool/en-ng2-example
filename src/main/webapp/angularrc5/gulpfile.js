@@ -42,11 +42,13 @@ var paths = {
             // 'node_modules/jqgrid/js/i18n/grid.locale-cn.js',
             // 'node_modules/jqgrid/js/i18n/grid.locale-en.js',
             'node_modules/jqgrid/js/jquery.jqGrid.src.js',
+            'node_modules/toastr/build/toastr.min.js',
         ],
         css: [
             'node_modules/bootstrap/dist/css/bootstrap.css',
             'node_modules/font-awesome/css/font-awesome.css',
             'node_modules/ztree/css/zTreeStyle/**/*',
+            'node_modules/toastr/build/toastr.min.css',
         ],
         font:[
               'node_modules/font-awesome/fonts/*',

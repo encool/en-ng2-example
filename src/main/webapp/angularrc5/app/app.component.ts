@@ -5,10 +5,27 @@ import { Component, ViewContainerRef } from '@angular/core';
 @Component({
     moduleId: module.id,
     selector: 'my-app',
-    templateUrl : 'app.component.html'
+    templateUrl: 'app.component.html'
 })
-export class AppComponent { 
-//   constructor(overlay: Overlay, vcRef: ViewContainerRef, public modal: Modal) {
-//     overlay.defaultViewContainer = vcRef;
-//   }
+export class AppComponent {
+    //   constructor(overlay: Overlay, vcRef: ViewContainerRef, public modal: Modal) {
+    //     overlay.defaultViewContainer = vcRef;
+    //   }
+    ngOnInit() {
+        toastr.options = {
+            "closeButton": true,
+            "debug": false,
+            "newestOnTop": false,
+            "progressBar": false,
+            "positionClass": "toast-bottom-center",
+            "preventDuplicates": false,
+            "onclick": null,
+            "timeOut": 3000,
+            "extendedTimeOut": 1000,
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        }
+    }
 }

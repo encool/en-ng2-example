@@ -8,47 +8,49 @@ import { TreeNode } from '../object/treenode'
 import { TreeAction } from '../object/tree-action'
 import { TreeActionKeys } from '../enum/tree-action-keys'
 import { ZtreeCallback } from '../interface/ztree.callback'
+import { ZtreeSetting } from '../object/ztree-setting'
 
 @Component({
     moduleId:module.id,
     selector: 'my-ztree',
     template: `
-            <ul [id]="treeId" class="ztree"></ul>
+            <ul [id]="ztreeSetting.treeId" class="ztree"></ul>
             <div [id]="_rMenuId" style="z-index: 1" class="rMenu" oncontextmenu="return false">
                 <ul>
-                    <li *ngFor="let action of actions" (click)="onAction(action)">{{action.name}}</li>
+                    <li *ngFor="let action of ztreeSetting.actions" (click)="onAction(action)">{{action.name}}</li>
                 </ul>
             </div>
         `,
     styleUrls:  ['ztree.component.css']
 })
 export class ZtreeComponent {
-    @Input() treeId:string;
-    @Input() rootNodeName:string;
-    @Input() dataUrl:string;
-    @Input() actions:Array<TreeAction> = []
-    //otherParam
-    @Input() params:any = {}
-    //自动提交参数
-    @Input() autoParam:Array<string> = ["id","pid"]
-    //初始展开所有
-    @Input() expendAll:boolean = false;
-    //初始展开层级
-    @Input() expendLevel:number = 1;     
-    //多选 按住ctrl键可多选
-    @Input() selectedMulti:boolean = false
+    //TODO 去掉在setting中参数
+    // @Input() treeId:string;
+    // @Input() dataUrl:string;
+    // @Input() actions:Array<TreeAction> = []
+    @Input() ztreeSetting:ZtreeSetting
+    // //otherParam
+    // @Input() params:any = {}
+    // //自动提交参数
+    // @Input() autoParam:Array<string> = ["id","pid"]
+    // //初始展开所有
+    // @Input() expendAll:boolean = false;
+    // //初始展开层级
+    // @Input() expendLevel:number = 1;     
+    // //多选 按住ctrl键可多选
+    // @Input() selectedMulti:boolean = false
 
-    //勾选
-    @Input() checkEnable:boolean = false
-    //checkbox 或 radio
-    @Input() checkStyle:string = "checkbox"
-    // Y 属性定义 checkbox 被勾选后的情况； 
-    // N 属性定义 checkbox 取消勾选后的情况； 
-    // "p" 表示操作会影响父级节点； 
-    // "s" 表示操作会影响子级节点。
-    @Input() chkboxType:any = { "Y" : "p", "N" : "s" };
-    // 设置自动关联勾选时是否触发 beforeCheck / onCheck 事件回调函数。
-    @Input() autoCheckTrigger:boolean = false;
+    // //勾选
+    // @Input() checkEnable:boolean = false
+    // //checkbox 或 radio
+    // @Input() checkStyle:string = "checkbox"
+    // // Y 属性定义 checkbox 被勾选后的情况； 
+    // // N 属性定义 checkbox 取消勾选后的情况； 
+    // // "p" 表示操作会影响父级节点； 
+    // // "s" 表示操作会影响子级节点。
+    // @Input() chkboxType:any = { "Y" : "p", "N" : "s" };
+    // // 设置自动关联勾选时是否触发 beforeCheck / onCheck 事件回调函数。
+    // @Input() autoCheckTrigger:boolean = false;
 
     //多选树 单选树？
     treeType:string
@@ -66,7 +68,7 @@ export class ZtreeComponent {
     constructor(private http: Http) { }
 
     ngOnInit() {
-        this._rMenuId = "_rMenuId"+this.treeId;
+        this._rMenuId = "_rMenuId"+this.ztreeSetting.treeId;
     };
 
     ngAfterViewInit(){
@@ -75,10 +77,10 @@ export class ZtreeComponent {
             async: {
                 enable: true,
                 type: "post",
-                url: this.dataUrl,
+                url: this.ztreeSetting.dataUrl,
                 // contentType: "application/json",
-                autoParam: this.autoParam,
-                otherParam:this.params,
+                autoParam: this.ztreeSetting.autoParam,
+                otherParam:this.ztreeSetting.params,
                 dataType:"text",
                 dataFilter: (treeId, parentNode, responseData) => {
                     return responseData;
@@ -114,8 +116,8 @@ export class ZtreeComponent {
             },
 
             view: {
-                // nameIsHTML:scope.nameIsHtml,
-                selectedMulti: this.selectedMulti,
+                nameIsHTML: this.ztreeSetting.nameIsHTML,
+                selectedMulti: this.ztreeSetting.selectedMulti,
                 // showIcon: scope.showIcon,
                 // showTitle: scope.showTitle,
                 //搜索树的样式
@@ -124,10 +126,10 @@ export class ZtreeComponent {
                 }
             },
             check: {
-                autoCheckTrigger: this.autoCheckTrigger,
-                chkboxType: this.chkboxType,
-                enable: this.checkEnable,
-                chkStyle: this.checkStyle,
+                autoCheckTrigger: this.ztreeSetting.autoCheckTrigger,
+                chkboxType: this.ztreeSetting.chkboxType,
+                enable: this.ztreeSetting.checkEnable,
+                chkStyle: this.ztreeSetting.checkStyle,
                 radioType: "all",
                 nocheckInherit:false,
                 chkDisabledInherit:false
@@ -136,24 +138,25 @@ export class ZtreeComponent {
             callback: {
                 onRightClick: this.OnRightClick.bind(this),
                 onClick: (event, treeId, treeNode, clickFlag) =>{
-                    let action:TreeAction = new TreeAction("onclick","点击") 
-                    let treeevent:TreeEvent = new TreeEvent(treeNode,this.treeId,action,null,event)
-                    this.zevent.emit(treeevent)
+                    this.callback.onClick(event, treeId, treeNode, clickFlag)
+                    // let action:TreeAction = new TreeAction({key:"onclick",name:"点击"}) 
+                    // let treeevent:TreeEvent = new TreeEvent(treeNode,this.treeId,action,null,event)
+                    // this.zevent.emit(treeevent)
                     // scope.nodeClick({event: event, treeId: treeId, treeNode: treeNode, clickFlag:clickFlag});
                 },
 
                 onAsyncSuccess:(event, treeId, treeNode, msg)=>{
                     var ztree = this.zTreeObj;
-                    if(this.expendAll){
+                    if(this.ztreeSetting.expendAll){
                         var expendTreeNodes = _.isUndefined(treeNode)||treeNode==null?ztree.getNodes():treeNode.children;
                         _.forEach(expendTreeNodes,function(node,n){
                             if(node.isParent)ztree.expandNode(node,true,false,false);
                         });
                     }else{
-                        if (this.expendLevel&&this.expendLevel>0) {
+                        if (this.ztreeSetting.expendLevel&&this.ztreeSetting.expendLevel>0) {
                             var expendTreeNodes = _.isUndefined(treeNode)||treeNode==null?ztree.getNodes():treeNode.children;
                             _.forEach(expendTreeNodes,(node,n)=>{
-                                if(node.isParent&&node.level < this.expendLevel){
+                                if(node.isParent&&node.level < this.ztreeSetting.expendLevel){
                                     ztree.expandNode(node,true,false,false);
                                 }
                             });
@@ -278,7 +281,7 @@ export class ZtreeComponent {
         //     })
         //     .catch(this.handleError);
 
-        this.zTreeObj = $.fn.zTree.init($('#'+this.treeId), setting);               
+        this.zTreeObj = $.fn.zTree.init($('#'+this.ztreeSetting.treeId), setting);               
             
         // zTree 的数据属性，深入使用请参考 API 文档（zTreeNode 节点数据详解）
 
@@ -348,6 +351,10 @@ export class ZtreeComponent {
         return this.zTreeObj.getSelectedNodes();
     }
 
+    getCheckedNodes(checked:boolean):Array<any>{
+        return this.zTreeObj.getCheckedNodes(checked)
+    }
+
     refreshTree(){
         let nodes:Array<any> = this.zTreeObj.getSelectedNodes();   
         if(nodes.length==1){
@@ -368,7 +375,7 @@ export class ZtreeComponent {
         if(nodes.length == 1){
             node = nodes[0]
         }
-        let treeEvent:TreeEvent = new TreeEvent(node,this.treeId,action,nodes);
+        let treeEvent:TreeEvent = new TreeEvent(node,this.ztreeSetting.treeId,action,nodes);
         this.zevent.emit(treeEvent)
         this.hideRMenu();
     }

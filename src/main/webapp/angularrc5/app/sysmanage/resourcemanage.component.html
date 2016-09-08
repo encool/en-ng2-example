@@ -3,25 +3,26 @@
 
   	<div class="col-sm-3">
   		<my-panel title="机构树" [actions]="_orgtree_actions" style="height:100%">
-				<my-ztree #panelcontent_ref #orgtree_ref treeId="orgtree" rootNodeName="机构" [actions]="_orgtree_actions" dataUrl="tree/orgtreecontent" (zevent)="onZtreeAction($event)"></my-ztree>			
+				<my-ztree #panelcontent_ref #orgtree_ref [ztreeSetting]="_orgtree_setting" 
+					 (zevent)="onZtreeAction($event)" [callback]="orgTreeCall"></my-ztree>			
   		</my-panel>
-			<my-modal modalId="orgmodal" [actions]="_orgmodal_actions" (modalevent)="onModalAction($event)">
+			<!--<my-modal modalId="orgmodal" [actions]="_orgmodal_actions" (modalevent)="onModalAction($event)">
 				<my-orginfo #modalcontent_ref [model]="_model.org" [params]="_orginfo_params"></my-orginfo>
-			</my-modal>
+			</my-modal>-->
     </div>
 
 		<div class="col-sm-6">
-			<my-grid #jobgrid_ref gridId="jobmanage" primaryKey="jobId" title="岗位管理" [colModel]="_job_col_model" [actions]="_job_grid_actions" 
-				(jqgridevent)="onGridAction($event)" [callback]="jobgridcall"></my-grid>	
+			<my-grid #jobgrid_ref [jqgridSetting]="_job_grid_setting" [colModel]="_job_col_model"  
+				(jqgridevent)="onGridAction($event)" [callback]="jobgridcall"></my-grid>
 			<my-modal modalId="jobmodalid" [actions]="_menumodal_actions" (modalevent)="onModalAction($event)">			
 				<my-jobinfo #modalcontent_ref [params]="_jobinfo_params" [model]="_model.job"></my-jobinfo>
 			</my-modal>				
 		</div>	
 
 		<div class="col-sm-3">
-  		<my-panel title="资源管理" style="height:100%">
-				<my-ztree #menutree_ref treeId="menutree" rootNodeName="所有菜单" dataUrl="tree/restreecontent" [autoParam]="_menutree_autoParam" (zevent)="onZtreeAction($event)" 
-						[actions]="_menutree_actions" selectedMulti="ture" checkEnable="true" [callback]="resTreeCallback" autoCheckTrigger="true">
+  		<my-panel title="资源管理" [actions]="_menutree_actions" style="height:100%">
+				<my-ztree #panelcontent_ref #menutree_ref [ztreeSetting]="_menutree_setting" (zevent)="onZtreeAction($event)" 
+						  [callback]="resTreeCallback">
 				</my-ztree>
   		</my-panel>
 			<my-modal modalId="testmodalid" [actions]="_menumodal_actions" (modalevent)="onModalAction($event)">

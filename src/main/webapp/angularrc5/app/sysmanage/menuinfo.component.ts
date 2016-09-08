@@ -63,8 +63,11 @@ export class MenuinfoComponent implements OnInit,modalOnSave {
     modalOnSave(){
         console.log("save model",this.model)
         if(this.params.type == "edit"){
-            return this.menuService.updateMenu(this.model).then(()=>{return "menuupdate"})
-        }else if(this.params.type == "add"){debugger
+            return this.menuService.updateMenu(this.model).then(()=>{
+                console.log("update success!")
+                return "menuupdate"
+            })
+        }else if(this.params.type == "add"){
             return this.menuService.createMenu(this.params.pNode.privilegeId,this.model).then(()=>{ return "menuadded"})
         }
         

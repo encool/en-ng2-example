@@ -16,6 +16,8 @@ import { MyrowComponent } from './layout/myrow.component'
 
 import { DynamicFormComponent } from './form/dynamic-form.component'
 import { DynamicFormfieldComponent } from './form/dynamic-form-field.component'
+import { DynamicFormHorizontalComponent } from './form/dynamic-form-horizontal.component'
+import { DynamicfieldHorizontalComponent } from './form/dynamic-field-horizontal.component'
 
 import { FieldDataService } from './form/field-data.service'
 @NgModule({
@@ -32,6 +34,8 @@ import { FieldDataService } from './form/field-data.service'
                     MyModalComponent,
                     DynamicFormComponent,
                     DynamicFormfieldComponent,
+                    DynamicFormHorizontalComponent,
+                    DynamicfieldHorizontalComponent,
                     JqgridComponent
     ],
     exports:      [ 
@@ -45,6 +49,8 @@ import { FieldDataService } from './form/field-data.service'
                     MyModalComponent,
                     DynamicFormComponent,
                     DynamicFormfieldComponent,
+                    DynamicFormHorizontalComponent,
+                    DynamicfieldHorizontalComponent,                    
                     JqgridComponent   
     ]
 })

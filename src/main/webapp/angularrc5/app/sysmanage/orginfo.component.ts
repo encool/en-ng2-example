@@ -13,9 +13,10 @@ import { modalOnSave } from '../shared/interface/modal_hook'
     templateUrl: 'orginfo.component.html'
 })
 export class OrginfoComponent implements OnInit,modalOnSave {
-    @Input() model:any = {};
-    @Input() type:string
-    @Input() params:any = {}
+    @Input() $model:any = {}
+    // @Input() model:any = {}
+    // @Input() type:string
+    // @Input() params:any = {}
     private _orgfields
     constructor(private orgService:OrgService) {
         this._orgfields = [
@@ -72,17 +73,18 @@ export class OrginfoComponent implements OnInit,modalOnSave {
     ngOnInit() { }
 
     modalOnSave(){
-        console.log("save model",this.model)
+        console.log("save model",this.$model.org)
         
-        if(this.params.type == "edit"){
-            return this.orgService.update(this.model).then((data)=>{
+        if(this.$model.params.type == "edit"){
+            return this.orgService.update(this.$model.org).then((data)=>{
                 if(data ==true){
+                    console.log("update success!")
                     return "orgupdate"
                 }
                 return "orgupdatefalse"
             });
-        }else if(this.params.type == "add"){
-            return this.orgService.create(this.params.pNode.id,this.model).then(()=>{return "orgadd"})
+        }else if(this.$model.params.type == "add"){
+            return this.orgService.create(this.$model.params.pNode.id,this.$model.org).then(()=>{return "orgadd"})
         }
     }
 }

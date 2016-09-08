@@ -4,6 +4,7 @@ import { JqgridEvent } from '../object/jqgrid-event'
 import { ColModel } from '../object/col-model'
 import { JqgridAction } from '../object/jqgrid-action'
 import { JqgridCallback } from '../interface/jqgrid.callback'
+import { JqgridSetting } from '../object/jqgrid-setting'
 
 @Component({
     moduleId: module.id,
@@ -11,22 +12,20 @@ import { JqgridCallback } from '../interface/jqgrid.callback'
     templateUrl: "jqgrid.component.html"
 })
 export class JqgridComponent implements OnInit {
-    constructor() { }
+
     jqgridObject:any
-    multiselect:boolean = true
-
-    @Input() primaryKey:string
     @Input() postParams:any = {}
-    @Input() gridId:string
-    @Input() title:string
-    @Input() colModel:ColModel[]
-    @Input() actions:JqgridAction[]
 
+    @Input() colModel:ColModel[]
+
+    @Input() jqgridSetting:JqgridSetting
     @Input() callback:JqgridCallback
 
     @Output() jqgridevent = new EventEmitter();
 
-    ngOnInit() { 
+    constructor() { }
+
+    ngOnInit() {
 		// $.jgrid.defaults.width = 780;
 		$.jgrid.defaults.styleUI = 'Bootstrap';        
         this.jqgridObject = $("#jqGrid").jqGrid({
@@ -39,13 +38,13 @@ export class JqgridComponent implements OnInit {
             },           
             jsonReader: {
                 root:"contents",
-                id:this.primaryKey,
+                id:this.jqgridSetting.primaryKey,
                 page:"pageIndex",
                 records:"total",
                 total:"totalPage"
             },  
             postData:this.postParams,
-            serializeGridData: function(postData) {
+            serializeGridData: (postData)=>{
                 //page转数字，如果转换失败默认为1
                 postData.page = parseInt(postData.page,10);
                 if (isNaN(postData.page)) postData.page = 1;
@@ -71,20 +70,26 @@ export class JqgridComponent implements OnInit {
                 for (var pd in postData){
                     if($.trim(postData[pd])=="")delete postData[pd];
                 }
-                myPostData.cond = postData;
-                return JSON.stringify(myPostData);
+                
+                if(this.jqgridSetting.mtype == "get"){
+                    myPostData.cond = JSON.stringify(postData);
+                    return myPostData
+                }else{
+                    myPostData.cond = postData;
+                    return JSON.stringify(myPostData);
+                }
             },        
             regional:'en',
             autowidth:true,
             shrinkToFit:true,
             height: 200,
             rowNum: 15,
-            url: 'job/list',
-            mtype: 'post',
+            url: this.jqgridSetting.url,
+            mtype: this.jqgridSetting.mtype,
             ajaxGridOptions: { contentType: 'application/json; charset=utf-8' },
             datatype: "json",
 
-            multiselect: this.multiselect,//是否能够多选
+            multiselect: this.jqgridSetting.multiselect,//是否能够多选
             multiboxonly: true,//需要点击checkbox才能多选
             pager: "#jqGridPager",
 
@@ -96,10 +101,14 @@ export class JqgridComponent implements OnInit {
     }
 
     onAction(action:JqgridAction){
+        if(action.key == "refresh"){
+            this.refresh();
+            return;
+        }
         let rowId = this.getSingleSelectRowId();
         let rowData = this.getSingleSelectData();
         let rowDatas = this.getSelectDatas();
-        let event:JqgridEvent = new JqgridEvent(this.gridId,action,rowId,rowData,rowDatas)  
+        let event:JqgridEvent = new JqgridEvent(this.jqgridSetting.gridId,action,rowId,rowData,rowDatas)  
         this.jqgridevent.emit(event);
     }
 
@@ -107,7 +116,7 @@ export class JqgridComponent implements OnInit {
      * 刷新列表
      * param:表格查询传递的参数对象{xx:xx,xxx:xxx}
      */
-    refresh(param) {
+    refresh(param?) {
         this.postParams = param;
         if(param != undefined){
             var pd = this.jqgridObject.jqGrid("getGridParam","postData");

@@ -47,8 +47,7 @@ public class LoginController {
 	@SuppressWarnings("rawtypes")
 	@ResponseBody
 	@RequestMapping(value="logoutAction",method=RequestMethod.POST)
-	public Object logout(@RequestParam(value = "username") String username,
-			@RequestParam(value = "password") String password) {
+	public Object logout() {
 		
 		ApplicationContext context = ApplicationContextManager.getContext();
 		AuthenticationProvider acs = (AuthenticationProvider) context.getBean("AuthenticationProvider");

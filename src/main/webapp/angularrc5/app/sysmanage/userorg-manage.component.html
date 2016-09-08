@@ -1,12 +1,19 @@
 <div class="container-fluid">
-  <div class="row">
-  	<div class="col-sm-3">
-  		<my-panel title="机构树" [actions]="_orgtree_actions" style="height:100%">
-				<my-ztree #panelcontent_ref #orgtree_ref treeId="orgtree" rootNodeName="机构" [actions]="_orgtree_actions" dataUrl="tree/orgtreenojob" (zevent)="onZtreeAction($event)"></my-ztree>			
-  		</my-panel>
-			<my-modal modalId="orgmodal" [actions]="_orgmodal_actions" (modalevent)="onModalAction($event)">
-				<my-orginfo #modalcontent_ref [model]="_model.org" [params]="_orginfo_params"></my-orginfo>
-			</my-modal>			
-    </div>
-  </div>
+	<div class="row">
+		<div class="col-sm-3">
+			<my-panel title="机构树" [actions]="_orgtree_actions" style="height:100%">
+				<my-ztree #panelcontent_ref #orgtree_ref [ztreeSetting]="_orgtree_setting" (zevent)="onZtreeAction($event)"
+					[callback]="orgTreeCall"></my-ztree>
+			</my-panel>
+		</div>
+		<div class="col-sm-6">
+			<my-grid #usergrid_ref [colModel]="_usermgt_col_model" [jqgridSetting]="_usermgt_grid_setting"
+				(jqgridevent)="onGridAction($event)" [callback]="userGridCall">
+			</my-grid>
+		</div>
+		<my-panel class="col-sm-3" title="岗位设置" [actions]="_jobtree_actions" style="height:100%">
+			<my-ztree #panelcontent_ref #jobtree_ref treeId="jobtree" [ztreeSetting]="_jobtree_setting" (zevent)="onZtreeAction($event)"
+				[callback]="jobTreeCall"></my-ztree>
+		</my-panel>
+	</div>
 </div>

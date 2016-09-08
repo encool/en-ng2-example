@@ -1,11 +1,11 @@
 export class ColModel {
-    label:string
-    name:string
+    label: string
+    name: string
     title: string//是否设置单元格的 title 属性。
-    width: number|string//该列的宽度
+    width: number | string//该列的宽度
     align: string //对齐方式："left" "center" "right"
     classes: string//给单元格添加类。
-    
+
     fixed: boolean//设置为 true 时，该列的宽度固定，不会自动拉伸或者压缩。
     frozen: boolean//该列是否可以被冻结
     hidedlg: boolean
@@ -15,13 +15,33 @@ export class ColModel {
     resizable: boolean//该类是否可以拖动边界改变宽度。
     sortable: boolean//该列是否可以排序。    
 
-    formatter:string|Function
-    constructor(label:string,name:string,width?:number|string,formatter?:string|Function,hidden?:boolean,key?:boolean){
-        this.label = label
-        this.name = name
-        this.width = width
-        this.formatter = formatter
-        this.hidden = hidden
-        this.key = key
+    formatter: string | Function
+    constructor(options: {
+        align?: string
+        label?: string,
+        name?: string,
+        width?: number | string,
+        formatter?: string | Function,
+        hidden?: boolean,
+        key?: boolean
+        classes?: string
+        sortable?: boolean
+        resizable?: boolean
+        frozen?: boolean
+        index?: string
+    } = {}
+    ) {
+        this.label = options.label
+        this.name = options.name
+        this.width = options.width
+        this.formatter = options.formatter
+        this.hidden = options.hidden
+        this.key = options.key
+        this.align = options.align
+        this.classes = options.classes
+        this.sortable = options.sortable
+        this.resizable = options.resizable
+        this.fixed = options.frozen
+        this.index = options.index
     }
 }
