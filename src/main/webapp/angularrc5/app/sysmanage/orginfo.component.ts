@@ -72,7 +72,7 @@ export class OrginfoComponent implements OnInit,modalOnSave {
 
     ngOnInit() { }
 
-    modalOnSave(){
+    onModalAction(){
         console.log("save model",this.$model.org)
         
         if(this.$model.params.type == "edit"){

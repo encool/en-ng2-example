@@ -1,4 +1,4 @@
-import { Injectable }   from '@angular/core';
+import { Injectable } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 import { FieldBase } from './field-base';
@@ -13,7 +13,7 @@ export class FieldControlService {
     fields.forEach(field => {
       var validators = [];
       var asyncValidators = [];
-      if(field.required){
+      if (field.required) {
         validators.push(Validators.required)
       }
       if (field.validator) {
@@ -23,13 +23,13 @@ export class FieldControlService {
         asyncValidators.push(field.asyncValidator)
       }
       if (validators.length > 0 && asyncValidators.length > 0) {
-        group[field.key] = new FormControl(field.value || '', validators, asyncValidators)
+        group[field.key] = new FormControl({value:field.value,disabled:field.disable} || '', validators, asyncValidators)
       } else if (validators.length > 0) {
-        group[field.key] = new FormControl(field.value || '', validators)
+        group[field.key] = new FormControl({value:field.value,disabled:field.disable} || '', validators)
       } else if (asyncValidators.length > 0) {
-        group[field.key] = new FormControl(field.value || '', null, asyncValidators)
+        group[field.key] = new FormControl({value:field.value,disabled:field.disable} || '', null, asyncValidators)
       } else {
-        group[field.key] = new FormControl(field.value || '')
+        group[field.key] = new FormControl({value:field.value,disabled:field.disable} || '')
       }
 
     });

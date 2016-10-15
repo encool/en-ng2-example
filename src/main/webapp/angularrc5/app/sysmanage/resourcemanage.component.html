@@ -14,9 +14,9 @@
 		<div class="col-sm-6">
 			<my-grid #jobgrid_ref [jqgridSetting]="_job_grid_setting" [colModel]="_job_col_model"  
 				(jqgridevent)="onGridAction($event)" [callback]="jobgridcall"></my-grid>
-			<my-modal modalId="jobmodalid" [actions]="_menumodal_actions" (modalevent)="onModalAction($event)">			
+			<!--<my-modal modalId="jobmodalid" [actions]="_menumodal_actions" (modalevent)="onModalAction($event)">			
 				<my-jobinfo #modalcontent_ref [params]="_jobinfo_params" [model]="_model.job"></my-jobinfo>
-			</my-modal>				
+			</my-modal>				-->
 		</div>	
 
 		<div class="col-sm-3">
@@ -25,10 +25,10 @@
 						  [callback]="resTreeCallback">
 				</my-ztree>
   		</my-panel>
-			<my-modal modalId="testmodalid" [actions]="_menumodal_actions" (modalevent)="onModalAction($event)">
+			<!--<my-modal modalId="testmodalid" [actions]="_menumodal_actions" (modalevent)="onModalAction($event)">
 				<my-menuinfo #modalcontent_ref [model]="_model.menu" [params]="_menuinfo_params">
 				</my-menuinfo>
-			</my-modal>
+			</my-modal>--> 
     </div>
 
   </div>

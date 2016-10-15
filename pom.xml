@@ -46,6 +46,18 @@
 
     <dependencies>
 
+		<dependency>
+		  <groupId>com.cool.energy</groupId>
+		  <artifactId>en-runtime</artifactId>
+		  <version>0.2.4-SNAPSHOT</version>	
+		</dependency>
+
+		<dependency>
+		    <groupId>com.chinacreator.c2.qyb</groupId>
+		    <artifactId>qysyb-workflow-oracle-test</artifactId>
+		    <version>0.9.9</version>
+		</dependency>
+
         <!-- Logging API + implementation: -->
         <dependency>
             <groupId>org.slf4j</groupId>

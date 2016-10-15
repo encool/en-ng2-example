@@ -1,4 +1,6 @@
-import { Injectable, ViewContainerRef, Compiler, ComponentRef, Type } from '@angular/core';
+import { Injectable , ViewContainerRef, Compiler, ComponentRef, Type, ComponentFactoryResolver } from '@angular/core';
+// import { Injectable } from '@angular/platform-browser-dynamic'
+
 import 'rxjs/add/operator/toPromise';
 
 import { SimpleModalComponent } from '../shared/component/simple-modal.component'
@@ -10,6 +12,11 @@ export class ModalService {
         new ModalAction({ key: "cancel", name: "取消", order: 1, cancel: true, style: "default" }),
         new ModalAction({ key: "close", name: "保存", order: 2, close: true })
     ]
+
+    _confirm_actions: Array<ModalAction> = [
+        new ModalAction({ key: "cancel", name: "取消", order: 1, cancel: true, style: "default" }),
+        new ModalAction({ key: "close", name: "确定", order: 2, close: true })
+    ]    
     _smodalstack = []
     // _ref:ComponentRef<SimpleModalComponent>
     constructor() {
@@ -17,41 +24,87 @@ export class ModalService {
     openConfirm(modalContext:
         {
             vcRef: ViewContainerRef
-            compiler: Compiler
-            ngModule: Type
+            componentFactoryResolver:ComponentFactoryResolver
         },
         modalOptions: {
             actions?: ModalAction[]
             width?: string
             message: string
+            title?: string
+            height?: string|number
         },
         success?: Function, dismiss?: Function) {
-        modalContext.compiler.compileComponentAsync(SimpleModalComponent).then(compf => {
-            let _ref: ComponentRef<SimpleModalComponent> = modalContext.vcRef.createComponent(compf);
-            _ref.instance.openConfirm(modalOptions.message, _ref, success, dismiss)
+            let myComponentFactory = modalContext.componentFactoryResolver.resolveComponentFactory(SimpleModalComponent);
+            let _ref: ComponentRef<SimpleModalComponent> = modalContext.vcRef.createComponent(myComponentFactory);
+
+            let successwrapper = (data)=>{
+                if(success){
+                    success(data)
+                }
+                this.destroy();
+            }
+
+            
+            let dismisswrapper = (data)=>{
+                if(dismiss){
+                    dismiss(data)
+                }
+                this.destroy();
+            }
+
+            this._smodalstack.push(_ref)
+
+            _ref.instance.openConfirm(modalOptions.message,successwrapper, dismisswrapper)
             _ref.instance._width = modalOptions.width
-            _ref.instance._actions = modalOptions.actions == undefined ? this._default_actions : modalOptions.actions
-        })
+            _ref.instance._height = modalOptions.height
+            _ref.instance._title = modalOptions.title
+            _ref.instance._actions = modalOptions.actions == undefined ? this._confirm_actions : modalOptions.actions               
     }
 
     open(modalContext:
         {
             vcRef: ViewContainerRef
-            compiler: Compiler
-            ngModule: Type
+            componentFactoryResolver:ComponentFactoryResolver
         },
         modalOptions: {
-            comp: Type
+            comp: Type<any>
             actions?: ModalAction[]
             width?: string
+            title?: string
+            height?: string|number
         },
         params: any,
         success?: Function, dismiss?: Function) {
-        modalContext.compiler.compileComponentAsync(SimpleModalComponent).then(compf => {
-            let _ref: ComponentRef<SimpleModalComponent> = modalContext.vcRef.createComponent(compf);
-            _ref.instance.open(modalOptions.comp, modalContext.ngModule, _ref, params, success, dismiss)
+            let myComponentFactory = modalContext.componentFactoryResolver.resolveComponentFactory(SimpleModalComponent);
+            let _ref: ComponentRef<SimpleModalComponent> = modalContext.vcRef.createComponent(myComponentFactory);
+            let myContentComponentFactory = modalContext.componentFactoryResolver.resolveComponentFactory(modalOptions.comp);
+
+            let successwrapper = (data)=>{
+                if(success){
+                    success(data)
+                }
+                this.destroy();
+            }
+
+            
+            let dismisswrapper = (data)=>{
+                if(dismiss){
+                    dismiss(data)
+                }
+                this.destroy();
+            }
+
+            this._smodalstack.push(_ref)
+
+            _ref.instance.open(myContentComponentFactory, params,successwrapper, dismisswrapper)
             _ref.instance._width = modalOptions.width
-            _ref.instance._actions = modalOptions.actions
-        })
+            _ref.instance._height = modalOptions.height
+            _ref.instance._title = modalOptions.title
+            _ref.instance._actions = modalOptions.actions == undefined ? this._default_actions : modalOptions.actions              
+    }
+
+    destroy(){
+        let cmpRef: ComponentRef<any> = this._smodalstack.pop();
+        cmpRef.destroy() 
     }
 }

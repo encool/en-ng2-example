@@ -7,15 +7,20 @@ import { DropdownField } from '../shared/form/dropdown-field';
 import { FieldBase }     from '../shared/form/field-base';
 import { TextField }  from '../shared/form/text-field';
 
-import { modalOnSave } from '../shared/interface/modal_hook' 
+import { onModalAction } from '../shared/interface/modal_hook' 
 @Component({
     moduleId: module.id,
     selector: 'my-menuinfo',
     templateUrl: 'menuinfo.component.html'
 })
-export class MenuinfoComponent implements OnInit,modalOnSave {
-    @Input() model:any = {}
-    @Input() params:any
+export class MenuinfoComponent implements OnInit,onModalAction {
+
+    @Input() $model:{
+        model:any
+        params:any
+    }
+    // @Input() model:any = {}
+    // @Input() params:any
     menufields:any[];
     constructor(private fieldDataService:FieldDataService,private menuService:MenuService) { 
         // this.menufields = fieldDataService.getFields();
@@ -60,15 +65,15 @@ export class MenuinfoComponent implements OnInit,modalOnSave {
     ngOnInit() { 
         
     }
-    modalOnSave(){
-        console.log("save model",this.model)
-        if(this.params.type == "edit"){
-            return this.menuService.updateMenu(this.model).then(()=>{
+    onModalAction(){
+        console.log("save model",this.$model.model)
+        if(this.$model.params.type == "edit"){
+            return this.menuService.updateMenu(this.$model.model).then(()=>{
                 console.log("update success!")
                 return "menuupdate"
             })
-        }else if(this.params.type == "add"){
-            return this.menuService.createMenu(this.params.pNode.privilegeId,this.model).then(()=>{ return "menuadded"})
+        }else if(this.$model.params.type == "add"){
+            return this.menuService.createMenu(this.$model.params.pNode.privilegeId,this.$model.model).then(()=>{ return "menuadded"})
         }
         
     }

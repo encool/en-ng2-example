@@ -104,8 +104,11 @@ export class JqgridSetting {
         primaryKey?: string
         title?: string
         actions?: Array<JqgridAction>
+        defaultaction?: boolean
         multiselect?: boolean
         mtype?: string
+        rowNum?: number
+        postData?:any
     } = {}) {
         this.gridId = options.gridId
         this.url = options.url
@@ -113,11 +116,13 @@ export class JqgridSetting {
         this.multiselect = options.multiselect == undefined ? true : options.multiselect
         this.title = options.title 
         this.mtype = options.mtype == undefined ? "get" : options.mtype
-        this.actions = options.actions == undefined ? [
+        this.actions = options.defaultaction == true ? [
             new JqgridAction({ key: "add", name: "新增", order: 2 }),
             new JqgridAction({ key: "edit", name: "编辑", order: 3 }),
             new JqgridAction({ key: "refresh", name: "刷新", order: 1 }),
             new JqgridAction({ key: "delete", name: "删除", order: 6 }),
         ] : options.actions
+        this.rowNum = options.rowNum == undefined?10:options.rowNum
+        this.postData = options.postData == undefined?{}:options.postData
     }
 }

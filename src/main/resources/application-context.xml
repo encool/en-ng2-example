@@ -28,7 +28,7 @@
 
     <bean id="templateResolver"
           class="org.thymeleaf.templateresolver.ServletContextTemplateResolver">
-        <property name="prefix" value="/dist/" />
+        <property name="prefix" value="angularrc5/dist/" />
         <property name="suffix" value=".html" />
         <property name="templateMode" value="HTML5" />
     </bean>
@@ -42,7 +42,10 @@
         <property name="templateEngine" ref="templateEngine" />
     </bean>
     
+    <bean class="com.chinacreator.c2.qyb.workflow.module.impl.MyExtendServiceImpl"></bean>
+    
 <!--     <mvc:default-servlet-handler /> -->
+	<mvc:annotation-driven />
 	<mvc:resources location="/dist/" mapping="/dist/**"/>    
 	<context:property-placeholder location="classpath*:*-config.properties,classpath*:en-default.properties"/>    
 </beans>    

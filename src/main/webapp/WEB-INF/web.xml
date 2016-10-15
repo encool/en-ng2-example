@@ -93,7 +93,7 @@
 		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
         <init-param>
             <param-name>contextConfigLocation</param-name>
-            <param-value>classpath*:web/*-context.xml</param-value>
+            <param-value>classpath:web-core-context.xml,classpath*:web/*-context.xml</param-value>
         </init-param>
         <load-on-startup>1</load-on-startup>
     </servlet>
@@ -147,7 +147,18 @@
 	    <url-pattern>/*</url-pattern>
 	</filter-mapping>
 
-
+	<servlet>
+	 <servlet-name>RestletServlet</servlet-name>
+	 <servlet-class>org.restlet.ext.servlet.ServerServlet</servlet-class>
+	 <init-param>
+	 <param-name>org.restlet.application</param-name>
+	 <param-value>com.chinacreator.c2.flow.rest.WfRestApplication</param-value>
+	 </init-param>
+	</servlet>
+	<servlet-mapping>
+	 <servlet-name>RestletServlet</servlet-name>
+	 <url-pattern>/workflow/service/*</url-pattern>
+	</servlet-mapping>
 
 
 

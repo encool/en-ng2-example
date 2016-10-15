@@ -21,7 +21,7 @@ import { ZtreeSetting } from '../object/ztree-setting'
                 </ul>
             </div>
         `,
-    styleUrls:  ['ztree.component.css']
+    styleUrls:  ['./ztree.component.css']
 })
 export class ZtreeComponent {
     //TODO 去掉在setting中参数

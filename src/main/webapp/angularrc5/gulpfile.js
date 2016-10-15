@@ -12,7 +12,7 @@ var paths = {
         'app/*'
     ],
     css: [
-         'css/*'
+         'css/**/*'
     ],
     img: [
          'images/*'
@@ -43,6 +43,7 @@ var paths = {
             // 'node_modules/jqgrid/js/i18n/grid.locale-en.js',
             'node_modules/jqgrid/js/jquery.jqGrid.src.js',
             'node_modules/toastr/build/toastr.min.js',
+            'js/bpmn-modeler-custom.js'
         ],
         css: [
             'node_modules/bootstrap/dist/css/bootstrap.css',

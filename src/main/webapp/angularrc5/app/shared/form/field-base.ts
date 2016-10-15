@@ -13,6 +13,10 @@ export class FieldBase<T>{
   minLength: number
   maxLength: number
   pattern: string
+  labelOffset:number
+  isObject:boolean
+  disable:boolean
+  hidden:boolean
   constructor(options: {
     value?: T,
     key?: string,
@@ -26,6 +30,10 @@ export class FieldBase<T>{
     pattern?: string
     order?: number,
     controlType?: string
+    labelOffset?:number
+    isObject?:boolean
+    disable?:boolean
+    hidden?:boolean
   } = {}) {
     this.value = options.value;
     this.key = options.key || '';
@@ -39,5 +47,9 @@ export class FieldBase<T>{
     this.minLength = options.minLength
     this.maxLength = options.maxLength
     this.pattern = options.pattern
+    this.labelOffset = options.labelOffset === undefined ? 75 :options.labelOffset
+    this.isObject = options.isObject === undefined ? false :options.isObject
+    this.disable = options.disable === undefined ? false :options.disable
+    this.hidden = options.hidden === undefined ? false :options.hidden
   }
 }

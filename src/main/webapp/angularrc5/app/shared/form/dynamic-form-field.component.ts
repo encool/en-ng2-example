@@ -9,9 +9,12 @@ import { FieldBase }     from './field-base';
 export class DynamicFormfieldComponent implements OnInit,AfterViewInit{
     @Input() field: FieldBase<any>;
     @Input() form: FormGroup;
-    @Input() model: any = {};
+    @Input() model: any;
     _tipmsg:string = "必填项";
-    get isValid() { return this.form.controls[this.field.key].valid; }
+    get isValid() { 
+        // return true;
+        return this.form.controls[this.field.key].valid; 
+    }
     ngclasses(){
         return {
             'form-group':true,
@@ -19,7 +22,7 @@ export class DynamicFormfieldComponent implements OnInit,AfterViewInit{
         }
     }
     ngOnInit(){
-        
+        this.model = this.model
     }
     ngAfterViewInit(){
 

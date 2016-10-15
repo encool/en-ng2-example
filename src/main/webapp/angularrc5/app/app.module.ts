@@ -13,8 +13,11 @@ import { UserService } from './service/user.service'
 import { JobService } from './service/job.service'
 import { MenuService } from './service/menu.service'
 import { OrgService } from './service/org.service'
+
 import { SharedModule } from './shared/shared.module'
-import { SysmanageModule } from './sysmanage/sysmanage.module'
+// import { SysmanageModule } from './sysmanage/sysmanage.module'
+// import { WorkflowModule } from './workflow/workflow.module'
+
 
 import { ModalService } from './service/modal.service'
 
@@ -29,8 +32,8 @@ import { ModalService } from './service/modal.service'
     JsonpModule,
     routing,
     SharedModule.forRoot(),
-    SysmanageModule,
-
+    // SysmanageModule,
+    // WorkflowModule,
     // ModalModule.forRoot(),
     // BootstrapModalModule
   ],

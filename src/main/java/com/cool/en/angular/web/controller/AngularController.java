@@ -1,4 +1,4 @@
-package com.cool.en.angular.controller;
+package com.cool.en.angular.web.controller;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;

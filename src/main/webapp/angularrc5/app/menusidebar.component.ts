@@ -38,6 +38,11 @@ export class MenusidebarComponent {
     }   
 
     setrouterLink(menu,index,isherf){
-        return menu.l;
+        if(menu.l){
+            return menu.l;
+        }else{
+            return "dd"
+        }
+        
     }   
 }

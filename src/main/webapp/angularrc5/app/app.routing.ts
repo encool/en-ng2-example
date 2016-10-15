@@ -3,21 +3,9 @@ import { Routes, RouterModule } from '@angular/router';
 // import { UserorgManageComponent } from './sysmanage/userorg-manage.component'
 
 const appRoutes: Routes = [
-    // {
-    //     path: 'resourcemanage',
-    //     component: ResourcemanageComponent,
-    //     data: {
-    //         title: '权限资源管理'
-    //     }
-    // },
-    // {
-    //     path: 'userorgmanage',
-    //     component: UserorgManageComponent,
-    //     data: {
-    //         title: '机构用户管理'
-    //     }
-    // }
-    { path: '', redirectTo: 'userorgmanage', pathMatch: 'full'},
+    { path: '', redirectTo: 'userorgmanage', pathMatch: 'full' },
+    { path: 'workflow', loadChildren: './dist/assets/js/workflow/workflow.module.js#WorkflowModule' },
+    { path: 'sysmgt', loadChildren: './dist/assets/js/sysmanage/sysmanage.module.js#SysmanageModule' },
 ];
 export const appRoutingProviders: any[] = [
 

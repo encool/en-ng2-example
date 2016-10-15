@@ -1,7 +1,7 @@
-import { Component, OnInit, ViewChild, ViewContainerRef, Compiler, Type, ComponentRef, ApplicationRef } from '@angular/core';
+import { ComponentFactory,Component, OnInit, ViewChild, ViewContainerRef, Compiler, Type, ComponentRef, ApplicationRef, ComponentFactoryResolver } from '@angular/core';
 import { SysmanageModule } from '../../sysmanage/sysmanage.module'
 import { ModalAction } from '../object/modal-action'
-import { onModalAction } from '../interface/modal_hook'
+import { ModalHook } from '../interface/modal_hook'
 
 @Component({
     moduleId: module.id,
@@ -14,47 +14,54 @@ export class SimpleModalComponent implements OnInit {
 
     _actions: ModalAction[]
     _width: string
-    _modalstack = []
-    _content: onModalAction
+    _height: string|number
+    _title: string
+
+    _content: ModalHook
     _message: Function
     _dismiss: Function
     _success: Function
 
+    hidecallback: Function
+    hidecallback_params:any
+
     constructor(private _comp: Compiler, private myComp: ApplicationRef) {
-        this._width = "600px"
+        this._width = "750px"
+        this._height = "auto"
+        this._title = "是否确认"
     }
 
     ngOnInit() { 
-        $('#mysimpleModal').on('hidden.bs.modal', (e) => {debugger
-            let cmpRef: ComponentRef<any> = this._modalstack.pop();
-            if(cmpRef){
-                cmpRef.destroy()
+        this.hidecallback = this._dismiss
+        $('#mysimpleModal').on('hidden.bs.modal', (e) => {
+            if(this.hidecallback){
+                this.hidecallback(this.hidecallback_params)
+            }
+            if(this._content.onModalNativeEvent){
+                this._content.onModalNativeEvent('hidden.bs.modal',e)
+            }
+        })
+        $('#mysimpleModal').on('shown.bs.modal', (e) => {
+            if(this._content.onModalNativeEvent){
+                this._content.onModalNativeEvent('shown.bs.modal',e)
             }
         })
     }
 
-    openConfirm(message, ref: ComponentRef<any>, success?: Function, dismisss?: Function) {
+    openConfirm(message,success?: Function, dismisss?: Function) {
         this._message = message
-        this._modalstack.push(ref)
-        $("#mysimpleModal").modal("show")
+        this.show()
         this._success = success
+        this._dismiss = dismisss
     }
 
-    open(com: any, ngModule: any, ref: ComponentRef<any>, params: any, success?: Function, dismisss?: Function) {
-        this._comp.compileComponentAsync(com, ngModule).then(f => {
-            let cmpRef: ComponentRef<any> = this.wrapperRef.createComponent(f);
-            this._content = cmpRef.instance
-            this._modalstack.push(ref)
-            cmpRef.instance.$model = params;
-            this._success = success
-            this._dismiss = dismisss
-            $("#mysimpleModal").modal("show")
-        });
-        // var f = this._comp.compileComponentSync(com,ngModule)
-        // let cmpRef:ComponentRef<any> = this.wrapperRef.createComponent(f)
-        // this._success = success
-        // this._dismiss = dismisss
-        // $("#mysimpleModal").modal("show")
+    open(myComponentFactory:ComponentFactory<any>, params: any, success?: Function, dismisss?: Function) {
+        let cmpRef: ComponentRef<any> = this.wrapperRef.createComponent(myComponentFactory);
+        this._content = cmpRef.instance
+        cmpRef.instance.$model = params;
+        this._success = success
+        this._dismiss = dismisss
+        this.show()
     }
 
     setActionBtnClass(action: ModalAction) {
@@ -70,58 +77,30 @@ export class SimpleModalComponent implements OnInit {
     }
 
     onAction(action: ModalAction) {
-        if (action.cancel) {
+        if (action.cancel) {        
+            this.hidecallback = this._dismiss
+            this.hidecallback_params = {action:action}
             this.hide()
-            this.onDismiss(action)
             return
         }
 
         if (this._content != undefined && this._content.onModalAction) {
             this._content.onModalAction(action).then(
                 (data) => {
-                    this._success(data);
+                    this.hidecallback = this._success;
+                    this.hidecallback_params = {action:action,data:data}
                     this.hide()
-                    // let cmpRef: ComponentRef<any> = this._modalstack.pop();
-                    // cmpRef.destroy()
                 },
                 data => {
                     console.log("modal action be rejected," + data)
                 })
         } else if (action.close) {
-            this._success(action);
+            this.hidecallback = this._success;
+            this.hidecallback_params = {action:action}
             this.hide()
-            // let cmpRef: ComponentRef<any> = this._modalstack.pop();
-            // cmpRef.destroy()
         } else {
             toastr.warning("need handle action:" + action.name)
         }
-    }
-
-    // onSuccess() {debugger
-    //     if (this._content.modalOnSave) {
-    //         this._content.modalOnSave().then((data) => {
-    //             this._success(data);
-    //             $("#mysimpleModal").modal("hide")
-    //             let cmpRef: ComponentRef<any> = this._modalstack.pop();
-    //             cmpRef.destroy()
-    //         }, data => {
-    //             alert("should not close now")
-    //         })
-    //     } else if (this._success) {
-    //         this._success();
-    //         $("#mysimpleModal").modal("hide")
-    //         let cmpRef: ComponentRef<any> = this._modalstack.pop();
-    //         cmpRef.destroy()
-    //     }
-
-    // }
-
-    onDismiss(action) {
-        if (this._dismiss) {
-            this._dismiss(action);
-        }
-        // let cmpRef: ComponentRef<any> = this._modalstack.pop();
-        // cmpRef.destroy()
     }
 
     show() {

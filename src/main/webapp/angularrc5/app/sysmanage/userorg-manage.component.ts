@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ViewContainerRef, Compiler, Type } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewContainerRef, Compiler, Type, ComponentFactoryResolver } from '@angular/core';
 
 import * as _ from "lodash"
 
@@ -37,7 +37,8 @@ export class UserorgManageComponent implements OnInit, onZtreeAction {
     _modalContext: {
         vcRef: ViewContainerRef,
         compiler: Compiler,
-        ngModule: Type
+        ngModule: Type<any>
+        componentFactoryResolver:ComponentFactoryResolver
     }
     _orginfo_params: any = {}
     _orgtree_actions: Array<TreeAction> = [
@@ -89,13 +90,14 @@ export class UserorgManageComponent implements OnInit, onZtreeAction {
         actions:this._usermgt_grid_actions,
     })
 
-    constructor(private vcRef: ViewContainerRef, private compiler: Compiler,
+    constructor(private componentFactoryResolver:ComponentFactoryResolver,private vcRef: ViewContainerRef, private compiler: Compiler,
         private orgService: OrgService, private modalService: ModalService,
         private userService: UserService) {
         this._modalContext = {
             vcRef: vcRef,
             compiler: compiler,
-            ngModule: SysmanageModule
+            ngModule: SysmanageModule,
+            componentFactoryResolver:componentFactoryResolver
         }
     }
 
@@ -165,6 +167,20 @@ export class UserorgManageComponent implements OnInit, onZtreeAction {
                     console.log('addUser success',this._model);
                 }
             )
+
+            // this.modalService.openConfirm(
+            //     this._modalContext,
+            //     {
+            //         message:"11",
+            //         width: "800px",
+            //         actions:this._usermodal_actions
+            //     },
+            //     (data) => {
+            //         this.userGrid.refresh();
+            //         console.log('addUser success',this._model);
+            //     }
+            // )
+
         }
     }
 

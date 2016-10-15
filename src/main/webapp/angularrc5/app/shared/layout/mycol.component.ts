@@ -14,7 +14,7 @@ export class MycolComponent implements OnInit {
     span:string;
     
     setClass(){
-        var colClassName = "clo-sm-"+this.span;
+        var colClassName = "col-sm-"+this.span;
         var classOb = {};
         classOb[colClassName] = true;
         return classOb;

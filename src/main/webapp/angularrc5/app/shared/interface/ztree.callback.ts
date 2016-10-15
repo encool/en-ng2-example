@@ -7,6 +7,14 @@ export declare abstract class ZtreeCallback{
 }
 
 export class DefaultZtreeCallBack implements ZtreeCallback {
+
+    constructor(options:{
+        onCheck?:(event: any, treeId: string, treeNode: any) => void,
+        onClick?:(event, treeId, treeNode, clickFlag) => void
+    }){
+        this.onCheck = options.onCheck == undefined ? this.onCheck:options.onCheck
+        this.onClick = options.onClick == undefined ? this.onClick:options.onClick
+    }
     onCheck(event: any, treeId: string, treeNode: any){}
     onClick(event, treeId, treeNode, clickFlag){}
 }

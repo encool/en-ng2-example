@@ -1,4 +1,4 @@
-package com.cool.en.login.controller;
+package com.cool.en.login.web.controller;
 
 import org.en.core.common.UnionAjaxMessage;
 import org.en.core.eenum.APIStatus;

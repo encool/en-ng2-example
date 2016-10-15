@@ -1,4 +1,4 @@
-import { Component ,OnInit, ViewChild, ViewContainerRef, Compiler, Type } from '@angular/core';
+import { Component ,OnInit, ViewChild, ViewContainerRef, Compiler, Type, ComponentFactoryResolver } from '@angular/core';
 import { Headers, Http, URLSearchParams, RequestOptions } from '@angular/http';
 
 import { SysmanageModule } from './sysmanage.module'
@@ -9,6 +9,7 @@ import { ModalEvent } from '../shared/object/modal-event'
 import { JqgridSetting, JqgridAction, JqgridEvent, JqgridCallback, DefaultJqgridCallback, ColModel, JqgridComponent} from '../shared/jqgrid.module'
 import { TreeEvent, ZtreeSetting, ZtreeComponent, onZtreeAction, TreeAction, TreeNode, ZtreeCallback, DefaultZtreeCallBack} from '../shared/ztree.module'
 
+import { MenuinfoComponent } from './menuinfo.component'
 
 import { MenuService } from '../service/menu.service'
 import { OrgService } from '../service/org.service'
@@ -34,8 +35,7 @@ export class ResourcemanageComponent implements OnInit,onZtreeAction{
 
     _modalContext: {
         vcRef: ViewContainerRef,
-        compiler: Compiler,
-        ngModule: Type
+        componentFactoryResolver: ComponentFactoryResolver
     }
 
     _menutree_autoParam = ["id","pid","type","checked","virtual"];
@@ -112,13 +112,12 @@ export class ResourcemanageComponent implements OnInit,onZtreeAction{
         }
     };
 
-    constructor(private http:Http,private vcRef: ViewContainerRef, private compiler:Compiler,
+    constructor(private http:Http,private vcRef: ViewContainerRef, private componentFactoryResolver:ComponentFactoryResolver,
                     private menuService:MenuService,private orgService:OrgService,
                     private jobService:JobService,private modalService:ModalService){
         this._modalContext = {
             vcRef: vcRef,
-            compiler: compiler,
-            ngModule: SysmanageModule
+            componentFactoryResolver: componentFactoryResolver
         }                        
     }
  
@@ -182,16 +181,49 @@ export class ResourcemanageComponent implements OnInit,onZtreeAction{
                 case "edit":
                     this.menuService.getMenuByMenuId(treeEvent.node.id).then(data => {
                         // console.log("geted menu",data);
-                        this._model.menu = data;
-                        this._menuinfo_params.type = "edit"
-                        $('#testmodalid').modal('show')
+                        // this._model.menu = data;
+                        // this._menuinfo_params.type = "edit"
+                        // $('#testmodalid').modal('show')
+                        
+                        this.modalService.open(
+                            this._modalContext,
+                            {
+                                comp: MenuinfoComponent,
+                                title: "编辑菜单信息"
+                            },
+                            {
+                                model: data,
+                                params:{
+                                    type: "edit"
+                                }
+                            },
+                            () => {
+                                
+                            }
+                        )
                     });
                     break
                 case "add":
                     this._model.menu = {};
                     this._menuinfo_params.type = "add"
                     this._menuinfo_params.pNode = treeEvent.node;
-                    $('#testmodalid').modal('show')
+                    this.modalService.open(
+                        this._modalContext,
+                        {
+                            comp: MenuinfoComponent,
+                            title: "编辑菜单信息"
+                        },
+                        {
+                            model: {},
+                            params:{
+                                type: "add",
+                                pNode: treeEvent.node
+                            }
+                        },
+                        ()=>{
+                            
+                        }
+                    )
                     break
                 case "refresh":
                     this.menuTree.refreshTree()

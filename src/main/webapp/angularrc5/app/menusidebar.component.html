@@ -9,7 +9,7 @@
             <!-- menu profile quick info -->
             <div class="profile">
               <div class="profile_pic">
-                <img src="dist/assets/images/img.jpg" alt="..." class="img-circle profile_img">
+                <img src="./assets/images/img.jpg"alt="..." class="img-circle profile_img">
               </div>
               <div class="profile_info">
                 <span>Welcome,</span>
@@ -25,11 +25,13 @@
               <div class="menu_section active">
                 <h3>General</h3>
                 <ul class="nav side-menu" >
-                  <li [ngClass]={active:menu.isSelected} *ngFor="let menu of menus;let i = index">
-                  	<a data-toggle="collapse" [href]="setMenuId(menu,i,'herf')"><i [ngClass]="setIconClasses(menu)"></i> {{menu.t}} <span *ngIf="menu.c" class="fa fa-chevron-down"></span></a>
+                  <li [ngSwitch]="menu.l != undefined && menu.l != ''" [ngClass]={active:menu.isSelected} *ngFor="let menu of menus;let i = index">
+                  	<a *ngSwitchCase="true" data-toggle="collapse" [routerLink]="setrouterLink(menu,i)" [href]="setMenuId(menu,i,'herf')"><i [ngClass]="setIconClasses(menu)"></i> {{menu.t}} <span *ngIf="menu.c" class="fa fa-chevron-down"></span></a>                   
+                  	<a *ngSwitchCase="false" data-toggle="collapse" [href]="setMenuId(menu,i,'herf')"><i [ngClass]="setIconClasses(menu)"></i> {{menu.t}} <span *ngIf="menu.c" class="fa fa-chevron-down"></span></a>                   
                     <ul *ngIf="menu.c" [id]="setMenuId(menu,i)" aria-expanded="false" [attr.aria-controls]="setMenuId(menu,i)" class="nav child_menu collapse">
-                      	<li *ngFor="let menu of menu.c;let i = index" [ngClass]={currentpage:menu.isSelected}>
-		                  	<a data-toggle="collapse" [href]="setMenuId(menu,i,'herf')"><i [ngClass]="setIconClasses(menu)"></i> {{menu.t}} <span *ngIf="menu.c" class="fa fa-chevron-down"></span></a>	
+                      	<li [ngSwitch]="menu.l != undefined && menu.l != ''" *ngFor="let menu of menu.c;let i = index" [ngClass]={currentpage:menu.isSelected}>
+                  	    <a *ngSwitchCase="true" data-toggle="collapse" [routerLink]="setrouterLink(menu,i)" [href]="setMenuId(menu,i,'herf')"><i [ngClass]="setIconClasses(menu)"></i> {{menu.t}} <span *ngIf="menu.c" class="fa fa-chevron-down"></span></a>                   
+                  	    <a *ngSwitchCase="false" data-toggle="collapse" [href]="setMenuId(menu,i,'herf')"><i [ngClass]="setIconClasses(menu)"></i> {{menu.t}} <span *ngIf="menu.c" class="fa fa-chevron-down"></span></a>                   
 		                    <ul *ngIf="menu.c" [id]="setMenuId(menu,i)" aria-expanded="false" [attr.aria-controls]="setMenuId(menu,i)" class="nav child_menu collapse">
 		                      	<li *ngFor="let menu of menu.c;let i = index" [ngClass]={currentpage:menu.isSelected}>
 				                  	<a [routerLink]="setrouterLink(menu,i)" data-toggle="collapse" [href]="setMenuId(menu,i,'herf')">
