@@ -3,9 +3,8 @@ import { FormGroup }                 from '@angular/forms';
 import { FieldBase }              from './field-base';
 import { FieldControlService }    from './field-control.service';
 @Component({
-    moduleId:module.id,
     selector: 'dynamic-form-hori',
-    templateUrl: 'dynamic-form-horizontal.component.html',
+    templateUrl: './dynamic-form-horizontal.component.html',
     providers: [ FieldControlService ]
 })
 export class DynamicFormHorizontalComponent implements OnInit {

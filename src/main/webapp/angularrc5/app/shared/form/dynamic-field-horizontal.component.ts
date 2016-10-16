@@ -2,9 +2,8 @@ import { Component, Input, OnInit, AfterViewInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { FieldBase }     from './field-base';
 @Component({
-    moduleId: module.id,
     selector: 'df-field-hori',
-    templateUrl: 'dynamic-field-horizontal.component.html'
+    templateUrl: './dynamic-field-horizontal.component.html'
 })
 export class DynamicfieldHorizontalComponent implements OnInit, AfterViewInit {
     @Input() field: FieldBase<any>;

@@ -7,7 +7,6 @@ import { WorkprocessService } from '../service/workprocess.service'
 import { WorkflowService } from '../service/workflow.service'
 
 @Component({
-    moduleId: module.id,
     selector: 'usertask-do',
     template: `
     <wf-task-form ></wf-task-form>

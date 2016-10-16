@@ -7,7 +7,6 @@ import { TextField }  from '../../shared/form/text-field';
 import { DynamicFormComponent } from '../../shared/form/dynamic-form.component'
 
 @Component({
-    moduleId: module.id,
     selector: 'field-edit',
     template: `
        <dynamic-form-hori #df_ref [fields]="_fields" [model]="$model.model" ></dynamic-form-hori>

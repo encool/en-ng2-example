@@ -17,9 +17,8 @@ import { SysmanageModule } from './sysmanage.module'
 import { UserinfoComponent } from './userinfo.component'
 
 @Component({
-    moduleId: module.id,
     selector: 'userorg-manage',
-    templateUrl: 'userorg-manage.component.html'
+    templateUrl: './userorg-manage.component.html'
 })
 export class UserorgManageComponent implements OnInit, onZtreeAction {
 

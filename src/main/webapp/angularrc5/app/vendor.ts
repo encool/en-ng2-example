@@ -7,5 +7,8 @@ import '@angular/http';
 import '@angular/router';
 // RxJS
 import 'rxjs';
+import "jQuery"
+import "Lodash"
+// require('bpmn-js/lib/Modeler');
 // Other vendors for example jQuery, Lodash or Bootstrap
 // You can import js, ts, css, sass, ...

@@ -8,9 +8,8 @@ import { OrgService } from '../service/org.service'
 import { modalOnSave } from '../shared/interface/modal_hook' 
 
 @Component({
-    moduleId: module.id,
     selector: 'my-orginfo',
-    templateUrl: 'orginfo.component.html'
+    templateUrl: './orginfo.component.html'
 })
 export class OrginfoComponent implements OnInit,modalOnSave {
     @Input() $model:any = {}
@@ -72,7 +71,7 @@ export class OrginfoComponent implements OnInit,modalOnSave {
 
     ngOnInit() { }
 
-    onModalAction(){
+    modalOnSave(){
         console.log("save model",this.$model.org)
         
         if(this.$model.params.type == "edit"){

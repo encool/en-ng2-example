@@ -7,9 +7,8 @@ import { JqgridCallback } from '../interface/jqgrid.callback'
 import { JqgridSetting } from '../object/jqgrid-setting'
 
 @Component({
-    moduleId: module.id,
     selector: 'my-grid',
-    templateUrl: "jqgrid.component.html"
+    templateUrl: "./jqgrid.component.html"
 })
 export class JqgridComponent implements OnInit {
 

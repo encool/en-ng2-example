@@ -4,7 +4,6 @@ import { Router } from '@angular/router'
 import { WorkflowService } from '../service/workflow.service'
 
 @Component({
-    moduleId: module.id,
     selector: 'wf-sp-entry',
     template: `
     <table id="productentry" width="100%" border="0" cellspacing="0" cellpadding="0" class="ng-scope"><tbody>

@@ -12,9 +12,8 @@ import { onModalAction } from '../shared/interface/modal_hook'
 import { ModalAction } from '../shared/object/modal-action'
 
 @Component({
-    moduleId: module.id,
     selector: 'my-userinfo',
-    templateUrl: 'userinfo.component.html'
+    templateUrl: './userinfo.component.html'
 })
 export class UserinfoComponent implements OnInit, onModalAction {
     @Input() $model: any = {

@@ -9,9 +9,8 @@ import { TextField }  from '../shared/form/text-field';
 
 import { onModalAction } from '../shared/interface/modal_hook' 
 @Component({
-    moduleId: module.id,
     selector: 'my-menuinfo',
-    templateUrl: 'menuinfo.component.html'
+    templateUrl: './menuinfo.component.html'
 })
 export class MenuinfoComponent implements OnInit,onModalAction {
 

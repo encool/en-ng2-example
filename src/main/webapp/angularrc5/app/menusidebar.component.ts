@@ -4,9 +4,8 @@ import {MenuService } from './service/menu.service';
 
 
 @Component({
-    moduleId: module.id,
     selector: 'my-menubar',
-    templateUrl: 'menusidebar.component.html',
+    templateUrl: './menusidebar.component.html',
     providers: [MenuService]
 })
 export class MenusidebarComponent {

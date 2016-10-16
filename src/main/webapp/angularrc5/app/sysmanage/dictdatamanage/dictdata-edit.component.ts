@@ -5,7 +5,6 @@ import { DynamicFormHorizontalComponent, DropdownField, FieldBase, TextField} fr
 
 
 @Component({
-    moduleId: module.id,
     selector: 'dictdata',
     template: `
         <dynamic-form-hori #dictdataform [fields]="fields" [model]="$model.dictdata" ></dynamic-form-hori>

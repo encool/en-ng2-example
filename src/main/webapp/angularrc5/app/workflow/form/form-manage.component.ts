@@ -8,7 +8,6 @@ import { RelEditComponent } from './rel-edit.component'
 import { ModalService } from '../../service/modal.service'
 
 @Component({
-    moduleId: module.id,
     selector: 'form-manage',
     template: `
         <my-container>

@@ -1,4 +1,5 @@
 var helpers = require('./helpers');
+var webpack = require('webpack');
 module.exports = {
     entry: {
         "bpmn-viewer-custom": "./src/bpmn-viewer.js",
@@ -15,7 +16,7 @@ module.exports = {
     },
     module: {
         preLoaders: [
-            { test: /\.json$/,  loader: 'json' },
+            { test: /\.json$/, loader: 'json' },
         ],
         // loaders: [
         //     { test: /\.js$/, exclude: /node_modules/, loader: 'babel' },
@@ -23,4 +24,16 @@ module.exports = {
         //     { test: /\.css$/, exclude: /static/, loader: 'style!css' }
         // ]
     },
+    plugins: [
+        // new webpack.NoErrorsPlugin(),
+        // new webpack.optimize.DedupePlugin(),
+        new webpack.optimize.UglifyJsPlugin({ // https://github.com/angular/angular/issues/10618
+            mangle: {
+                keep_fnames: true
+            },
+            compress: {
+                warnings: false
+            }
+        }),
+    ]
 }

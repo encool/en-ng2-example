@@ -12,7 +12,6 @@ import { onModalAction } from '../../shared/interface/modal_hook'
 import { ModalAction } from '../../shared/object/modal-action'
 
 @Component({
-    moduleId: module.id,
     selector: 'pro-def-info',
     templateUrl: './process-model-info.component.html'
 })

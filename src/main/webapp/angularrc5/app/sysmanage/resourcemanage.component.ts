@@ -17,9 +17,8 @@ import { JobService } from '../service/job.service'
 import { ModalService } from '../service/modal.service'
 
 @Component({
-    moduleId: module.id,
     selector: 'resource-manage',
-    templateUrl: 'resourcemanage.component.html',
+    templateUrl: './resourcemanage.component.html',
 })
 export class ResourcemanageComponent implements OnInit,onZtreeAction{
 
@@ -418,7 +417,10 @@ export class ResourcemanageComponent implements OnInit,onZtreeAction{
             }else{
                 this.refreshResTree({jobId:""});
             }
-        }        
+        } ,
+        gridComplete(){
+
+        }       
     }
 
     orgTreeCall = _.assign(this.orgTreeCall, DefaultZtreeCallBack, {

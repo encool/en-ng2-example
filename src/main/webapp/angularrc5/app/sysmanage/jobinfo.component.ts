@@ -9,9 +9,8 @@ import { TextField }  from '../shared/form/text-field';
 
 import { modalOnSave } from '../shared/interface/modal_hook' 
 @Component({
-    moduleId: module.id,
     selector: 'my-jobinfo',
-    templateUrl: 'jobinfo.component.html'
+    templateUrl: './jobinfo.component.html'
 })
 export class JobinfoComponent implements OnInit,modalOnSave {
     @Input() model:any = {}

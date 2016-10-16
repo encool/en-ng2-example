@@ -3,7 +3,6 @@ import { Component, OnInit, Input } from '@angular/core';
 import { WorkflowService } from '../service/workflow.service'
 
 @Component({
-    moduleId: module.id,
     selector: 'wf-task-form',
     template: `
     <div *ngFor="let field of fields">

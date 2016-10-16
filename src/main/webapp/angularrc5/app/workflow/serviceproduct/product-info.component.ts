@@ -6,7 +6,6 @@ import { TextField }  from '../../shared/form/text-field';
 import { DynamicFormHorizontalComponent } from '../../shared/form/dynamic-form-horizontal.component'
 
 @Component({
-    moduleId: module.id,
     selector: 'product-info',
     templateUrl: './product-info.component.html'
 })

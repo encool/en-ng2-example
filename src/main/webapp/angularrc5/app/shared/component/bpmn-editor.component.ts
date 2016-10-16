@@ -5,9 +5,8 @@ import { ModalAction } from '../../shared/object/modal-action'
 import { Headers, Http, URLSearchParams, RequestOptions } from '@angular/http';
 
 @Component({
-    moduleId: module.id,
     selector: 'bpmn-editor',
-    templateUrl: 'bpmn-editor.component.html'
+    templateUrl: './bpmn-editor.component.html'
 })
 export class BpmnEditorComponent implements OnInit {
 
@@ -117,7 +116,7 @@ export class BpmnEditorComponent implements OnInit {
         var windowl:any = window
         var propertiesPanelModule = windowl.PropertiesPanelModule;
         var propertiesProviderModule = windowl.PropertiesProviderModule;
-        var camundaModdleDescriptor = require("./camunda.js")
+        var camundaModdleDescriptor = require("./camunda")
         var BpmnModeler = windowl.BpmnJS;
         var BpmnViewer = windowl.BpmnViewer;
         var canvas = $('#js-canvas');

@@ -2,9 +2,8 @@ import { Component } from '@angular/core';
 import { SecurityService } from './service/security.service'
 
 @Component({
-    moduleId: module.id,
     selector: 'top-nav',
-    templateUrl: 'topnav.component.html'
+    templateUrl: './topnav.component.html'
 })
 export class TopnavComponent {
 

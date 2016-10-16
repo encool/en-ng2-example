@@ -9,7 +9,6 @@ import { ProcessModelInfoComponent } from './process-model-info.component'
 import { BpmnEditorComponent } from '../../shared/component/bpmn-editor.component'
  
 @Component({
-    moduleId: module.id,
     selector: 'process-def',
     templateUrl: './process-definition.component.html'
 })

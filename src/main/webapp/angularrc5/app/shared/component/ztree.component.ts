@@ -11,7 +11,6 @@ import { ZtreeCallback } from '../interface/ztree.callback'
 import { ZtreeSetting } from '../object/ztree-setting'
 
 @Component({
-    moduleId:module.id,
     selector: 'my-ztree',
     template: `
             <ul [id]="ztreeSetting.treeId" class="ztree"></ul>
@@ -21,7 +20,8 @@ import { ZtreeSetting } from '../object/ztree-setting'
                 </ul>
             </div>
         `,
-    styleUrls:  ['./ztree.component.css']
+    // styles: [require('./app/assets/css/ztree.component.css')]
+    styleUrls:  ['ztree.component.css']
 })
 export class ZtreeComponent {
     //TODO 去掉在setting中参数

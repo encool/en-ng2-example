@@ -4,7 +4,6 @@ import { Tab } from './tab'
 import { TabpanelComponent } from './tabpanel.component'
 
 @Component({
-    moduleId: module.id,
     selector: 'tabs',
     template: `
         <ul class="nav nav-tabs" role="tablist" style="margin-bottom: 15px;">

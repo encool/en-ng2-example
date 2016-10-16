@@ -10,7 +10,6 @@ import { DictdataEditComponent } from './dictdata-edit.component'
 
 
 @Component({
-    moduleId: module.id,
     selector: 'dictdata',
     templateUrl: './dictdata-manage.component.html'
 })
@@ -71,6 +70,9 @@ export class DictdataManageComponent implements OnInit {
     _dictdatagridcall: JqgridCallback = {
         onSelectRow: (rowid, status, e) => {
             var selectRowIds = this.dictdataGrid.getSelectRowIds();
+        },
+        gridComplete: () => {
+
         }
     }
 

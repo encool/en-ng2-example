@@ -8,7 +8,6 @@ import { WorkflowService } from '../service/workflow.service'
 import { ProductInfoComponent } from './product-info.component'
 
 @Component({
-    moduleId: module.id,
     selector: 'sp-manage',
     templateUrl: './product-manage.component.html'
 })

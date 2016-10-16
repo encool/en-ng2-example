@@ -4,9 +4,8 @@ import { ModalAction } from '../object/modal-action'
 import { ModalEvent } from '../object/modal-event'
 
 @Component({
-    moduleId: module.id,
     selector: 'my-modal',
-    templateUrl: 'my-modal.component.html'
+    templateUrl: './my-modal.component.html'
 })
 export class MyModalComponent implements OnInit {
     private _id:string;

@@ -4,9 +4,8 @@ import { ModalAction } from '../object/modal-action'
 import { ModalHook } from '../interface/modal_hook'
 
 @Component({
-    moduleId: module.id,
     selector: 's-modal',
-    templateUrl: 'simple-modal.component.html'
+    templateUrl: './simple-modal.component.html'
 })
 export class SimpleModalComponent implements OnInit {
 

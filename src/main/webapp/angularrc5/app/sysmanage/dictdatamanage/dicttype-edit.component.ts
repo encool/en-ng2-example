@@ -10,7 +10,6 @@ import {
 } from '@angular/forms';
 
 @Component({
-    moduleId: module.id,
     selector: 'dicttype',
     template: `
 <form class="form-horizontal" role="form" [formGroup]="myForm">

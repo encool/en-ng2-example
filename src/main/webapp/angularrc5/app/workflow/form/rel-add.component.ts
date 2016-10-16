@@ -9,7 +9,6 @@ import { TextField }  from '../../shared/form/text-field';
 import { DynamicFormComponent } from '../../shared/form/dynamic-form.component'
 
 @Component({
-    moduleId: module.id,
     selector: 'ff-rel-add',
     template: `
     <my-div [span]="12">

@@ -8,7 +8,6 @@ import { Tab } from '../../shared/form/widget/tab'
 import { BpmnEditorComponent } from '../../shared/component/bpmn-editor.component'
 
 @Component({
-    moduleId: module.id,
     selector: 'process-config',
     template: `
         <div class="container-fluid" style="height: 80%;">

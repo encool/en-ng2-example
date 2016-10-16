@@ -81,14 +81,14 @@ module.exports = {
         test: /\.(png|jpe?g|gif|svg|woff|woff2|ttf|eot|ico)$/,
         loader: 'file?name=assets/[name].[hash].[ext]'
       },
+      // {
+      //   test: /\.css$/,
+      //   exclude: helpers.root('src', 'app'),
+      //   loader: ExtractTextPlugin.extract('style', 'css?sourceMap')
+      // },
       {
         test: /\.css$/,
-        exclude: helpers.root('src', 'app'),
-        loader: ExtractTextPlugin.extract('style', 'css?sourceMap')
-      },
-      {
-        test: /\.css$/,
-        include: helpers.root('src', 'app'),
+        include: helpers.root('app'),
         loader: 'raw'
       }
     ]
@@ -98,7 +98,12 @@ module.exports = {
     new webpack.optimize.CommonsChunkPlugin({
       name: ['app', 'vendor', 'polyfills']
     }),
-
+    // new webpack.optimize.UglifyJsPlugin({
+    //     beautify: false, //prod
+    //     mangle: { screw_ie8 : true, keep_fnames: true }, //prod
+    //     compress: { screw_ie8: true }, //prod
+    //     comments: false //prod
+    // })
     // new HtmlWebpackPlugin({
     //   template: 'html/index.html',
     //   filename: 'index.html'

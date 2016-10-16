@@ -1,9 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
-    moduleId: module.id,
     selector: 'my-text',
-    templateUrl: 'text.component.html'
+    templateUrl: './text.component.html'
 })
 export class TextComponent implements OnInit {
     @Input() id;

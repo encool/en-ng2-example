@@ -7,7 +7,6 @@ import { ModalService } from '../../service/modal.service'
 import { FieldEditComponent } from './field-edit.component'
 
 @Component({
-    moduleId: module.id,
     selector: 'field-manage',
     template: `
         <my-container>
