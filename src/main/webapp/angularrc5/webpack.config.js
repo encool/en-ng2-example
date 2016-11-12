@@ -1,1 +1,0 @@
- module.exports = require('./config/webpack.bpmn.panel.property.camunda.js');

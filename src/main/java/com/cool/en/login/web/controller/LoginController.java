@@ -32,7 +32,7 @@ public class LoginController {
 			unionAjaxMessage.setStatus(APIStatus.SCUUESS);
 			unionAjaxMessage.setMessage("success");
 //			return unionAjaxMessage;
-			return "redirect:/index";
+			return "redirect:index";
 		} catch (AuthenticationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -40,7 +40,7 @@ public class LoginController {
 			unionAjaxMessage.setStatus(APIStatus.FAILED);
 			unionAjaxMessage.setMessage("failed");
 //			return unionAjaxMessage;
-			return "redirect:/login";
+			return "redirect:login";
 		}
 	}
 	

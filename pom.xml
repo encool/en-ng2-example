@@ -54,7 +54,7 @@
 
 		<dependency>
 		    <groupId>com.chinacreator.c2.qyb</groupId>
-		    <artifactId>qysyb-workflow-oracle-test</artifactId>
+		    <artifactId>qysyb-workflow-mysql-test</artifactId>
 		    <version>0.9.9</version>
 		</dependency>
 

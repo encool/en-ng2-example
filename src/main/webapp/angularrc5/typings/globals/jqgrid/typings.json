@@ -1,8 +1,0 @@
-{
-  "resolution": "main",
-  "tree": {
-    "src": "https://raw.githubusercontent.com/DefinitelyTyped/DefinitelyTyped/f714aefb78c3e5e24d171dd3ec74fffc81696b3f/jqgrid/jqgrid.d.ts",
-    "raw": "registry:dt/jqgrid#0.0.0+20160801011631",
-    "typings": "https://raw.githubusercontent.com/DefinitelyTyped/DefinitelyTyped/f714aefb78c3e5e24d171dd3ec74fffc81696b3f/jqgrid/jqgrid.d.ts"
-  }
-}

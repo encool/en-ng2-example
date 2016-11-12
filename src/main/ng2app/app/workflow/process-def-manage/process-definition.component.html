@@ -1,0 +1,12 @@
+<div class="container-fluid" style="height: 80%;">
+	<div class="row" style="height: 100%;">
+		<div class="col-sm-6">
+			<my-grid #processdefgrid_ref [colModel]="_procdefmgt_col_model" [jqgridSetting]="_procdefmgt_grid_setting"
+				(jqgridevent)="onGridAction($event)" [callback]="userGridCall">
+			</my-grid>
+		</div>        
+        <!--<div class="col-sm-12" style="height: 100%;">
+            <bpmn-editor></bpmn-editor>
+        </div>-->
+	</div>
+</div>

@@ -21,7 +21,9 @@
    <!--  配置文件路径 -->
     <context-param>
         <param-name>contextConfigLocation</param-name>
-    	<param-value>classpath:application-context.xml,classpath*:*core-context.xml,classpath*:context/*-context.xml,classpath*:custom/*-context.xml</param-value>
+<!--         <param-value>classpath:c2-core-context.xml,classpath*:context/*-context.xml,classpath*:custom/*-context.xml</param-value>
+     -->    
+    	<param-value>classpath:application-context.xml,classpath*:core-context.xml,classpath*:context/*-context.xml,classpath*:custom/*-context.xml</param-value>
     </context-param>
  
    <!-- 平台全局属性初始化 -->

@@ -1,0 +1,17 @@
+<div class="modal fade" id="mysimpleModal">
+  <div class="modal-dialog" [style.width]="_width">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" (click)="onDismiss()" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">{{_title}}</h4>
+      </div>
+      <div class="modal-body" [style.height]="_height">
+        <div #wrapper></div>
+        {{_message}}
+      </div>
+      <div class="modal-footer">
+        <button *ngFor="let action of _actions" type="button" [ngClass]="setActionBtnClass(action)" (click)="onAction(action)">{{action.name}}</button>
+      </div>
+    </div><!-- /.modal-content  -->
+  </div><!-- /.modal-dialog --> 
+</div>
