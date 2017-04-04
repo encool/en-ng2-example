@@ -1,8 +1,8 @@
 import { Component, OnInit, ViewChild, ViewContainerRef, ComponentFactoryResolver } from '@angular/core';
 import { Headers, Http, URLSearchParams, RequestOptions } from '@angular/http';
 
-import { JqgridSetting, JqgridAction, JqgridEvent, JqgridCallback, DefaultJqgridCallback, ColModel, JqgridComponent} from '../../shared/jqgrid.module'
-import { TreeEvent, ZtreeSetting, ZtreeComponent, onZtreeAction, TreeAction, TreeNode, ZtreeCallback, DefaultZtreeCallBack} from '../../shared/ztree.module'
+import { JqgridSetting, JqgridAction, JqgridEvent, JqgridCallback, DefaultJqgridCallback, ColModel, JqgridComponent } from '../../shared/jqgrid.module'
+import { TreeEvent, ZtreeSetting, ZtreeComponent, onZtreeAction, TreeAction, TreeNode, ZtreeCallback, DefaultZtreeCallBack } from '../../shared/ztree.module'
 
 import { ModalService } from '../../service/modal.service'
 import { DicttypeEditComponent } from './dicttype-edit.component'
@@ -47,13 +47,7 @@ export class DictdataManageComponent implements OnInit {
         }
     })
 
-    _dictdata_grid_setting = new JqgridSetting({
-        primaryKey: "dictdataId",
-        title: "字典管理",
-        actions: this.grid_actions,
-        url: "list/dictdatacontents",
-        gridId: "dictdatamanage"
-    })
+
     _dictdata_col_model = [
         new ColModel({ label: "字典真实值", name: "dictdataName", width: "20" }),
         new ColModel({ label: "字典显示值", name: "dictdataValue", width: "20" }),
@@ -67,6 +61,15 @@ export class DictdataManageComponent implements OnInit {
         new JqgridAction({ key: "refresh", name: "刷新", order: 1 }),
         new JqgridAction({ key: "delete", name: "删除", order: 6 }),
     ]
+
+    _dictdata_grid_setting = new JqgridSetting({
+        primaryKey: "dictdataId",
+        title: "字典管理",
+        actions: this.grid_actions,
+        url: "list/dictdatacontents",
+        gridId: "dictdatamanage"
+    })
+
     _dictdatagridcall: JqgridCallback = {
         onSelectRow: (rowid, status, e) => {
             var selectRowIds = this.dictdataGrid.getSelectRowIds();
@@ -203,8 +206,8 @@ export class DictdataManageComponent implements OnInit {
                     this.modalService.openConfirm(
                         this._modalContext,
                         {
-                            message:"确认删除所选记录？",
-                            title:"是否确认"
+                            message: "确认删除所选记录？",
+                            title: "是否确认"
                         },
                         data => {
                             let ids: string[] = this.dictdataGrid.getSelectRowIds();
@@ -213,11 +216,11 @@ export class DictdataManageComponent implements OnInit {
                             let options = new RequestOptions({ headers: headers });
                             this.http.post('dictdata/delete', body, options)
                                 .toPromise()
-                                .then((data) => { 
+                                .then((data) => {
                                     this.dictdataGrid.refresh()
-                                    return data 
-                                })                            
-                            
+                                    return data
+                                })
+
                         }
                     )
 

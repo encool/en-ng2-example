@@ -78,7 +78,23 @@ export class ProductManageComponent implements OnInit {
                             })
                     })
                     break;
-                case 'delete':
+                case 'delete': 
+                    let ids = this.formGrid.getSelectRowIds()
+                    if (ids) {
+                        this.modalService.openConfirm(
+                            this._modalContext,
+                            {
+                                title: "确认",
+                                message: '是否删除？'
+                            },
+                            data => {
+                                this.workflowService.delProduct(ids).then(() => {
+                                    toastr.success('删除成功!')
+                                    this.formGrid.refresh()
+                                })
+                            }
+                        )
+                    }
                     break;
                 case 'refresh':
                     break;

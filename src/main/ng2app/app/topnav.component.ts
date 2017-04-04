@@ -1,17 +1,19 @@
 import { Component } from '@angular/core';
 import { SecurityService } from './service/security.service'
 
+import { MenuService } from './service/menu.service';
+
 @Component({
     selector: 'top-nav',
     templateUrl: './topnav.component.html'
 })
 export class TopnavComponent {
 
-    constructor(private securityService:SecurityService){
-        
+    constructor(private securityService: SecurityService, private menuService: MenuService) {
+
     }
 
-    logout(){
+    logout() {
         this.securityService.logout()
     }
 

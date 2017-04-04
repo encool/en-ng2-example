@@ -33,7 +33,7 @@ export class TextareaComponent implements OnInit {
     @Input() simple: boolean = true
     @Input() key: string = ''
     @Input() label: string = ''
-    @Input() span: number = 4
+    @Input() span: number = 12
     @Input() offset: number = 0
     @Input() hidden: boolean = false
     @Input() disabled: boolean = false
@@ -71,7 +71,8 @@ export class TextareaComponent implements OnInit {
             classExpression["col-sm-" + this.span] = true;
             classExpression["col-md-offset-" + this.offset] = this.offset == 0 ? false : true;
         } else {
-            classExpression["col-sm-" + this.field.span] = true;
+            let span = this.field.span || 12
+            classExpression["col-sm-" + span] = true;
         }
         return classExpression
     }

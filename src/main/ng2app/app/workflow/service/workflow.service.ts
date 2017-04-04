@@ -48,6 +48,16 @@ export class WorkflowService {
             .catch(this.handleError);
     }
 
+    delProduct(ids: String[]): Promise<any> {
+        let idstr = ids.join(",")
+        let headers = new Headers({ 'Content-Type': 'application/json;charset=UTF-8' });
+        let options = new RequestOptions({ headers: headers });
+        return this.http.delete(this._serviceproduct_url + idstr, options)
+            .toPromise()
+            .then((data) => { return true })
+            .catch(this.handleError);
+    }
+
     createModel(name, key, description): Promise<any> {
         let urlSearchParams = new URLSearchParams();
         urlSearchParams.set("name", name);

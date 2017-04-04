@@ -4,6 +4,8 @@ import { Headers, Http, URLSearchParams, RequestOptions } from '@angular/http';
 import { DropdownField } from '../../shared/form/dropdown-field';
 import { FieldBase } from '../../shared/form/field-base';
 import { TextField } from '../../shared/form/text-field';
+import { CheckboxField } from '../../shared/form/widget/checkbox.field';
+
 import { DynamicFormComponent } from '../../shared/form/dynamic-form.component'
 
 @Component({
@@ -25,6 +27,10 @@ export class FieldEditComponent implements OnInit {
 
     constructor(private http: Http) {
         this._fields = [
+            new TextField({
+                key: 'fieldId',
+                hidden: true
+            }),
             new TextField({
                 key: 'fieldNo',
                 label: '字段编码',
@@ -77,6 +83,36 @@ export class FieldEditComponent implements OnInit {
                 span: 6,
                 order: 9
             }),
+            new TextField({
+                key: 'remark1',
+                label: '属性1',
+                span: 6,
+                order: 10
+            }),
+            new TextField({
+                key: 'remark2',
+                label: '属性2',
+                span: 6,
+                order: 11
+            }),
+            new TextField({
+                key: 'remark3',
+                label: '属性3',
+                span: 6,
+                order: 12
+            }),
+            new TextField({
+                key: 'remark4',
+                label: '属性4',
+                span: 6,
+                order: 13
+            }),
+            // new CheckboxField({
+            //     key: 'remark9',
+            //     label: '属性9(b)',
+            //     span: 6,
+            //     order: 13
+            // }),            
         ];
     }
 
@@ -95,7 +131,8 @@ export class FieldEditComponent implements OnInit {
             this.http.get("e/" + this._sn + "/" + this.$model.params.fieldId, options)
                 .toPromise()
                 .then((data) => {
-                    this.$model.model = data.json()
+                    let d = data.json()
+                    this.modelForm.form.patchValue(d)
                 })
         }
     }
@@ -103,7 +140,7 @@ export class FieldEditComponent implements OnInit {
     onModalAction(): Promise<any> {
         if (this.$model.params.type == 'edit') {
             if (this.modelForm.form.valid) {
-                let body = JSON.stringify(this.$model.model);
+                let body = JSON.stringify(this.modelForm.form.value);
                 let headers = new Headers({ 'Content-Type': 'application/json;charset=UTF-8' });
                 let options = new RequestOptions({
                     headers: headers,
@@ -122,7 +159,7 @@ export class FieldEditComponent implements OnInit {
             }
         } else if (this.$model.params.type == 'add') {
             if (this.modelForm.form.valid) {
-                let body = JSON.stringify(this.$model.model);
+                let body = JSON.stringify(this.modelForm.form.value);
                 let headers = new Headers({ 'Content-Type': 'application/json;charset=UTF-8' });
                 let options = new RequestOptions({
                     headers: headers,

@@ -1,14 +1,11 @@
-<div class="container-fluid" style="height: 100%;">
-  
-    <div style="position: absolute;width:220px;">
-    	<my-menubar></my-menubar>
-    </div>
-     <div style="background: #F7F7F7; margin-left: 230px;margin-right: 10px;height: 100%;">
-     	<div class="row">
-     	<top-nav></top-nav>
-     	</div>
-     	<div class="row" style="height: 100%;margin-top: -68px;">
-     	  <router-outlet></router-outlet>
-     	</div>
-     </div>
+<div class="container body">
+	<div class="main_container">
+		<my-menubar></my-menubar>
+		<top-nav></top-nav>
+		<div class="right_col" role="main" style="min-height: 932px;">
+			<div class="row" style="height: 100%;margin-top: -68px;">
+				<router-outlet></router-outlet>
+			</div>
+		</div>
+	</div>
 </div>

@@ -1,7 +1,8 @@
 import { Component, ViewContainerRef, ComponentFactoryResolver } from '@angular/core';
 
 import { ModalService } from './service/modal.service'
-// import { Overlay } from 'angular2-modal';
+require('jquery')
+let toastr = require('toastr')
 // import { Modal } from 'angular2-modal/plugins/bootstrap';
 @Component({
     selector: 'my-app',

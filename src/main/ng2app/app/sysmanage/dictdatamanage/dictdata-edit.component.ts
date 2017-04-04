@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, ViewContainerRef, ComponentFactoryResolver, ViewChild } from '@angular/core';
 import { Headers, Http, URLSearchParams, RequestOptions } from '@angular/http';
 
-import { DynamicFormHorizontalComponent, DropdownField, FieldBase, TextField} from '../../shared/form/form.composite';
+import { DynamicFormHorizontalComponent, DropdownField, FieldBase, TextField } from '../../shared/form/form.composite';
 
 
 @Component({
@@ -38,8 +38,8 @@ export class DictdataEditComponent implements OnInit {
                 order: 1,
                 asyncValidator:
                 control => {
-                    return new Promise((resolve, reject)=> {
-                        if(this.$model.params.type == "add"){
+                    return new Promise((resolve, reject) => {
+                        if (this.$model.params.type == "add") {
                             this.$model.dictdata.dicttypeId = this.$model.params.dicttypeId
                         }
                         let body = JSON.stringify(this.$model.dictdata);
@@ -54,15 +54,15 @@ export class DictdataEditComponent implements OnInit {
                         });
                         this.http.post('dictdata/validate', body, options)
                             .toPromise()
-                            .then((data) => { 
-                                if(data.json().validate == "success"){
+                            .then((data) => {
+                                if (data.json().validate == "success") {
                                     resolve(null)
-                                }else{
+                                } else {
                                     resolve("error")
                                 }
-                            })                       
-                    }); 
-                    
+                            })
+                    });
+
 
                 }
             }),
@@ -71,6 +71,10 @@ export class DictdataEditComponent implements OnInit {
                 label: '字典显示值',
                 required: true,
                 order: 2
+            }),
+            new TextField({
+                key: 'dictdataId',
+                hidden: true
             }),
         ];
     }
@@ -91,7 +95,7 @@ export class DictdataEditComponent implements OnInit {
                 .map(res => res.json())
                 .subscribe(
                 data => {
-                    this.$model.dictdata = data
+                    this.myForm.form.patchValue(data)
                 },
                 err => {
 
@@ -103,7 +107,7 @@ export class DictdataEditComponent implements OnInit {
     onModalAction(): Promise<any> {
         if (this.$model.params.type == 'edit') {
             if (this.myForm.form.valid) {
-                let body = JSON.stringify(this.$model.dictdata);
+                let body = JSON.stringify(this.myForm.form.value);
                 let headers = new Headers({ 'Content-Type': 'application/json;charset=UTF-8' });
                 let options = new RequestOptions({ headers: headers });
                 return this.http.put('dictdata', body, options)
@@ -117,8 +121,9 @@ export class DictdataEditComponent implements OnInit {
             }
         } else if (this.$model.params.type == 'add') {
             if (this.myForm.form.valid) {
-                this.$model.dictdata.dicttypeId = this.$model.params.dicttypeId
-                let body = JSON.stringify(this.$model.dictdata);
+                let dictdata = this.myForm.form.value
+                dictdata.dicttypeId = this.$model.params.dicttypeId
+                let body = JSON.stringify(dictdata);
                 let headers = new Headers({ 'Content-Type': 'application/json;charset=UTF-8' });
                 let options = new RequestOptions({ headers: headers });
                 return this.http.post('dictdata', body, options)

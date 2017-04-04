@@ -23,7 +23,7 @@
         <param-name>contextConfigLocation</param-name>
 <!--         <param-value>classpath:c2-core-context.xml,classpath*:context/*-context.xml,classpath*:custom/*-context.xml</param-value>
      -->    
-    	<param-value>classpath:application-context.xml,classpath*:core-context.xml,classpath*:context/*-context.xml,classpath*:custom/*-context.xml</param-value>
+    	<param-value>classpath:core-context.xml,classpath*:context/*-context.xml,classpath*:custom/*-context.xml</param-value>
     </context-param>
  
    <!-- 平台全局属性初始化 -->
@@ -112,6 +112,22 @@
 	<listener>
 		<listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
 	</listener>   
+
+ <!-- 支持gzip压缩，不需要压缩的话可以删除，建议在所有项目都启用该Filter -->
+<!--     <filter>
+        <filter-name>GZIPFilter</filter-name>
+        <filter-class>com.chinacreator.c2.web.filter.GZIPFilter</filter-class>
+        <init-param>
+            <param-name>excludeURL</param-name>
+            在这里配置不要启用数据压缩的url，支持正则匹配
+            主要文件下载类的请求不要启用数据压缩，会导致下载的文件不正确
+            <param-value>/file/*</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>GZIPFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping> -->
 
     <!-- 编码统一使用UTF-8 -->
     <filter>

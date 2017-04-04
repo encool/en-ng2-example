@@ -2,8 +2,9 @@ import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { Headers, Http, URLSearchParams, RequestOptions } from '@angular/http';
 
 import { DropdownField } from '../../shared/form/dropdown-field';
-import { FieldBase }     from '../../shared/form/field-base';
-import { TextField }  from '../../shared/form/text-field';
+import { FieldBase } from '../../shared/form/field-base';
+import { TextField } from '../../shared/form/text-field';
+import { RadioGroupField } from '../../shared/form/widget/radio-group.field';
 import { DynamicFormComponent } from '../../shared/form/dynamic-form.component'
 
 @Component({
@@ -26,6 +27,11 @@ export class FormEditComponent implements OnInit {
     constructor(private http: Http) {
         this._fields = [
             new TextField({
+                key: 'formId',
+                label: 'formId',
+                hidden: true
+            }),
+            new TextField({
                 key: 'formNo',
                 label: '表单编码',
                 required: true,
@@ -45,6 +51,14 @@ export class FormEditComponent implements OnInit {
                 required: true,
                 span: 6,
                 order: 3,
+            }),
+            new RadioGroupField({
+                key: 'isTableStorage',
+                label: '是否单独表',
+                required: true,
+                span: 6,
+                order: 8,
+                options: [{ key: true, value: "是" }, { key: false, value: "否" }]
             }),
             new TextField({
                 key: 'tableName',
@@ -75,10 +89,11 @@ export class FormEditComponent implements OnInit {
             let options = new RequestOptions({
                 headers: headers,
             });
-            this.http.get("e/" + this._sn  + "/" + this.$model.params.formId, options)
+            this.http.get("e/" + this._sn + "/" + this.$model.params.formId, options)
                 .toPromise()
                 .then((data) => {
-                    this.$model.model = data.json()
+                    let d = data.json()
+                    this.modelForm.form.patchValue(d)
                 })
         }
     }
@@ -86,17 +101,17 @@ export class FormEditComponent implements OnInit {
     onModalAction(): Promise<any> {
         if (this.$model.params.type == 'edit') {
             if (this.modelForm.form.valid) {
-                let body = JSON.stringify(this.$model.model);
+                let body = JSON.stringify(this.modelForm.form.value);
                 let headers = new Headers({ 'Content-Type': 'application/json;charset=UTF-8' });
                 let options = new RequestOptions({
                     headers: headers,
                 });
-                return this.http.post("e/" + this._sn + "/" +this.$model.params.formId, 
-                                body, options)
+                return this.http.post("e/" + this._sn + "/" + this.$model.params.formId,
+                    body, options)
                     .toPromise()
                     .then((data) => {
                         return data
-                    })                
+                    })
             } else {
                 return new Promise((resolve, reject) => {
                     reject('no valid');
@@ -105,12 +120,12 @@ export class FormEditComponent implements OnInit {
             }
         } else if (this.$model.params.type == 'add') {
             if (this.modelForm.form.valid) {
-                let body = JSON.stringify(this.$model.model);
+                let body = JSON.stringify(this.modelForm.form.value);
                 let headers = new Headers({ 'Content-Type': 'application/json;charset=UTF-8' });
                 let options = new RequestOptions({
                     headers: headers,
                 });
-                return this.http.post("e/" + this._sn + "/" , body, options)
+                return this.http.post("e/" + this._sn + "/", body, options)
                     .toPromise()
                     .then((data) => {
                         return data

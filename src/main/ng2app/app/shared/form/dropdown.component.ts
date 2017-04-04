@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, AfterViewInit } from '@angular/core';
+import { Component, Input, OnInit, AfterViewInit, SimpleChanges } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Headers, Http, URLSearchParams, RequestOptions } from '@angular/http';
 
@@ -10,15 +10,10 @@ import { DropdownField } from './dropdown-field'
     selector: 'f-dropdown-input',
     template: `
     <div [ngSwitch]="simple">
-        <div *ngSwitchCase="false" [ngSwitch]="field.isObject" [formGroup]="form" [ngClass]="ngclasses()">
+        <div *ngSwitchCase="false" [formGroup]="form" [ngClass]="ngclasses()">
     	    <label [attr.for]="field.key" class="control-label" style="float: left;width:75px">{{field.label}}</label>
-            <div [ngSwitch]="field.isObject" style="margin-left:85px">
-                <select *ngSwitchCase="true" [id]="field.key" [formControlName]="field.key" [(ngModel)]="model[key1][key2]" 
-                        class="form-control"> 
-                    <option *ngFor="let opt of field.options" [value]="opt[field.optionId]">{{opt[field.optionName]}}</option>
-                </select>
-        
-                <select *ngSwitchCase="false" [id]="field.key" [formControlName]="field.key" [(ngModel)]="model[field.key]" 
+            <div style="margin-left:85px">
+                <select [id]="field.key" [formControlName]="field.key"
                         class="form-control"> 
                     <option *ngFor="let opt of field.options" [value]="opt[field.optionId]">{{opt[field.optionName]}}</option>
                 </select>
@@ -79,10 +74,10 @@ export class DropdownComponent implements OnInit {
                     this.field.optionsOb.subscribe(data => this.field.options = data)
                 } else if (this.field.dictName) {
                     this.getDictDataObserable(this.field.dictName).subscribe(data => this.field.options = data)
-                    if(this.field.optionId == "key"){
+                    if (this.field.optionId == "key") {
                         this.field.optionId = 'dictdataName'
                     }
-                    if(this.field.optionName == "value"){
+                    if (this.field.optionName == "value") {
                         this.field.optionName = 'dictdataValue'
                     }
                 }
@@ -104,7 +99,8 @@ export class DropdownComponent implements OnInit {
             classExpression["col-sm-" + this.span] = true;
             classExpression["col-md-offset-" + this.offset] = this.offset == 0 ? false : true;
         } else {
-            classExpression["col-sm-" + this.field.span] = true;
+            let span = this.field.span || 4
+            classExpression["col-sm-" + span] = true;
         }
         return classExpression
     }
@@ -133,5 +129,11 @@ export class DropdownComponent implements OnInit {
         });
         return this.http.get(url, options)
             .map((data) => data.json())
+    }
+
+    ngOnChanges(changes: SimpleChanges) {
+        // if (changes['field'] && changes['field'].currentValue) {
+        //     debugger
+        // }
     }
 }

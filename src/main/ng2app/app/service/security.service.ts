@@ -8,7 +8,7 @@ export class SecurityService {
 
     $window: any
 
-    constructor(private http: Http, @Inject('Window') window: Window) {
+    constructor(private http: Http, @Inject('Window') window) {
         this.$window = window
     }
 
@@ -28,17 +28,17 @@ export class SecurityService {
         //     });
         //     return source
         // } else {
-            let urlSearchParams = new URLSearchParams();
-            let headers = new Headers({ 'Content-Type': 'application/json;charset=UTF-8' });
-            let options = new RequestOptions({
-                headers: headers,
-                search: urlSearchParams
-            });
-            return this.http.get('getsubject', options)
-                .map(res => {
-                    // this.$window.sessionStorage.syssubject = res.json()
-                    return res.json()
-                })
+        let urlSearchParams = new URLSearchParams();
+        let headers = new Headers({ 'Content-Type': 'application/json;charset=UTF-8' });
+        let options = new RequestOptions({
+            headers: headers,
+            search: urlSearchParams
+        });
+        return this.http.get('getsubject', options)
+            .map(res => {
+                // this.$window.sessionStorage.syssubject = res.json()
+                return res.json()
+            })
         // }
     }
     login(username, password, url, errFun) {

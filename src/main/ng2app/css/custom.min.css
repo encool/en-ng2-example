@@ -249,7 +249,7 @@ div#rMenu ul li {
 	position: absolute;
 	display: -ms-flexbox;
 	display: flex;
-	z-index: 9999
+	/*z-index: 9999*/
 }
 
 .nav-md .container.body .col-md-3.left_col.menu_fixed {
@@ -656,11 +656,11 @@ a:hover, a:focus {
 }
 
 .nav.child_menu {
-	
+	/*display: none*/
 }
 
 .nav.child_menu li:hover, .nav.child_menu li.active {
-	/* 	background-color: rgba(255, 255, 255, 0.06) */
+	background-color: rgba(255, 255, 255, 0.06) 
 	
 }
 
@@ -5202,7 +5202,7 @@ ul.notifications {
   border-left: 5px solid #42A948; /* green */
 }
 
-input.ng-invalid   {
+select.ng-invalid, textarea.ng-invalid ,input.ng-invalid   {
   border-left: 5px solid #a94442; /* red */
 }
 
@@ -5363,3 +5363,9 @@ input.ng-invalid   {
 .highlightflowgreen .djs-visual > :nth-child(1) {
   stroke: #00ff00 !important; /* color elements as green */
 }  
+/*表格拖动*/
+.ui-jqgrid .ui-jqgrid-bdiv .drag-tr {
+    color: green;
+    font-size: 21px;
+    opacity: 1;
+}

@@ -133,10 +133,11 @@ gulp.task("webpack:build", function (callback) {
     });
 });
 
-gulp.task('webpack:w',  function (callback) {
+gulp.task('webpack:w',  function (callback) {debugger
     // modify some webpack config options
     var myConfig = Object.create(webpackConfig);
     myConfig.watch = true
+    // console.log("1111111111", myConfig.toString());    
     webpack(myConfig, function (err, stats) {
         if (err) throw new gutil.PluginError("webpack:w", err);
         gutil.log("[webpack:w]", stats.toString({

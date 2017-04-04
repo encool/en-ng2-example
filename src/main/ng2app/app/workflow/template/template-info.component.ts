@@ -81,12 +81,16 @@ export class TemplateInfoComponent implements OnInit {
                 span: 12,
                 order: 3
             }),
+            new TextField({
+                key: 'id',
+                hidden: true
+            }),
         ];
     }
     onModalAction(): Promise<any> {
         if (this.$model.params.type == 'edit') {
             if (this.myForm.form.valid) {
-                let body = JSON.stringify(this.$model.template);
+                let body = JSON.stringify(this.myForm.form.value);
                 let urlSearchParams = new URLSearchParams();
                 // urlSearchParams.set('', );
                 let headers = new Headers({ 'Content-Type': 'application/json;charset=UTF-8' });
@@ -103,9 +107,9 @@ export class TemplateInfoComponent implements OnInit {
                     toastr.warning('验证不通过！')
                 })
             }
-        } else if (this.$model.params.type == 'add') {
+        } else if (this.$model.params.type == 'add') {debugger
             if (this.myForm.form.valid) {
-                let body = JSON.stringify(this.$model.template);
+                let body = JSON.stringify(this.myForm.form.value);
                 let urlSearchParams = new URLSearchParams();
                 // urlSearchParams.set('', );
                 let headers = new Headers({ 'Content-Type': 'application/json;charset=UTF-8' });

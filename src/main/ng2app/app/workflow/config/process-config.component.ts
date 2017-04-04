@@ -26,7 +26,7 @@ import { BpmnEditorComponent } from '../bpmn2/bpmn-editor.component'
                             </my-grid>                        
                         </tabpanel>
                         <tabpanel [tab]="tabs[1]">
-                            <bpmn-editor #bpmnview_ref [$model]="bpmnModel" ></bpmn-editor>
+                            <bpmn-editor #bpmnview_ref [model]="bpmnEditorModel" ></bpmn-editor>
                         </tabpanel>                        
                     </tabs>
                 </div>
@@ -41,9 +41,9 @@ export class ProcessConfigComponent implements OnInit {
     @ViewChild("processgrid_ref") productGrid: JqgridComponent
     @ViewChild("bpmnview_ref") bpmnView: BpmnEditorComponent
 
-    bpmnModel:any = {
+    bpmnEditorModel:any = {
         params: {},
-        model: {}
+        bpmnModel: {}
     }
 
     bindProcess:any = {}
@@ -183,11 +183,12 @@ export class ProcessConfigComponent implements OnInit {
 
     onTabClick(tab:Tab){
         if(tab.key == "processdefgragh"){
-            this.bpmnModel.params.processDefId = this.bindProcess == undefined?undefined:this.bindProcess.id
-            this.bpmnModel.params.type = "config"
-            this.bpmnModel.params.moduleId = this._curModule.id;
+            this.bpmnEditorModel.params.processDefId = this.bindProcess == undefined?undefined:this.bindProcess.id
+            this.bpmnEditorModel.params.type = "config"
+            this.bpmnEditorModel.params.moduleId = this._curModule.id;
             // this.bpmnModel.params.curActivity = this.c
-            this.bpmnView.initBpmn()
+            // this.bpmnView.initBpmn()
+            this.bpmnView.ngOnInit()
         }
     }
 }

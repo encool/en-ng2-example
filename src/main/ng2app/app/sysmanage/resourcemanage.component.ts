@@ -11,6 +11,7 @@ import { TreeEvent, ZtreeSetting, ZtreeComponent, onZtreeAction, TreeAction, Tre
 
 import { MenuinfoComponent } from './menuinfo.component'
 import { JobinfoComponent } from './jobinfo.component'
+import { OrginfoComponent } from './orginfo.component'
 
 import { MenuService } from '../service/menu.service'
 import { OrgService } from '../service/org.service'
@@ -172,7 +173,7 @@ export class ResourcemanageComponent implements OnInit, onZtreeAction {
                         this.modalService.open(
                             this._modalContext,
                             {
-                                comp:JobinfoComponent,
+                                comp: JobinfoComponent,
                                 title: '编辑岗位',
                                 width: '800px'
                             },
@@ -274,13 +275,32 @@ export class ResourcemanageComponent implements OnInit, onZtreeAction {
             switch (treeEvent.action.key) {
                 case "edit":
                     let node1: any = treeEvent.node;
-                    this.orgService.getOrgByPK(node1.id, null).then(data => {
-                        this._model.org = data;
-                        this._orginfo_params.pNode = { id: node1.pid };
-                        this._orginfo_params.type = "edit"
-                        $('#orgmodal').modal('show')
-                    });
-                    $('#orgmodal').modal('show')
+                    this.modalService.open(
+                        this._modalContext,
+                        {
+                            comp: OrginfoComponent,
+                            title: "编辑菜单信息"
+                        },
+                        {
+                            model: {},
+                            params: {
+                                type: "edit",
+                                id: node1.id
+                            }
+                        },
+                        () => {
+
+                        }
+                    )
+
+                    // let node1: any = treeEvent.node;
+                    // this.orgService.getOrgByPK(node1.id, null).then(data => {
+                    //     this._model.org = data;
+                    //     this._orginfo_params.pNode = { id: node1.pid };
+                    //     this._orginfo_params.type = "edit"
+                    //     $('#orgmodal').modal('show')
+                    // });
+                    // $('#orgmodal').modal('show')
                     break;
                 case "add":
                     this._model.org = {}
@@ -288,9 +308,23 @@ export class ResourcemanageComponent implements OnInit, onZtreeAction {
                         alert("通用岗位下不能新增机构!");
                         return;
                     }
-                    this._orginfo_params.pNode = treeEvent.node;
-                    this._orginfo_params.type = "add"
-                    $('#orgmodal').modal('show')
+
+                    this.modalService.open(
+                        this._modalContext,
+                        {
+                            comp: OrginfoComponent,
+                            title: "新增菜单信息"
+                        },
+                        {
+                            params: {
+                                type: "add",
+                                pNode: treeEvent.node
+                            }
+                        },
+                        () => {
+
+                        }
+                    )
                     break;
                 case "refresh":
                     this.orgTree.refreshTree()

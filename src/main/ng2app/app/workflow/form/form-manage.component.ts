@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewContainerRef, ComponentFactoryResolver, ViewChild } from '@angular/core';
 import { Headers, Http, URLSearchParams, RequestOptions } from '@angular/http';
-import { JqgridSetting, JqgridAction, JqgridEvent, JqgridCallback, DefaultJqgridCallback, ColModel, JqgridComponent} from '../../shared/jqgrid.module'
+import { JqgridSetting, JqgridAction, JqgridEvent, JqgridCallback, DefaultJqgridCallback, ColModel, JqgridComponent } from '../../shared/jqgrid.module'
 
 import { FormEditComponent } from './form-edit.component'
 import { RelAddComponent } from './rel-add.component'
@@ -69,6 +69,7 @@ export class FormManageComponent implements OnInit {
         new JqgridAction({ key: "add", name: "新增", order: 2 }),
         new JqgridAction({ key: "edit", name: "编辑", order: 3 }),
         new JqgridAction({ key: "refresh", name: "刷新", order: 1 }),
+        new JqgridAction({ key: "sort", name: "排序", order: 1 }),
         new JqgridAction({ key: "delete", name: "删除", order: 6 }),
     ]
     _rel_grid_setting = new JqgridSetting({
@@ -92,6 +93,8 @@ export class FormManageComponent implements OnInit {
         vcRef: ViewContainerRef,
         componentFactoryResolver: ComponentFactoryResolver
     }
+
+    isSortField: boolean
 
     constructor(private http: Http, private vcRef: ViewContainerRef, private componentFactoryResolver: ComponentFactoryResolver,
         private modalService: ModalService) {
@@ -222,7 +225,25 @@ export class FormManageComponent implements OnInit {
                             this.formRelGrid.refresh();
                         })
                     break;
+                case 'sort':
+                    var sortable = this.isSortField;
+                    if (_.isUndefined(sortable)) {
+                        sortable = false;
+                    }
+                    this.isSortField = !sortable;
+                    toastr.info((sortable ? "关闭" : "开启") + "排序功能！")
+                    this.formRelGrid.setSortRow(!sortable, () => {
+                        var rowNum = this.formRelGrid.getGridParam("rowNum");
+                        var page = this.formRelGrid.getGridParam("page");
+                        var ids = this.formRelGrid.getDataIDs();
+                        this.http.post("formmgt/sortFormFieldRel", { "rowNum": rowNum, "page": page, "ids": ids })
+                            .toPromise().then(() => {
+                                toastr.info("排序成功")
+                            })
+                    });
+                    break;
                 case 'refresh':
+                    this.isSortField = false
                     break;
             }
         }

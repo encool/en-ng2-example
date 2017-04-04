@@ -6,10 +6,9 @@ import { WorkflowService } from '../service/workflow.service'
 @Component({
     selector: 'wf-sp-entry',
     template: `
+    <my-container>
     <table id="productentry" width="100%" border="0" cellspacing="0" cellpadding="0" class="ng-scope"><tbody>
-    <!-- ngRepeat: a in $model.a -->
         <tr *ngFor="let a of products" style="padding-bottom:30px" class="ng-scope">
-        	<!-- ngRepeat: tmp in a -->
             <td align="left" valign="top" width="33%" style="line-height:110px;" *ngFor="let tmp of a" class="ng-scope">
         	<table width="95%" border="0" cellspacing="0" cellpadding="0" class="tab_chanpin">
         		<tbody>
@@ -25,19 +24,37 @@ import { WorkflowService } from '../service/workflow.service'
         	</tbody>
         
         	</table>
-        	</td><!-- end ngRepeat: tmp in a -->
+        	</td>
         </tr>
-    </tbody></table>    
+    </tbody>
+    </table>
+    </my-container>
     `
 })
 export class ServiceproductEntryComponent implements OnInit {
+    //for test
+    $model = {}
+    strategy_options = {
+        "falsefilter": "无过滤",
+        "orgfilter": "按部门过滤",
+        "orgbossfilter": "按部门&领导过滤",
+        "starter": "分派申请人",
+        "historyassign": "历史处理人"
+    }
+    // testend
 
     products: any[] = []
 
-    constructor(private router: Router,private wfs: WorkflowService) { }
+    constructor(private router: Router, private wfs: WorkflowService) { }
 
     startProductService(product) {
-        this.router.navigate(['/workflow/usertaskdo', product]);
+        let url = product.wfProcessstartUrl
+        if (url) {
+            this.router.navigate([url, product]);
+        } else {
+
+            this.router.navigate(['/workflow/usertaskdo', product]);
+        }
     }
 
     ngOnInit() {

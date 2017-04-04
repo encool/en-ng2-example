@@ -6,11 +6,8 @@ import { CheckboxGroupField } from './checkbox-group.field'
 @Component({
     selector: 'f-checkbox-group',
     template: `  
-    <div class="checkbox" [ngSwitch]="field.isObject" [formGroup]="form">
-            <label *ngSwitchCase="true" *ngFor="let opt of field.options">
-                <input type="checkbox" [(ngModel)]="model[key1][key2]" [formControlName]="field.key">{{opt[field.optionName]}}
-            </label>
-            <label *ngSwitchCase="false" *ngFor="let opt of field.options">
+    <div class="checkbox" [formGroup]="form">
+            <label *ngFor="let opt of field.options">
                 <input type="checkbox" [(ngModel)]="model[field.key]" [formControlName]="field.key">{{opt[field.optionName]}}
             </label>
     </div>                    

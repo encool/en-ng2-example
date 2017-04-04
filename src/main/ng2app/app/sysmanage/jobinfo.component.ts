@@ -60,12 +60,14 @@ export class JobinfoComponent implements OnInit, onModalAction {
         ];
     }
     ngOnInit() {
-        
+
     }
     onModalAction(): Promise<any> {
         if (this.$model.params.type == 'edit') {
             if (this.myForm.form.valid) {
-                return this.jobService.update(this.$model.job).then(() => { return "jobupdated" })
+                let job = this.myForm.form.value
+                job.jobId = this.$model.job.jobId
+                return this.jobService.update(job).then(() => { return "jobupdated" })
 
             } else {
                 return new Promise((resolve, reject) => {
@@ -75,7 +77,9 @@ export class JobinfoComponent implements OnInit, onModalAction {
             }
         } else if (this.$model.params.type == 'add') {
             if (this.myForm.form.valid) {
-                return this.jobService.create(this.$model.job, this.$model.params.orgId).then(() => { return "jobadded" })
+                let job = this.myForm.form.value
+                job.jobScope = this.$model.job.jobScope
+                return this.jobService.create(job, this.$model.params.orgId).then(() => { return "jobadded" })
             } else {
                 return new Promise((resolve, reject) => {
                     reject('no valid');

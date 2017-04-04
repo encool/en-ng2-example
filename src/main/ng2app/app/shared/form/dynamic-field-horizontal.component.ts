@@ -1,84 +1,79 @@
-import { Component, Input, OnInit, AfterViewInit } from '@angular/core';
+import {
+    Component, Type, Input, OnInit, ViewChild,
+    AfterViewInit, SimpleChange, ViewContainerRef,
+    ComponentFactoryResolver
+} from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { FieldBase } from './field-base';
 import { DropdownField } from './dropdown-field'
+
+import { uimap } from '../../decorators/ui-component.decorator'
 @Component({
     selector: 'df-field-hori',
-    templateUrl: './dynamic-field-horizontal.component.html'
+    template: `
+    <div #wrapper *ngFor="let field of fields" [ngSwitch]="field.controlType">
+    	<f-dropdown-input *ngSwitchCase="'dropdowninput'" [simple]="false" [form]="form" [field]="field" [model]="model"></f-dropdown-input>
+    	<f-text-input *ngSwitchCase="'textinput'" [simple]="false" [form]="form" [field]="field" [model]="model"></f-text-input>
+    	<f-datetime-pick *ngSwitchCase="'datetimepick'" [simple]="false" [form]="form" [field]="field" [model]="model"></f-datetime-pick>
+    	<f-textarea *ngSwitchCase="'textarea'" [simple]="false" [form]="form" [field]="field" [model]="model"></f-textarea>
+    	<f-select2 *ngSwitchCase="'select2'" [simple]="false" [form]="form" [field]="field" [model]="model"></f-select2>
+    	<f-checkbox-input *ngSwitchCase="'checkbox'" [simple]="false" [form]="form" [field]="field" [model]="model"></f-checkbox-input>
+    	<f-file-upload *ngSwitchCase="'fileupload'" [simple]="false" [form]="form" [field]="field" [model]="model"></f-file-upload>
+    	<f-radio-group *ngSwitchCase="'radiogroup'" [simple]="false" [form]="form" [field]="field" [model]="model"></f-radio-group>
+    	<df-field-group-hori *ngSwitchCase="'fieldgroup'" [form]="form" [field]="field" [model]="model"></df-field-group-hori>
+    </div>    
+    `
 })
 export class DynamicfieldHorizontalComponent implements OnInit, AfterViewInit {
-    @Input() field: any;
+    @Input() fields: FieldBase<any>[];
     @Input() form: FormGroup;
     @Input() model: any;
 
+
+    @ViewChild('wrapper', { read: ViewContainerRef }) wrapperRef: ViewContainerRef;
+
     _tipmsg: string = "必填项";
 
-    key1: string
-    key2: string
+    constructor(private vcRef: ViewContainerRef,
+        private componentFactoryResolver: ComponentFactoryResolver, ) {
 
-    get isValid() { return this.form.controls[this.field.key].valid; }
-    ngclasses() {
-        let classExpression = {
-            'form-group': true,
-            // 'has-error':!this.isValid,
-        }
-        classExpression["col-sm-" + this.field.span] = true;
-        return classExpression
     }
-
     ngOnInit() {
-        let key = this.field.key
-        if (this.field.isObject && 　key.indexOf(".") != -1) {
-            let keys = key.split(".")
-            this.key1 = keys[0]
-            if (this.model[this.key1] == undefined) {
-                this.model[this.key1] = {}
-            }
-            this.key2 = keys[1]
-        }
-        // debugger
-        // if (this.field instanceof DropdownField) {
-        //     let field = this.field as DropdownField
-        //     if (field.options.length == 0 && field.optionsOb) {debugger
-        //          field.optionsOb.subscribe(data => this.field.options = data)
-        //     }
-        //     // field.options = null;
-        // }
+
     }
 
     ngAfterViewInit() {
 
     }
 
-    // oldValue:any
-    // ngDoCheck() {
-    //     // console.log("checked and old",this.oldValue);
-    //     // if(this.model[this.key1]){
-
-    //     // }
-    //     if (this.isComplicateKey && this.model[this.key1] !== undefined
-    //             && this.model[this.key1][this.key2] !== this.oldValue) {debugger
-    //         console.log("old",this.oldValue);
-    //         console.log("new",this.model[this.key1][this.key2]);
-    //         this.oldValue = this.model[this.key1][this.key2]
-    //         this.key1Value[this.key2] = this.oldValue
-    //     }
-    //     console.log("this.key1Value",this.key1Value);
-    //     if (this.isComplicateKey && this.key1Value !== undefined
-    //             && this.key1Value[this.key2] !== this.oldValue) {debugger
-    //         console.log("old",this.oldValue);
-    //         console.log("new",this.model[this.key1][this.key2]);
-    //         this.oldValue = this.model[this.key1][this.key2]
-    //         this.key1Value[this.key2] = this.oldValue
-    //     }        
-
-    // }
-
-
     ngAfterViewChecked() {
-        // console.log("ng after view checked!");
-        // var select = "#"+this.field.key;
-        // var tip = $("#"+this.field.key)
-        // var r = tip.tooltip();
+
+    }
+
+    ngOnChanges(changes: { [propertyName: string]: SimpleChange }) {
+        if (changes['fields'] && changes['fields'].currentValue) {
+            setTimeout(() => {
+                debugger
+                let cstmTpltfields: FieldBase<any>[] = this.getCustomTemplateFields()
+                cstmTpltfields.forEach((field) => {
+                    debugger
+                    let comp: Type<any> = uimap.get("contract-custom")
+                    let myComponentFactory
+                        = this.componentFactoryResolver.resolveComponentFactory(comp)
+                    this.wrapperRef.createComponent(myComponentFactory,0)
+                })
+                uimap
+            });
+        }
+    }
+
+    getCustomTemplateFields(): FieldBase<any>[] {
+        let cstmTpltfields: FieldBase<any>[] = new Array<FieldBase<any>>()
+        this.fields.forEach((field) => {
+            if (field.controlType == "customtemplate") {
+                cstmTpltfields.push(field)
+            }
+        })
+        return cstmTpltfields
     }
 }

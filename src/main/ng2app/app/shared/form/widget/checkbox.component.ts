@@ -7,7 +7,7 @@ import { CheckboxField } from './checkbox.field'
     selector: 'f-checkbox-input',
     template: `
     <div [ngSwitch]="simple">
-        <div class="checkbox" *ngSwitchCase="false" [ngSwitch]="field.isObject" [formGroup]="form">
+        <div *ngSwitchCase="false" [ngClass]="ngclasses()" style="padding-left:100px" [ngSwitch]="field.isObject" [formGroup]="form">
                 <label *ngSwitchCase="true" >
                     <input type="checkbox" [(ngModel)]="model[key1][key2]" [formControlName]="field.key" [value]="field.value">{{field.label}}
                 </label>
@@ -15,7 +15,7 @@ import { CheckboxField } from './checkbox.field'
                     <input type="checkbox" [(ngModel)]="model[field.key]" [formControlName]="field.key">{{field.label}}
                 </label>
         </div>    
-        <div *ngSwitchCase="true"  [ngClass]="ngclasses()">
+        <div *ngSwitchCase="true"  [ngClass]="ngclasses()" style="padding-left:100px">
             <label>
                 <input type="checkbox" [(ngModel)]="model[key]" (ngModelChange)="onModelChange($event)">{{label}}
             </label>        

@@ -61,21 +61,28 @@ export class BpmnViewerComponent implements OnInit {
     ngOnInit() {
         if (this.$model.params.processDefId != undefined
             && this.$model.params.processInsId != undefined) {
-            this.initBpmn()
+            (require as any).ensure([], require => {
+                let BpmnModeler = require('bpmn-js/lib/Modeler')
+                let BpmnViewer = require('bpmn-js/lib/Viewer')
+                let propertiesPanelModule = require('bpmn-js-properties-panel')
+                let propertiesProviderModule = require('bpmn-js-properties-panel/lib/provider/camunda')
+                this.initBpmn(BpmnModeler,BpmnViewer,propertiesPanelModule,propertiesProviderModule)
+            });                
+            // this.initBpmn()
         }
     }
 
-    initBpmn() {
+    initBpmn(BpmnModeler,BpmnViewer,propertiesPanelModule,propertiesProviderModule) {
         if ((this.$model.params.processDefId == undefined && this.$model.params.processInsId == undefined)) {
             toastr.warning('没有流程信息')
             return
         }
-        var windowl: any = window
-        var propertiesPanelModule = windowl.PropertiesPanelModule;
-        var propertiesProviderModule = windowl.PropertiesProviderModule;
+        // var windowl: any = window
+        // var propertiesPanelModule = windowl.PropertiesPanelModule;
+        // var propertiesProviderModule = windowl.PropertiesProviderModule;
         var camundaModdleDescriptor = require("./camunda")
-        var BpmnModeler = windowl.BpmnJS;
-        var BpmnViewer = windowl.BpmnViewer;
+        // var BpmnModeler = windowl.BpmnJS;
+        // var BpmnViewer = windowl.BpmnViewer;
         var canvas = $('#js-canvas-view');
         if (this.$model.params.type == "view") {
             if (this._bpmnModeler == undefined) {

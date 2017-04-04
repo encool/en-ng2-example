@@ -8,5 +8,6 @@ import { DictdataManageComponent } from './dictdatamanage/dictdata-manage.compon
 export const routing: ModuleWithProviders = RouterModule.forChild([
   { path: 'userorgmanage', component: UserorgManageComponent },
   { path: 'resourcemanage', component: ResourcemanageComponent },
-  { path: 'dictdatamanage', component: DictdataManageComponent }
+  { path: 'dictdatamanage', component: DictdataManageComponent },
+  { path: '**', component: DictdataManageComponent }
 ]);

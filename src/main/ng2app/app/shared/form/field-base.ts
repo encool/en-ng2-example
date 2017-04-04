@@ -2,6 +2,7 @@ import { ValidatorFn, AsyncValidatorFn, Validators } from '@angular/forms';
 
 export class FieldBase<T>{
   value: T;
+  id: string
   key: string;
   label: string;
   span: number
@@ -20,6 +21,7 @@ export class FieldBase<T>{
   hidden: boolean
   constructor(options: {
     value?: T,
+    id?: string,
     key?: string,
     label?: string,
     span?: number,
@@ -38,6 +40,7 @@ export class FieldBase<T>{
     hidden?: boolean
   } = {}) {
     this.value = options.value;
+    this.id = options.id;
     this.key = options.key || '';
     this.label = options.label || '';
     this.span = options.span === undefined ? 6 : options.span

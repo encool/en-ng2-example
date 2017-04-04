@@ -1,57 +1,97 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" style="height: 100%">
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  	<base href="/">
-    <title>Angular 2 QuickStart</title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- Bootstrap -->
-    <link href="dist/assets/css/bootstrap.css" rel="stylesheet">
-    <!-- Font Awesome -->
-    <link href="dist/assets/css/font-awesome.css" rel="stylesheet">
+Html Webpack Plugin:
+<pre>
+  Error: Child compilation failed:
+  Entry module not found: Error: Can't resolve 'F:\git_wp\apache-shiro-tutorial-webapp\src\main\ng2app\src\index.html' in 'F:\git_wp\apache-shiro-tutorial-webapp\src\main\ng2app':
+  Error: Can't resolve 'F:\git_wp\apache-shiro-tutorial-webapp\src\main\ng2app\src\index.html' in 'F:\git_wp\apache-shiro-tutorial-webapp\src\main\ng2app'
   
-    <link href="dist/assets/css/zTreeStyle.css" rel="stylesheet">
-
-    <link href="dist/assets/css/ui.jqgrid-bootstrap.css" rel="stylesheet">
-
-    <link href="dist/assets/css/toastr.min.css" rel="stylesheet">
-
-    <link href="dist/assets/css/diagram-js.css" rel="stylesheet">
-    <link href="dist/assets/css/bpmn-font/css/bpmn-embedded.css" rel="stylesheet">
-    <link href="dist/assets/css/properties.css" rel="stylesheet">
-    <link href="dist/assets/css/bpmn-app.css" rel="stylesheet">
-
-    <link href="dist/assets/css/custom.min.css" rel="stylesheet">
-    <!-- 1. Load libraries -->
-     <!-- Polyfill(s) for older browsers --> 
-    <!--<script src="dist/assets/js/shim.min.js"></script>
-    <script src="dist/assets/js/zone.js"></script>
-    <script src="dist/assets/js/Reflect.js"></script>
-    <script src="dist/assets/js/system.src.js"></script>-->
-    <!-- 2. Configure SystemJS -->
-    <!--<script src="dist/assets/js/systemjs.config.js"></script>-->
-    <script src="dist/assets/js/jquery.min.js"></script>
-    <script src="dist/assets/js/bootstrap.js"></script>
-    <script src="dist/assets/js/jquery.ztree.all.min.js"></script>
-
-    <script src="dist/assets/js/grid.locale-en.js"></script>
-    <!-- This is the Javascript file of jqGrid -->   
-    <script src="dist/assets/js/jquery.jqGrid.js"></script>
-    <script src="dist/assets/js/toastr.min.js"></script>
-
-    <!--<script src="dist/assets/js/bpmn-modeler.js"></script>-->
-    <script src="angularrc5/dist/bpmn-panel.js"></script>
-    <script src="angularrc5/dist/bpmn-panel-property-camunda.js"></script>
-    <script src="angularrc5/dist/bpmn-modeler-custom.js"></script>
-    <script src="angularrc5/dist/bpmn-viewer-custom.js"></script>
-    <!--<script>
-      System.import('app').catch(function(err){ console.error(err); });
-    </script>-->
-  <link href="angularrc5/dist/app.css" rel="stylesheet"></head>
-  <!-- 3. Display the application -->
-  <body style="height: inherit;">
-    <my-app>Loading..</my-app>
-  <script type="text/javascript" src="angularrc5/dist/polyfills.js"></script><script type="text/javascript" src="angularrc5/dist/vendor.js"></script><script type="text/javascript" src="angularrc5/dist/app.js"></script></body>
-</html>
+  - compiler.js:76 
+    [ng2app]/[html-webpack-plugin]/lib/compiler.js:76:16
+  
+  - Compiler.js:280 Compiler.<anonymous>
+    [ng2app]/[webpack]/lib/Compiler.js:280:10
+  
+  - Compiler.js:480 
+    [ng2app]/[webpack]/lib/Compiler.js:480:13
+  
+  - Tapable.js:138 next
+    [ng2app]/[tapable]/lib/Tapable.js:138:11
+  
+  - CachePlugin.js:62 Compiler.<anonymous>
+    [ng2app]/[webpack]/lib/CachePlugin.js:62:5
+  
+  - Tapable.js:142 Compiler.applyPluginsAsyncSeries
+    [ng2app]/[tapable]/lib/Tapable.js:142:13
+  
+  - Compiler.js:477 
+    [ng2app]/[webpack]/lib/Compiler.js:477:10
+  
+  - Tapable.js:131 Compilation.applyPluginsAsyncSeries
+    [ng2app]/[tapable]/lib/Tapable.js:131:46
+  
+  - Compilation.js:640 self.applyPluginsAsync.err
+    [ng2app]/[webpack]/lib/Compilation.js:640:19
+  
+  - Tapable.js:131 Compilation.applyPluginsAsyncSeries
+    [ng2app]/[tapable]/lib/Tapable.js:131:46
+  
+  - Compilation.js:631 self.applyPluginsAsync.err
+    [ng2app]/[webpack]/lib/Compilation.js:631:11
+  
+  - Tapable.js:131 Compilation.applyPluginsAsyncSeries
+    [ng2app]/[tapable]/lib/Tapable.js:131:46
+  
+  - Compilation.js:626 self.applyPluginsAsync.err
+    [ng2app]/[webpack]/lib/Compilation.js:626:10
+  
+  - Tapable.js:131 Compilation.applyPluginsAsyncSeries
+    [ng2app]/[tapable]/lib/Tapable.js:131:46
+  
+  - Compilation.js:622 sealPart2
+    [ng2app]/[webpack]/lib/Compilation.js:622:9
+  
+  - Tapable.js:131 Compilation.applyPluginsAsyncSeries
+    [ng2app]/[tapable]/lib/Tapable.js:131:46
+  
+  - Compilation.js:570 Compilation.seal
+    [ng2app]/[webpack]/lib/Compilation.js:570:8
+  
+  - Compiler.js:474 
+    [ng2app]/[webpack]/lib/Compiler.js:474:16
+  
+  - Tapable.js:225 
+    [ng2app]/[tapable]/lib/Tapable.js:225:11
+  
+  - Compilation.js:472 _addModuleChain
+    [ng2app]/[webpack]/lib/Compilation.js:472:11
+  
+  - Compilation.js:365 Compilation.errorAndCallback
+    [ng2app]/[webpack]/lib/Compilation.js:365:4
+  
+  - Compilation.js:382 moduleFactory.create
+    [ng2app]/[webpack]/lib/Compilation.js:382:12
+  
+  - NormalModuleFactory.js:234 
+    [ng2app]/[webpack]/lib/NormalModuleFactory.js:234:19
+  
+  - NormalModuleFactory.js:59 onDoneResolving
+    [ng2app]/[webpack]/lib/NormalModuleFactory.js:59:20
+  
+  - NormalModuleFactory.js:126 
+    [ng2app]/[webpack]/lib/NormalModuleFactory.js:126:20
+  
+  - async.js:3799 
+    [ng2app]/[webpack]/[async]/dist/async.js:3799:9
+  
+  - async.js:360 
+    [ng2app]/[webpack]/[async]/dist/async.js:360:16
+  
+  - async.js:934 iteratorCallback
+    [ng2app]/[webpack]/[async]/dist/async.js:934:13
+  
+  - async.js:844 
+    [ng2app]/[webpack]/[async]/dist/async.js:844:16
+  
+  - async.js:3796 
+    [ng2app]/[webpack]/[async]/dist/async.js:3796:13
+  
+</pre><script type="text/javascript" src="http://localhost:8080/polyfills.js"></script><script type="text/javascript" src="http://localhost:8080/vendor.js"></script><script type="text/javascript" src="http://localhost:8080/app.js"></script>

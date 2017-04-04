@@ -3,18 +3,19 @@ import { Headers, Http, URLSearchParams, RequestOptions } from '@angular/http';
 
 import { DropdownField } from '../../shared/form/dropdown-field';
 import { FieldBase } from '../../shared/form/field-base';
+import { FieldGroup } from '../../shared/form/field-group';
 import { TextField } from '../../shared/form/text-field';
 import { DynamicFormComponent } from '../../shared/form/dynamic-form.component'
 
 @Component({
     selector: 'ff-rel-edit',
     template: `
-       <dynamic-form-hori #df_ref [fields]="_fields" [model]="$model.model" ></dynamic-form-hori>
+       <dynamic-form-hori #df_ref [fields]="_fields"></dynamic-form-hori>
     `
 })
 export class RelEditComponent implements OnInit {
 
-    _fields: FieldBase<any>[]
+    _fields: (FieldGroup | FieldBase<any>)[]
 
     @Input() $model: any = {
         model: {},
@@ -25,24 +26,33 @@ export class RelEditComponent implements OnInit {
 
     constructor(private http: Http) {
         this._fields = [
-            new TextField({
-                key: 'formId.formName',
-                label: '表单名称',
-                required: true,
-                span: 6,
-                order: 1,
-                isObject: true,
-                disable: true
+            new FieldGroup({
+                groupName: "formId",
+                fields: [
+                    new TextField({
+                        key: 'formName',
+                        label: '表单名称',
+                        required: true,
+                        span: 6,
+                        order: 1,
+                        isObject: true,
+                        disable: true
+                    })]
             }),
-            new TextField({
-                key: 'fieldId.fieldName',
-                label: '字段名称',
-                required: true,
-                span: 6,
-                order: 2,
-                isObject: true,
-                disable: true
+            new FieldGroup({
+                groupName: "fieldId",
+                fields: [
+                    new TextField({
+                        key: 'fieldName',
+                        label: '字段名称',
+                        required: true,
+                        span: 6,
+                        order: 2,
+                        isObject: true,
+                        disable: true
+                    }),]
             }),
+
             new TextField({
                 key: 'rorder',
                 label: '排序号',
@@ -61,7 +71,37 @@ export class RelEditComponent implements OnInit {
                 key: 'displaySpan',
                 label: '占位数',
                 span: 6,
+                order: 8
+            }),
+            new TextField({
+                key: 'dictName',
+                label: '字典名',
+                span: 6,
                 order: 9
+            }),
+            new TextField({
+                key: 'remark1',
+                label: '属性1',
+                span: 6,
+                order: 10
+            }),
+            new TextField({
+                key: 'remark2',
+                label: '属性2',
+                span: 6,
+                order: 11
+            }),
+            new TextField({
+                key: 'remark3',
+                label: '属性3',
+                span: 6,
+                order: 12
+            }),
+            new TextField({
+                key: 'remark4',
+                label: '属性4',
+                span: 6,
+                order: 13
             }),
         ];
     }
@@ -80,12 +120,15 @@ export class RelEditComponent implements OnInit {
             .toPromise()
             .then((data) => {
                 this.$model.model = data.json()
+                this.modelForm.form.patchValue(data.json())
             })
 
     }
 
     onModalAction(): Promise<any> {
         if (this.modelForm.form.valid) {
+            let formdata = this.modelForm.form.value
+            let data = Object.assign(this.$model.model,formdata)
             let body = JSON.stringify(this.$model.model);
             let headers = new Headers({ 'Content-Type': 'application/json;charset=UTF-8' });
             let options = new RequestOptions({

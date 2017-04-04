@@ -34,7 +34,9 @@ export class MyModalComponent implements OnInit {
         this.hideModal()
     }
 
-    ngOnInit() { }
+    ngOnInit() {
+        debugger
+     }
 
     onsave(){
         this.containerChild.modalOnSave().then((date)=>{

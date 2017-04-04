@@ -44,7 +44,7 @@ export class DicttypeEditComponent implements OnInit {
                 urlSearchParams.set("elementId", "dicttypeName");
                 urlSearchParams.set("elementValue", control.value);
                 urlSearchParams.set("formType", this.$model.params.type);
-                urlSearchParams.set("dictTypeId", this.$model.dicttype.dicttypeId);
+                urlSearchParams.set("dictTypeId", this.$model.dicttype.dicttypeId || "999");
                 let headers = new Headers({ 'Content-Type': 'application/json;charset=UTF-8' });
                 let options = new RequestOptions({
                     headers: headers,
@@ -95,7 +95,7 @@ export class DicttypeEditComponent implements OnInit {
             let options = new RequestOptions({ headers: headers });
             return this.http.put('dicttype', body, options)
                 .toPromise()
-                .then((data)=>{debugger
+                .then((data)=>{
                     return data
                 });   
         }else if(this.$model.params.type == "add"){

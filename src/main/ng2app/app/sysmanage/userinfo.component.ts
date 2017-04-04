@@ -1,9 +1,9 @@
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
-import { AbstractControl }                 from '@angular/forms';
+import { AbstractControl } from '@angular/forms';
 
 import { DropdownField } from '../shared/form/dropdown-field';
-import { FieldBase }     from '../shared/form/field-base';
-import { TextField }  from '../shared/form/text-field';
+import { FieldBase } from '../shared/form/field-base';
+import { TextField } from '../shared/form/text-field';
 import { DynamicFormHorizontalComponent } from '../shared/form/dynamic-form-horizontal.component'
 
 import { UserService } from '../service/user.service'
@@ -59,6 +59,11 @@ export class UserinfoComponent implements OnInit, onModalAction {
                 span: 6,
                 order: 3
             }),
+            new TextField({
+                key: 'userId',
+                label: '密码',
+                hidden: true,
+            }),
         ];
     }
 
@@ -67,20 +72,22 @@ export class UserinfoComponent implements OnInit, onModalAction {
     onModalAction(action: ModalAction) {
         if (action.key == "close") {
             console.log("save model", this.$model.user)
-            if (this.$model.params.type == "edit") {
-                return this.userService.update(this.$model.user).then((data) => {
-                    return this.$model.user
-                });
-            } else if (this.$model.params.type == "add") {
-                if (this.userForm.form.valid) {
-                    return this.userService.create(this.$model.user,this.$model.params.orgId)
-                } else {
-                    toastr.warning("验证不通过");
-                    return new Promise((resolve, reject) => {
-                        reject("true");
+
+            if (this.userForm.form.valid) {
+                if (this.$model.params.type == "edit") {
+                    return this.userService.update(this.userForm.form.value).then((data) => {
+                        return this.$model.user
                     });
+                } else if (this.$model.params.type == "add") {
+                    return this.userService.create(this.userForm.form.value, this.$model.params.orgId)
                 }
+            } else {
+                toastr.warning("验证不通过");
+                return new Promise((resolve, reject) => {
+                    reject("true");
+                });
             }
+
         } else if (action.key == "dismiss") {
 
         }

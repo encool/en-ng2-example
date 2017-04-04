@@ -12,7 +12,7 @@ import { onModalAction } from '../shared/interface/modal_hook'
     selector: 'my-orginfo',
     templateUrl: './orginfo.component.html'
 })
-export class OrginfoComponent implements OnInit, onModalAction{
+export class OrginfoComponent implements OnInit, onModalAction {
     @Input() $model: any = {}
     @ViewChild('form') myForm: DynamicFormComponent
 
@@ -30,6 +30,10 @@ export class OrginfoComponent implements OnInit, onModalAction{
             //     ],
             //     order: 3
             // }),
+            new TextField({
+                key: 'orgId',
+                hidden: true
+            }),
             new TextField({
                 key: 'orgNumber',
                 label: '机构编码',
@@ -69,12 +73,21 @@ export class OrginfoComponent implements OnInit, onModalAction{
         ];
     }
 
-    ngOnInit() { }
+    ngOnInit() {
+        if (this.$model.params.type == 'edit') {
+            this.orgService.getOrgByPK(this.$model.params.id, null).then(data => {
+                this.myForm.form.patchValue(data);
+                // this._orginfo_params.pNode = { id: node1.pid };
+                // this._orginfo_params.type = "edit"
+                // $('#orgmodal').modal('show')
+            });
+        }
+    }
 
     onModalAction(): Promise<any> {
         if (this.$model.params.type == 'edit') {
             if (this.myForm.form.valid) {
-                return this.orgService.update(this.$model.org).then((data) => {
+                return this.orgService.update(this.myForm.form.value).then((data) => {
                     if (data == true) {
                         console.log("update success!")
                         return "orgupdate"
@@ -89,7 +102,7 @@ export class OrginfoComponent implements OnInit, onModalAction{
             }
         } else if (this.$model.params.type == 'add') {
             if (this.myForm.form.valid) {
-                return this.orgService.create(this.$model.params.pNode.id, this.$model.org).then(() => { return "orgadd" })
+                return this.orgService.create(this.$model.params.pNode.id, this.myForm.form.value).then(() => { return "orgadd" })
             } else {
                 return new Promise((resolve, reject) => {
                     reject('no valid');

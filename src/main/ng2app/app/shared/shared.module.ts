@@ -18,18 +18,21 @@ import { TabpanelComponent } from './form/widget/tabpanel.component'
 import { SimpleModalComponent } from './component/simple-modal.component'
 
 import { DynamicFormComponent } from './form/dynamic-form.component'
-import { DynamicFormfieldComponent } from './form/dynamic-form-field.component'
+import { DynamicFormfieldComponent } from './form/dynamic-field.component'
 import { DynamicFormHorizontalComponent } from './form/dynamic-form-horizontal.component'
 import { DynamicfieldHorizontalComponent } from './form/dynamic-field-horizontal.component'
+import { FieldGroupHoriComponent } from './form/field-group-hori.component'
 import { DropdownComponent } from './form/dropdown.component'
 import { CheckboxComponent } from './form/widget/checkbox.component'
 import { TextComponent } from './form/widget/text.component'
 import { RadioGroupComponent } from './form/widget/radio-group.component'
+import { CheckboxGroupComponent } from './form/widget/checkbox-group.component'
 import { KeysPipe } from './pipes/keys.pipe'
 import { MyformComponent } from './layout/myform.component'
 import { DatetimePickComponent } from './form/widget/datetime-pick.component'
 import { TextareaComponent } from './form/widget/textarea.component'
-// import { BpmnEditorComponent } from './component/bpmn-editor.component'
+import { Select2Component } from './form/widget/select2.component'
+import { FileUploadComponent } from './form/widget/file-upload.component'
 
 import { FieldDataService } from './form/field-data.service'
 @NgModule({
@@ -48,6 +51,7 @@ import { FieldDataService } from './form/field-data.service'
     DynamicFormfieldComponent,
     DynamicFormHorizontalComponent,
     DynamicfieldHorizontalComponent,
+    FieldGroupHoriComponent,
     JqgridComponent,
     // BpmnEditorComponent,
     TabsComponent,
@@ -56,12 +60,15 @@ import { FieldDataService } from './form/field-data.service'
     SimpleModalComponent,
     DropdownComponent,
     CheckboxComponent,
+    CheckboxGroupComponent,
     TextComponent,
     RadioGroupComponent,
     KeysPipe,
     MyformComponent,
     DatetimePickComponent,
     TextareaComponent,
+    Select2Component,
+    FileUploadComponent,
   ],
   exports: [
     CommonModule,
@@ -90,6 +97,8 @@ import { FieldDataService } from './form/field-data.service'
     MyformComponent,
     DatetimePickComponent,
     TextareaComponent,
+    Select2Component,
+    FileUploadComponent,
   ],
   entryComponents: [SimpleModalComponent]
 })

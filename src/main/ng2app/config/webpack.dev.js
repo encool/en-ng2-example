@@ -5,8 +5,6 @@ var commonConfig = require('./webpack.common.js');
 var helpers = require('./helpers');
 var path = require('path');
 
-const ENV = process.env.NODE_ENV = process.env.ENV = 'production';
-
 module.exports = webpackMerge(commonConfig, {
   devtool: 'eval',
 
@@ -32,14 +30,14 @@ module.exports = webpackMerge(commonConfig, {
     //     keep_fnames: true
     //   },
     //   compress: {
-    //     warnings: false
+    //     warnings: true
     //   }
     // }),
-    new ExtractTextPlugin('[name].[hash].css'),
-    new webpack.DefinePlugin({
-      'process.env': {
-        'ENV': JSON.stringify(ENV)
-      }
-    })
+    // new ExtractTextPlugin('[name].[hash].css'),
+    // new webpack.DefinePlugin({
+    //   'process.env': {
+    //     'ENV': JSON.stringify(ENV)
+    //   }
+    // })
   ]
 });

@@ -13,7 +13,7 @@ export class MydivComponent implements OnInit {
     @Input() offset: number
     @Input() padding: any = true
     @Input() hidden: boolean = false
-    styles: string
+    @Input() styles: string
     setClass() {
         var colClassName = "col-sm-" + (this.span == undefined ? 12 : this.span);
         var classOb = {};
@@ -24,20 +24,28 @@ export class MydivComponent implements OnInit {
     }
 
     setStyles() {
-        if(this.padding === false || this.padding == "false"){
+        if (this.padding === false || this.padding == "false") {
             this.padding = false
         }
         let styles = {
             'padding': this.padding ? '10px' : '0px',  // italic
             'display': this.hidden ? 'none' : 'block',
         };
+        if (this.styles) {
+            let styes = this.styles.split(";")
+            for (let i in styes) {
+                let kvs = styes[i].split(":")
+                styles[kvs[0]] = kvs[1]
+            }
+        }
         return styles;
     }
 
     constructor() { }
 
     ngOnInit() {
-        
+        // debugger
+        this
     }
 
 }

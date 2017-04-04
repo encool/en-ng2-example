@@ -1,9 +1,8 @@
 export class Menu {
-    id: string;
-    c: Array<Menu>;
-    i:string;
-    o:string;
-    t:string; 
-    constructor(id:string,i:string,t:string,c?:Array<Menu>,o?:string){
+
+    constructor(public id: string, public i: string,
+        public t: string, public l: string, public isSelected?: boolean, public c?: Array<Menu>,
+        public o?: string, public e?: string, ) {
+
     }
 }

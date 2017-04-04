@@ -5202,7 +5202,7 @@ ul.notifications {
   border-left: 5px solid #42A948; /* green */
 }
 
-input.ng-invalid   {
+select textarea input.ng-invalid   {
   border-left: 5px solid #a94442; /* red */
 }
 

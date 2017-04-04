@@ -24,6 +24,7 @@ import { TodoComponent } from './process/todo.component'
 import { BpmnViewerComponent } from './bpmn2/bpmn-viewer.component'
 import { TemplateMgtComponent } from './template/template-mgt.component'
 import { TemplateInfoComponent } from './template/template-info.component'
+import { WftitleComponent } from './template/wftitle.component'
 
 import { routing } from './workflow.routing';
 
@@ -59,10 +60,12 @@ import { WorkprocessService } from './service/workprocess.service'
         BpmnViewerComponent,
         TemplateMgtComponent,
         TemplateInfoComponent,
+        WftitleComponent,
     ],
     exports: [
         BpmnEditorComponent,
         BpmnViewerComponent,
+        UsertaskDoComponent,
     ],
     providers: [WorkflowService, WorkprocessService],
     entryComponents: [

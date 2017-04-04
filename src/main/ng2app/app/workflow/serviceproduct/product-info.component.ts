@@ -14,7 +14,7 @@ import { DynamicFormComponent } from '../../shared/form/dynamic-form.component'
 })
 export class ProductInfoComponent implements OnInit {
 
-    $model: any;
+    $model: any = { product: {} };
     _fields: any;
     @ViewChild("df_ref") myForm: DynamicFormComponent
     constructor(private http: Http) { }
@@ -58,8 +58,8 @@ export class ProductInfoComponent implements OnInit {
                 order: 2
             }),
             new TextField({
-                key: 'ico',
-                label: '图标',
+                key: 'wfProcessstartUrl',
+                label: '处理URL',
                 required: true,
                 span: 6,
                 order: 3
@@ -67,10 +67,18 @@ export class ProductInfoComponent implements OnInit {
         ];
     }
 
+
+    ngAfterViewInit() {
+        this.myForm.form.valueChanges.subscribe((data) => {
+            
+        });
+    }
+
     onModalAction(): Promise<any> {
         if (this.$model.params.type == 'edit') {
             if (this.myForm.form.valid) {
-                let body = JSON.stringify(this.$model.product);
+                debugger
+                let body = JSON.stringify(this.myForm.form.value);
                 // let urlSearchParams = new URLSearchParams();
                 // urlSearchParams.set('', );
                 let headers = new Headers({ 'Content-Type': 'application/json;charset=UTF-8' });
@@ -78,7 +86,7 @@ export class ProductInfoComponent implements OnInit {
                     headers: headers,
                     // search: urlSearchParams
                 });
-                return this.http.post('e/workflowserviceproduct/'+this.$model.params.productId, body, options)
+                return this.http.post('e/workflowserviceproduct/' + this.$model.params.productId, body, options)
                     .toPromise()
                     .then((data) => { return data })
             } else {

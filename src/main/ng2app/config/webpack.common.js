@@ -1,60 +1,8 @@
-// var webpack = require('webpack');
-// var HtmlWebpackPlugin = require('html-webpack-plugin');
-// var ExtractTextPlugin = require('extract-text-webpack-plugin');
-// var helpers = require('./helpers');
-
-// module.exports = {
-//   entry: {
-//     'polyfills': './app/polyfills.ts',
-//     'vendor': './app/vendor.ts',
-//     'app': './app/main.ts'
-//   },
-
-//   resolve: {
-//     extensions: ['', '.js', '.ts']
-//   },
-
-//   module: {
-//     loaders: [
-//       {
-//         test: /\.ts$/,
-//         loaders: ['ts', 'angular2-template-loader']
-//       },
-//       {
-//         test: /\.html$/,
-//         loader: 'html'
-//       },
-//       {
-//         test: /\.(png|jpe?g|gif|svg|woff|woff2|ttf|eot|ico)$/,
-//         loader: 'file?name=assets/[name].[hash].[ext]'
-//       },
-//       {
-//         test: /\.css$/,
-//         exclude: helpers.root('src', 'app'),
-//         loader: ExtractTextPlugin.extract('style', 'css?sourceMap')
-//       },
-//       {
-//         test: /\.css$/,
-//         include: helpers.root('src', 'app'),
-//         loader: 'raw'
-//       }
-//     ]
-//   },
-
-//   plugins: [
-//     new webpack.optimize.CommonsChunkPlugin({
-//       name: ['app', 'vendor', 'polyfills']
-//     }),
-
-//     // new HtmlWebpackPlugin({
-//     //   template: 'html/index.html'
-//     // })
-//   ]
-// };
 var webpack = require('webpack');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var helpers = require('./helpers');
+// var AotPlugin = require('@ngtools/webpack')
 
 module.exports = {
   entry: {
@@ -63,19 +11,41 @@ module.exports = {
     'app': './app/main.ts'
   },
 
+  externals: {
+    jquery: 'window.$',
+    toastr: 'toastr',
+  },
+
   resolve: {
     extensions: ['', '.js', '.ts']
   },
 
   module: {
     loaders: [
+
+      // {
+      //   test: /\.ts$/,
+      //   loader: '@ngtools/webpack',
+      // },
+    
       {
         test: /\.ts$/,
         loaders: ['awesome-typescript-loader', 'angular2-template-loader']
       },
       {
         test: /\.html$/,
-        loader: 'html'
+        loader: 'html',
+        // options: {
+        //   minimize: false,
+        //   removeAttributeQuotes: false,
+        //   caseSensitive: false, // <- this
+        //   customAttrSurround: [
+        //     [/#/, /(?:)/],
+        //     [/\*/, /(?:)/],
+        //     [/\[?\(?/, /(?:)/]
+        //   ],
+        //   customAttrAssign: [/\)?\]?=/]
+        // }
       },
       {
         test: /\.(png|jpe?g|gif|svg|woff|woff2|ttf|eot|ico)$/,
@@ -83,14 +53,16 @@ module.exports = {
       },
       // {
       //   test: /\.css$/,
-      //   exclude: helpers.root('src', 'app'),
+      //   exclude: helpers.root('app'),
       //   loader: ExtractTextPlugin.extract('style', 'css?sourceMap')
       // },
       {
         test: /\.css$/,
         include: helpers.root('app'),
         loader: 'raw'
-      }
+      },
+      { test: /\.json$/, loader: "json-loader" }
+
     ]
   },
 
@@ -98,6 +70,16 @@ module.exports = {
     new webpack.optimize.CommonsChunkPlugin({
       name: ['app', 'vendor', 'polyfills']
     }),
+    new webpack.ProvidePlugin({
+      jQuery: 'jquery',
+      $: 'jquery',
+      jquery: 'jquery',
+    }),
+    // new AotPlugin({
+    //   tsConfigPath: '../tsconfig.json',
+    //   entryModule: '../app/app.module#AppModule'
+    // })
+  
     // new webpack.optimize.UglifyJsPlugin({
     //     beautify: false, //prod
     //     mangle: { screw_ie8 : true, keep_fnames: true }, //prod

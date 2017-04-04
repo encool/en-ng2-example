@@ -41,6 +41,7 @@ export class SimpleModalComponent implements OnInit {
             }
         })
         $('#mysimpleModal').on('shown.bs.modal', (e) => {
+            this._width = this._width
             if(this._content.onModalNativeEvent){
                 this._content.onModalNativeEvent('shown.bs.modal',e)
             }
@@ -57,7 +58,9 @@ export class SimpleModalComponent implements OnInit {
     open(myComponentFactory:ComponentFactory<any>, params: any, success?: Function, dismisss?: Function) {
         let cmpRef: ComponentRef<any> = this.wrapperRef.createComponent(myComponentFactory);
         this._content = cmpRef.instance
-        cmpRef.instance.$model = params;
+        //兼容设置
+        cmpRef.instance.$model = params
+        cmpRef.instance.model = params
         this._success = success
         this._dismiss = dismisss
         this.show()

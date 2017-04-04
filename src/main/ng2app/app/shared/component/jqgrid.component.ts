@@ -1,10 +1,12 @@
-import { Component, OnInit, Input, Output, EventEmitter, ElementRef, Renderer, ViewChild, HostListener} from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ElementRef, Renderer, ViewChild, HostListener } from '@angular/core';
 
 import { JqgridEvent } from '../object/jqgrid-event'
 import { ColModel } from '../object/col-model'
 import { JqgridAction } from '../object/jqgrid-action'
 import { JqgridCallback } from '../interface/jqgrid.callback'
 import { JqgridSetting } from '../object/jqgrid-setting'
+
+let $ = require('jquery')
 
 @Component({
     selector: 'my-grid',
@@ -20,8 +22,11 @@ export class JqgridComponent implements OnInit {
 
     @Output() jqgridevent = new EventEmitter();
 
+    eleJqGrid: any
     @ViewChild('gridContain') gridContainEle: ElementRef;
     _gridContainerWidth: number
+
+    dataOprations: any
 
     constructor(public renderer: Renderer) {
 
@@ -32,18 +37,29 @@ export class JqgridComponent implements OnInit {
     }
 
     ngAfterViewInit() {
-        this.initJqgrid()      
-        this._gridContainerWidth = this.gridContainEle.nativeElement.offsetWidth
-        this.recomputeWidth(this._gridContainerWidth, this.jqgridSetting.shrinkToFit)
+        (require as any).ensure(['jquery'], (require) => {
+            // if (process.env.ENV === 'production') {
+            //     require('../../../js/jquery.tablednd.min.js')
+            // }else{
+            //     require('../../../js/jquery.tablednd.js')
+            // }
+            require('../../../js/jquery.tablednd.js')
+            this.initJqgrid()
+            this._gridContainerWidth = this.gridContainEle.nativeElement.offsetWidth
+            this.recomputeWidth(this._gridContainerWidth, this.jqgridSetting.shrinkToFit)
+        }, 'test');
+        // this.initJqgrid()
+        // this._gridContainerWidth = this.gridContainEle.nativeElement.offsetWidth
+        // this.recomputeWidth(this._gridContainerWidth, this.jqgridSetting.shrinkToFit)
+
     }
 
     initJqgrid() {
         // dts文件不正确 为了ts编译不报错处理
-        let jqs: any = $;
-        let eleJqGrid: any = $("#"+this.jqgridSetting.gridId)
-
-        jqs.jgrid.defaults.styleUI = 'Bootstrap';
-        this.jqgridObject = eleJqGrid.jqGrid({
+        // let jqs: any = $;
+        this.eleJqGrid = $("#" + this.jqgridSetting.gridId)
+        $.jgrid.defaults.styleUI = 'Bootstrap';
+        this.jqgridObject = this.eleJqGrid.jqGrid({
             colModel: this.colModel,
             treeReader: {
                 level_field: "level",
@@ -170,7 +186,7 @@ export class JqgridComponent implements OnInit {
 
             multiselect: this.jqgridSetting.multiselect,//是否能够多选
             multiboxonly: true,//需要点击checkbox才能多选
-            pager: "#"+this.jqgridSetting.gridId+"pager",
+            pager: "#" + this.jqgridSetting.gridId + "pager",
 
             onSelectRow: (rowid, status, e) => {
                 if (this.callback && this.callback.onSelectRow) {
@@ -189,7 +205,7 @@ export class JqgridComponent implements OnInit {
     }
 
     @HostListener('window:resize', ['$event'])
-    onResize(e?:any) {
+    onResize(e?: any) {
         this._gridContainerWidth = this.gridContainEle.nativeElement.offsetWidth
         this.recomputeWidth(this._gridContainerWidth, this.jqgridSetting.shrinkToFit)
     }
@@ -286,9 +302,6 @@ export class JqgridComponent implements OnInit {
         return selectDatas;
     }
 
-    recomputeWidth(width, shrink) {
-        this.jqgridObject.jqGrid('setGridWidth', width, shrink);
-    }
 
     formatTitle(cellValue, options, rowObject) {
         return cellValue.substring(0, 50) + "...";
@@ -296,5 +309,191 @@ export class JqgridComponent implements OnInit {
     formatLink(cellValue, options, rowObject) {
         return "<a href='" + cellValue + "'>" + cellValue.substring(0, 25) + "..." + "</a>";
     }
+    /**
+    	     * 手动设置当前表格的主数据，当前表格必须是从表该API才有效
+    	     */
+    // setPrimaryData(pkValue) {
+    //     if (_.isDefined($scope.bindData.$fkMap)) {
+    //         //必须要是从表才有效
+    //         var fk = $scope.bindData.$fkMap.fk;//从表外键的key
+    //         //就算外键值还没有获取到，也要设置表格的参数，最好是一个无法查询出任何结果的值
+    //         //不然表格中可能会短暂的显示不应该看到的数据
+    //         var parentParamString = "{\"" + fk + "\":\"" + pkValue + "\"}";
+    //         this.setForeignKey(angular.fromJson(parentParamString));
+    //     }
+    // }
+    // removePrimaryData() {
+    //     this.setPrimaryData("___");
+    // }
+    /**
+     * 设置表格外键，{fkKey:fkValue}，内部接口，不推荐用户自己调用
+     */
+    setForeignKey = function (fk) {
+        this.fk = fk;
+        this.addParams(fk);
+    }
 
+    recomputeWidth(width, shrink) {
+        this.jqgridObject.jqGrid('setGridWidth', width, shrink);
+    }
+    recomputeHeight(height) {
+        this.jqgridObject.jqGrid('setGridHeight', height);
+    }
+    //设置第几页和每页显示行数
+    setPageAndRowNum(page, rows) {
+        this.jqgridObject.jqGrid("setGridParam", { page: page, rowNum: rows }).trigger("reloadGrid");
+        this.initDataOprations();
+    }
+    // getDataIDs = function () {
+    //     return this.jqgridObject.jqGrid("getDataIDs");
+    // }
+    // //获取指定列的数据 rowId:主列的值;如果rowId为空，则返回表格全部数据。
+    // getRowData = function (rowId) {
+    //     return this.jqgridObject.jqGrid("getRowData", rowId);
+    // }
+    // //获取表格信息。param:"rowNum"-每页记录条数 ",page"-当前第几页,"records"-总共有多少条,"postData"-请求参数...
+    // getGridParam = function (param) {
+    //     return this.jqgridObject.jqGrid("getGridParam", param);
+    // }
+    // //获取单个选中的行的主列值，如果选中多个这返回最后选中的值
+    // getSingleSelectRowId = function () {
+    //     return this.jqgridObject.jqGrid("getGridParam", "selrow");
+    // }
+    // //获取所有选中的行的主列值，返回数组
+    // getSelectRowIds = function () {
+    //     return this.jqgridObject.jqGrid("getGridParam", "selarrrow");
+    // }
+    // //返回单个选中的行数据
+    // getSingleSelectData = function () {
+    //     var rowId = this.jqgridObject.jqGrid("getGridParam", "selrow");
+    //     return this.jqgridObject.jqGrid("getRowData", rowId);
+    // }
+    // //返回所有选中行数据的数组
+    // getSelectDatas = function () {
+    //     var rowIds = this.jqgridObject.jqGrid("getGridParam", "selarrrow");
+    //     var selectDatas = new Array();
+    //     angular.forEach(rowIds, function (value, key) {
+    //         var rowData = this.jqgridObject.jqGrid("getRowData", value);
+    //         selectDatas.push(rowData);
+    //     });
+    //     return selectDatas;
+    // }
+    //启用和禁用排序
+    setSortRow(sortable, onDrop?, dragHandle?) {
+        if (sortable) {
+            //如果没定义事件，则使用表格配置的事件
+            let tableDndOptions: {
+                onDrop?: any
+                onDragClass: any
+                dragHandle: any
+            } = { onDragClass: "drag-tr", dragHandle: dragHandle };
+            if (typeof onDrop == "function") {
+                tableDndOptions.onDrop = onDrop;
+            }
+            // else if (onDrop == "angularFun" && $attrs.onDrop) {
+            //     tableDndOptions.onDrop = function (table, row) {
+            //         eval("$scope.$parent." + $attrs.onDrop);
+            //     }
+            // }
+            this.eleJqGrid.tableDnD(tableDndOptions);
+        } else {
+            jQuery(".jqgrow").css("cursor", "default");
+            jQuery(document).unbind('mousemove');
+            jQuery(document).unbind('mouseup');
+        }
+    }
+    editRow(rowid, editparameters) {
+        editparameters = editparameters || {};
+        this.jqgridObject.jqGrid("editRow", rowid, editparameters);
+    }
+    saveRow(rowid, saveparameters) {
+        this.jqgridObject.jqGrid("saveRow", rowid, saveparameters);
+    }
+    restoreRow(rowid, restoreparameters) {
+        this.jqgridObject.jqGrid("restoreRow", rowid, restoreparameters);
+    }
+    addRow(parameters) {
+        this.jqgridObject.jqGrid("addRow", parameters);
+    }
+    setSelection(rowid, onselectrowFlag) {
+        this.jqgridObject.jqGrid("setSelection", rowid, onselectrowFlag);
+    }
+    addRowData(rowid, data, position, srcrowid) {
+        return this.jqgridObject.jqGrid("addRowData", rowid, data, position, srcrowid);
+    }
+    delRowData(rowid) {
+        var isSuccess = this.jqgridObject.jqGrid("delRowData", rowid);
+        if (isSuccess) {//同步操作数据
+            _.forEach(this.dataOprations.add, function (v, i) {
+                if (v._tableAddRowId == rowid)
+                    this.dataOprations.add.splice(i, 1);
+            });
+            _.forEach(this.dataOprations.update, function (v, i) {
+                if (v[this.jqgridSetting.primaryKey] == rowid) this.dataOprations.update.splice(i, 1);
+            });
+            if (rowid.indexOf(this.tableNewRowIdPre) != 0) {
+                var o = new Object();
+                o[this.jqgridSetting.primaryKey] = rowid;
+                this.dataOprations["delete"].push(o);
+            }
+        }
+        return isSuccess;
+    }
+    //表格操作数据
+    initDataOprations() {
+        this.dataOprations = { update: [], add: [], "delete": [] };
+    }
+    getDataOprations() {
+        return this.dataOprations;
+    }
+    //获取表格工具栏中的按钮
+    getTableNavButtons = function () {
+        return this.tableNavButtons;
+    }
+    getTableTopButtons = function () {
+        return this.tableTopButtons;
+    }
+    getTableButtonActions = function () {
+        return this.tableButtonActions;
+    }
+    tableNewRowIdNum: number
+    tableNewRowIdPre: number
+    getTableNewRowId() {
+        var newId = this.tableNewRowIdPre + this.tableNewRowIdNum;
+        this.tableNewRowIdNum++;
+        return newId;
+    }
+    clearGridData(clearfooter) {
+        this.jqgridObject.jqGrid('clearGridData', clearfooter);
+    }
+    getCell(rowid, iCol) {
+        return this.jqgridObject.jqGrid('getCell', rowid, iCol);
+    }
+    getCol(colname, returntype, mathoperation) {
+        return this.jqgridObject.jqGrid('getCol', colname, returntype, mathoperation);
+    }
+    getInd(rowid, rowcontent) {
+        return this.jqgridObject.jqGrid("getInd", rowid, rowcontent);
+    }
+    hideCol(colname) {
+        this.jqgridObject.jqGrid("hideCol", colname);
+    }
+    showCol(colname) {
+        this.jqgridObject.jqGrid("showCol", colname);
+    }
+    setLabel(colname, data, className, properties) {
+        this.jqgridObject.jqGrid("setLabel", colname, data, className, properties)
+    }
+    remapColumns(permutation, updateCells, keepHeader) {
+        this.jqgridObject.jqGrid("remapColumns", permutation, updateCells, keepHeader);
+    }
+    resetSelection() {
+        this.jqgridObject.jqGrid("resetSelection");
+    }
+    setCell(rowid, colname, data, className, properties, forceup) {
+        this.jqgridObject.jqGrid("setCell", rowid, colname, data, className, properties, forceup);
+    }
+    setRowData(rowid, data, cssprop) {
+        this.jqgridObject.jqGrid("setRowData", rowid, data, cssprop);
+    }
 }

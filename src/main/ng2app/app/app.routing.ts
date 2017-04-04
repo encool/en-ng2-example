@@ -1,32 +1,11 @@
-import { Routes, RouterModule } from '@angular/router';
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+
+import { BreadcrumbmenuGuard } from './breadcrumbmenu-guard.service'
 // import { ResourcemanageComponent } from './sysmanage/resourcemanage.component';
 // import { UserorgManageComponent } from './sysmanage/userorg-manage.component'
 
-const appRoutes: Routes = [
-    { path: '', redirectTo: 'userorgmanage', pathMatch: 'full' },
-    // { path: 'workflow', loadChildren: './dist/assets/js/workflow/workflow.module.js#WorkflowModule' },
-    // { path: 'sysmgt', loadChildren: './sysmanage/sysmanage.module.js#SysmanageModule' },
-    // { path: 'sysmgt', loadChildren: 'es6-promise!./sysmanage/sysmanage.module#SysmanageModule' },
-    // { path: 'sysmgt', loadChildren: loadSubModule },
-    {
-        path: 'sysmgt', loadChildren: () => new Promise(function (resolve) {
-            (require as any).ensure([], function (require: any) {
-                resolve(require('./sysmanage/sysmanage.module')['SysmanageModule']);
-            });
-        })
-    },
-    {
-        path: 'workflow', loadChildren: () => new Promise(function (resolve) {
-            (require as any).ensure([], function (require: any) {
-                resolve(require('./workflow/workflow.module')['WorkflowModule']);
-            });
-        })
-    },
-];
-export const appRoutingProviders: any[] = [
-
-];
-
+// const appRoutes: Routes = ;
 // export function loadSubModule(): any {
 //   // 2-1 Naive loading sub module:
 //   // It's synchronous loading
@@ -41,5 +20,48 @@ export const appRoutingProviders: any[] = [
 //   // return require("es6-promise!../sub/sub.module.ngfactory")("SubModuleNgFactory");
 // }
 
-export const routing = RouterModule.forRoot(appRoutes);
+export function sysmgtChildren() {
+    return new Promise(function (resolve) {
+        (require as any).ensure([], function (require: any) {
+            resolve(require('./sysmanage/sysmanage.module')['SysmanageModule']);
+        });
+    })
+}
+export function workflowChildren() {
+    return new Promise(function (resolve) {
+        (require as any).ensure([], function (require: any) {
+            resolve(require('./workflow/workflow.module')['WorkflowModule']);
+        });
+    })
+}
+export function projectChildren() {
+    return new Promise(function (resolve) {
+        (require as any).ensure([], function (require: any) {
+            resolve(require('./projectmgt/projectmgt.module')['ProjectmgtModule']);
+        });
+    })
+}
+@NgModule({
+    imports: [RouterModule.forRoot([
+        {
+            path: '',
+            canActivate: [BreadcrumbmenuGuard],
+            canActivateChild: [BreadcrumbmenuGuard],
+            children: [
+                { path: 'index', redirectTo: '/sysmgt', pathMatch: 'full' },
+                {
+                    path: 'sysmgt', loadChildren: sysmgtChildren
+                },
+                {
+                    path: 'workflow', loadChildren: workflowChildren
+                },
+                {
+                    path: 'project', loadChildren: projectChildren
+                },],
+        },
+
+    ])],
+    exports: [RouterModule]
+})
+export class AppRoutingModule { }
 

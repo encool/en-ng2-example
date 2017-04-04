@@ -89,7 +89,7 @@ export class ProcessDefinitionComponent implements OnInit {
                                     },
                                     {
                                         params: { key: data.key,name: data.name, type: "add" },
-                                        model: data
+                                        bpmnModel: data
                                     },
                                     data=>{
                                         
@@ -113,7 +113,7 @@ export class ProcessDefinitionComponent implements OnInit {
                             params: { processDefId: processdefId, type: "edit" },
                         },
                         data=>{
-                            debugger
+                            // debugger
                         }
                     );                               
                     break;

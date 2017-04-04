@@ -13,7 +13,7 @@ import { ModalService } from '../../service/modal.service'
 })
 export class BpmnEditorComponent implements OnInit {
 
-    @Input() $model: {
+    @Input() model: {
         params?: {
             key?: string,
             name?: string,
@@ -22,7 +22,7 @@ export class BpmnEditorComponent implements OnInit {
             processDefId?: string
             moduleId?: string
         }
-        model?: any
+        bpmnModel?: any
     } = {
         params: {}
     }
@@ -45,9 +45,16 @@ export class BpmnEditorComponent implements OnInit {
     }
 
     ngOnInit() {
-        if (this.$model.params.processDefId != undefined
-            || this.$model.params.type == "add") {
-            this.initBpmn()
+        if (this.model.params.processDefId != undefined
+            || this.model.params.type == "add") {
+            // (require as any).ensure([], require => {
+            let BpmnModeler = require('bpmn-js/lib/Modeler')
+            let BpmnViewer = require('bpmn-js/lib/Viewer')
+            let propertiesPanelModule = require('bpmn-js-properties-panel')
+            let propertiesProviderModule = require('bpmn-js-properties-panel/lib/provider/camunda')
+            this.initBpmn(BpmnModeler, BpmnViewer, propertiesPanelModule, propertiesProviderModule)
+            // });
+            // this.initBpmn()
         }
     }
 
@@ -76,7 +83,6 @@ export class BpmnEditorComponent implements OnInit {
             '</div>')
         overlayHtml.append(formSetHtml)
         overlayHtml.append(activitySetHtml)
-        // debugger
         // var overlayHtml = $('<div><ul class="menu">click!</ul></div>')
         formSetHtml.click((e) => {
             this._overlays.remove({ element: this._curElement });
@@ -88,7 +94,7 @@ export class BpmnEditorComponent implements OnInit {
                     width: '900px'
                 },
                 {
-                    params: this.$model.params,
+                    params: this.model.params,
                     curActivity: this._curElement
                 },
                 data => {
@@ -101,12 +107,12 @@ export class BpmnEditorComponent implements OnInit {
             this.modalService.open(
                 this._modalContext,
                 {
-                    comp:ActivityConfigComponent,
+                    comp: ActivityConfigComponent,
                     title: '节点设置',
                     width: '800px'
                 },
                 {
-                    params: this.$model.params,
+                    params: this.model.params,
                     curActivity: this._curElement
                 },
                 data => {
@@ -148,21 +154,21 @@ export class BpmnEditorComponent implements OnInit {
         }
     }
 
-    initBpmn() {
-        if ((this.$model.params.processDefId == undefined && this.$model.params.type != "add")) {
+    initBpmn(BpmnModeler, BpmnViewer, propertiesPanelModule, propertiesProviderModule) {
+        if ((this.model.params.processDefId == undefined && this.model.params.type != "add")) {
             console.warn('没有流程信息')
             return
         }
-        var windowl: any = window
-        var propertiesPanelModule = windowl.PropertiesPanelModule;
-        var propertiesProviderModule = windowl.PropertiesProviderModule;
+        // var windowl: any = window
+        // var propertiesPanelModule = windowl.PropertiesPanelModule;
+        // var propertiesProviderModule = windowl.PropertiesProviderModule;
         var camundaModdleDescriptor = require("./camunda")
-        var BpmnModeler = windowl.BpmnJS;
-        var BpmnViewer = windowl.BpmnViewer;
+        // var BpmnModeler = windowl.BpmnJS;
+        // var BpmnViewer = windowl.BpmnViewer;
         var canvas = $('#js-canvas');
 
 
-        if (this.$model.params.type == "add") {
+        if (this.model.params.type == "add") {
             if (this._bpmnModeler == undefined) {
                 // create modeler
                 this._bpmnModeler = new BpmnModeler({
@@ -183,7 +189,7 @@ export class BpmnEditorComponent implements OnInit {
 
             let initXml = `<?xml version="1.0" encoding="UTF-8"?>
                 <definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" targetNamespace="http://www.activiti.org/processdef">
-                <process isExecutable="true" id="`+ this.$model.params.key + "\"" + (this.$model.params.name == undefined ? "" : " name=\"" + this.$model.params.name + "\"") + ` />
+                <process isExecutable="true" id="`+ this.model.params.key + "\"" + (this.model.params.name == undefined ? "" : " name=\"" + this.model.params.name + "\"") + ` />
                 <bpmndi:BPMNDiagram id="BPMNDiagram_test">
                     <bpmndi:BPMNPlane id="BPMNPlane_test" bpmnElement="test" />
                 </bpmndi:BPMNDiagram>
@@ -200,7 +206,7 @@ export class BpmnEditorComponent implements OnInit {
                     canvas.zoom('fit-viewport');
                 })
             }, 2000)
-        } else if (this.$model.params.type == "edit") {
+        } else if (this.model.params.type == "edit") {
             if (this._bpmnModeler == undefined) {
                 // create modeler
                 this._bpmnModeler = new BpmnModeler({
@@ -219,9 +225,9 @@ export class BpmnEditorComponent implements OnInit {
                 });
             }
 
-            this.http.get("workflow/model/editProcessByConvert/" + this.$model.params.processDefId).toPromise().then(rep => {
+            this.http.get("workflow/model/editProcessByConvert/" + this.model.params.processDefId).toPromise().then(rep => {
                 let rjson = rep.json();
-                this.$model.model = rjson.model;
+                this.model.bpmnModel = rjson.model;
                 let xml = this.activitiToCamundaAdapt(rjson.bpmn2xml)
                 console.info('diagram geted');
                 console.info(xml);
@@ -237,7 +243,7 @@ export class BpmnEditorComponent implements OnInit {
                 }, 1500)
 
             })
-        } else if (this.$model.params.type == "config") {
+        } else if (this.model.params.type == "config") {
             if (this._bpmnModeler == undefined) {
                 // create modeler
                 this._bpmnModeler = new BpmnViewer({
@@ -245,7 +251,7 @@ export class BpmnEditorComponent implements OnInit {
                 });
             }
 
-            this.getProcessDefDiagram(this.$model.params.processDefId).then(
+            this.getProcessDefDiagram(this.model.params.processDefId).then(
                 data => {
                     setTimeout(() => {
                         this._bpmnModeler.importXML(data, (err) => {
@@ -303,7 +309,7 @@ export class BpmnEditorComponent implements OnInit {
                             "svg=" + svg
                         let headers = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded;charset=ISO-8859-1' });
                         let options = new RequestOptions({ headers: headers });
-                        this.http.put("workflow/service/model/" + this.$model.model.id + "/save", body, options)
+                        this.http.put("workflow/service/model/" + this.model.bpmnModel.id + "/save", body, options)
                             .toPromise()
                             .then(function (response) {
                                 console.log("response", response.json());

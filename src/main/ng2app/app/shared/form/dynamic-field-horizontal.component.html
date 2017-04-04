@@ -1,24 +1,10 @@
-<div [ngSwitch]="field.isObject" [formGroup]="form" [ngClass]="ngclasses()">
-	<label [attr.for]="field.key" class="col-sm-3 control-label">{{field.label}}</label>
-
-	<div *ngSwitchCase="true" [ngSwitch]="field.controlType" class="col-sm-9">
-		<input *ngSwitchCase="'textbox'" [formControlName]="field.key" [id]="field.key" [(ngModel)]="model[key1][key2]" [id]="field.key"
-			[type]="field.type" class="form-control" data-toggle="tooltip" [title]="isValid?'':_tipmsg">
-		<f-dropdown-input *ngSwitchCase="'dropdown'" [form]="form" [field]="field" [model]="model"></f-dropdown-input>
-		<!--<select [id]="field.key" *ngSwitchCase="'dropdown'" [formControlName]="field.key" [(ngModel)]="model[key1][key2]" 
-            class="form-control"> 
-        <option *ngFor="let opt of field.options" [value]="opt.key">{{opt.value}}</option>
-    </select>-->
-	</div>
-	<div *ngSwitchCase="false" [ngSwitch]="field.controlType" class="col-sm-9">
-		<input *ngSwitchCase="'textbox'" [formControlName]="field.key" [id]="field.key" [(ngModel)]="model[field.key]" [id]="field.key"
-			[type]="field.type" class="form-control" data-toggle="tooltip" [title]="isValid?'':_tipmsg">
-		<f-dropdown-input *ngSwitchCase="'dropdown'" [form]="form" [field]="field" [model]="model"></f-dropdown-input>
-		<!--<select [id]="field.key" *ngSwitchCase="'dropdown'" [formControlName]="field.key" [(ngModel)]="model[field.key]" 
-            class="form-control"> 
-        <option *ngFor="let opt of field.options" [value]="opt.key">{{opt.value}}</option>
-    </select>-->
-	</div>
-
-	<!--<div class="errorMessage" *ngIf="!isValid">{{field.label}} is required</div>-->
+<div *ngFor="let field of fields" [ngSwitch]="field.controlType">
+	<f-dropdown-input *ngSwitchCase="'dropdowninput'" [simple]="false" [form]="form" [field]="field" [model]="model"></f-dropdown-input>
+	<f-text-input *ngSwitchCase="'textinput'" [simple]="false" [form]="form" [field]="field" [model]="model"></f-text-input>
+	<f-datetime-pick *ngSwitchCase="'datetimepick'" [simple]="false" [form]="form" [field]="field" [model]="model"></f-datetime-pick>
+	<f-textarea *ngSwitchCase="'textarea'" [simple]="false" [form]="form" [field]="field" [model]="model"></f-textarea>
+	<f-select2 *ngSwitchCase="'select2'" [simple]="false" [form]="form" [field]="field" [model]="model"></f-select2>
+	<f-checkbox-input *ngSwitchCase="'checkbox'" [simple]="false" [form]="form" [field]="field" [model]="model"></f-checkbox-input>
+	<f-file-upload *ngSwitchCase="'fileupload'" [simple]="false" [form]="form" [field]="field" [model]="model"></f-file-upload>
+	<f-radio-group *ngSwitchCase="'radiogroup'" [simple]="false" [form]="form" [field]="field" [model]="model"></f-radio-group>
 </div>

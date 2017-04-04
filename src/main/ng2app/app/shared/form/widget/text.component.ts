@@ -1,18 +1,20 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 
+import { UIComponent } from '../../../decorators/ui-component.decorator'
+
+@UIComponent({
+    selector: 'f-text-input',
+    component: TextComponent
+})
 @Component({
     selector: 'f-text-input',
     template: `
     <div [ngSwitch]="simple">
-        <div *ngSwitchCase="false" [ngSwitch]="field.isObject" [formGroup]="form" [ngClass]="ngclasses()">
+        <div *ngSwitchCase="false" [formGroup]="form" [style.display]="field.hidden ? 'none':'inline'"  [ngClass]="ngclasses()">
         	<label [attr.for]="field.key" class="control-label" style="float: left;width:75px">{{field.label}}</label>
-        	<div *ngSwitchCase="true"  class="" style="margin-left:85px">
-        		<input [formControlName]="field.key" [id]="field.key" [(ngModel)]="model[key1][key2]" [id]="field.key"
-        			[type]="field.type" class="form-control" data-toggle="tooltip" [title]="isValid?'':_tipmsg">
-        	</div>
-        	<div *ngSwitchCase="false" class="" style="margin-left:85px">
-        		<input [formControlName]="field.key" [id]="field.key" [(ngModel)]="model[field.key]" [id]="field.key"
+        	<div class="" style="margin-left:85px">
+        		<input [formControlName]="field.key" [id]="field.key" [id]="field.key" (click)="onClick($event)"
         			[type]="field.type" class="form-control" data-toggle="tooltip" [title]="isValid?'':_tipmsg">
             </div>            
         </div> 
@@ -69,8 +71,26 @@ export class TextComponent implements OnInit {
             classExpression["col-sm-" + this.span] = true;
             classExpression["col-md-offset-" + this.offset] = this.offset == 0 ? false : true;
         } else {
-            classExpression["col-sm-" + this.field.span] = true;
+            let span = this.field.span || 4
+            classExpression["col-sm-" + span] = true;
         }
         return classExpression
+    }
+
+    onClick($event) {
+        if (!this.simple) {
+            if (this.field.click) {
+                this.field.click()
+            }
+        }
+    }
+
+    // ngOnChanges(changes: SimpleChanges) {
+    //     // if (changes['field'] && changes['field'].currentValue) {
+    //     // }
+    // }
+
+    ngDoCheck() {
+        // debugger
     }
 }

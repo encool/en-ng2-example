@@ -21,14 +21,14 @@ import { ZtreeSetting } from '../object/ztree-setting'
             </div>
         `,
     // styles: [require('./app/assets/css/ztree.component.css')]
-    styleUrls:  ['ztree.component.css']
+    styleUrls: ['ztree.component.css']
 })
 export class ZtreeComponent {
     //TODO 去掉在setting中参数
     // @Input() treeId:string;
     // @Input() dataUrl:string;
     // @Input() actions:Array<TreeAction> = []
-    @Input() ztreeSetting:ZtreeSetting
+    @Input() ztreeSetting: ZtreeSetting
     // //otherParam
     // @Input() params:any = {}
     // //自动提交参数
@@ -53,25 +53,25 @@ export class ZtreeComponent {
     // @Input() autoCheckTrigger:boolean = false;
 
     //多选树 单选树？
-    treeType:string
+    treeType: string
 
-    @Input() callback:ZtreeCallback
+    @Input() callback: ZtreeCallback
 
     @Output() zevent = new EventEmitter<TreeEvent>();
 
-    public zTreeObj:any;
-    private _rMenuId:string;
-    private rMenu:any;
-    private _treeStateKeep:Function
- 
+    public zTreeObj: any;
+    private _rMenuId: string;
+    private rMenu: any;
+    private _treeStateKeep: Function
+
 
     constructor(private http: Http) { }
 
     ngOnInit() {
-        this._rMenuId = "_rMenuId"+this.ztreeSetting.treeId;
+        this._rMenuId = "_rMenuId" + this.ztreeSetting.treeId;
     };
 
-    ngAfterViewInit(){
+    ngAfterViewInit() {
         // zTree 的参数配置，深入使用请参考 API 文档（setting 配置详解）
         var setting = {
             async: {
@@ -80,8 +80,8 @@ export class ZtreeComponent {
                 url: this.ztreeSetting.dataUrl,
                 // contentType: "application/json",
                 autoParam: this.ztreeSetting.autoParam,
-                otherParam:this.ztreeSetting.params,
-                dataType:"text",
+                otherParam: this.ztreeSetting.params,
+                dataType: "text",
                 dataFilter: (treeId, parentNode, responseData) => {
                     return responseData;
                     //下拉树有chkDisabled属性时，去除勾选方法失效
@@ -92,20 +92,20 @@ export class ZtreeComponent {
                     // }
                     // var params = {treeId: treeId, parentNode: parentNode, responseData: responseData};
                     // return UIDirectiveService.invoke(attrs.filter, scope.filter, params, responseData);
-                }                
+                }
             },
 
             data: {
-                keep:{
-                    leaf:false,
-                    parent:false
+                keep: {
+                    leaf: false,
+                    parent: false
                 },
                 key: {
                     children: "children",
                     // name: attrs.nodeName,
                     // title: attrs.nodeTitle,
-                    checked:"checked",
-                    url:"url"
+                    checked: "checked",
+                    url: "url"
                 },
                 simpleData: {
                     enable: "true",
@@ -122,7 +122,7 @@ export class ZtreeComponent {
                 // showTitle: scope.showTitle,
                 //搜索树的样式
                 fontCss: function (treeId, treeNode) {
-                    return (!!treeNode.highlight) ? {color: "#A60000", "font-weight": "bold"} : {color: "#333", "font-weight": "normal","font-family":"微软雅黑, STHei, 华文黑体"};
+                    return (!!treeNode.highlight) ? { color: "#A60000", "font-weight": "bold" } : { color: "#333", "font-weight": "normal", "font-family": "微软雅黑, STHei, 华文黑体" };
                 }
             },
             check: {
@@ -131,13 +131,13 @@ export class ZtreeComponent {
                 enable: this.ztreeSetting.checkEnable,
                 chkStyle: this.ztreeSetting.checkStyle,
                 radioType: "all",
-                nocheckInherit:false,
-                chkDisabledInherit:false
+                nocheckInherit: false,
+                chkDisabledInherit: false
             },
 
             callback: {
                 onRightClick: this.OnRightClick.bind(this),
-                onClick: (event, treeId, treeNode, clickFlag) =>{
+                onClick: (event, treeId, treeNode, clickFlag) => {
                     this.callback.onClick(event, treeId, treeNode, clickFlag)
                     // let action:TreeAction = new TreeAction({key:"onclick",name:"点击"}) 
                     // let treeevent:TreeEvent = new TreeEvent(treeNode,this.treeId,action,null,event)
@@ -145,27 +145,27 @@ export class ZtreeComponent {
                     // scope.nodeClick({event: event, treeId: treeId, treeNode: treeNode, clickFlag:clickFlag});
                 },
 
-                onAsyncSuccess:(event, treeId, treeNode, msg)=>{
+                onAsyncSuccess: (event, treeId, treeNode, msg) => {
                     var ztree = this.zTreeObj;
-                    if(this.ztreeSetting.expendAll){
-                        var expendTreeNodes = _.isUndefined(treeNode)||treeNode==null?ztree.getNodes():treeNode.children;
-                        _.forEach(expendTreeNodes,function(node,n){
-                            if(node.isParent)ztree.expandNode(node,true,false,false);
+                    if (this.ztreeSetting.expendAll) {
+                        var expendTreeNodes = _.isUndefined(treeNode) || treeNode == null ? ztree.getNodes() : treeNode.children;
+                        _.forEach(expendTreeNodes, function (node, n) {
+                            if (node.isParent) ztree.expandNode(node, true, false, false);
                         });
-                    }else{
-                        if (this.ztreeSetting.expendLevel&&this.ztreeSetting.expendLevel>0) {
-                            var expendTreeNodes = _.isUndefined(treeNode)||treeNode==null?ztree.getNodes():treeNode.children;
-                            _.forEach(expendTreeNodes,(node,n)=>{
-                                if(node.isParent&&node.level < this.ztreeSetting.expendLevel){
-                                    ztree.expandNode(node,true,false,false);
+                    } else {
+                        if (this.ztreeSetting.expendLevel && this.ztreeSetting.expendLevel > 0) {
+                            var expendTreeNodes = _.isUndefined(treeNode) || treeNode == null ? ztree.getNodes() : treeNode.children;
+                            _.forEach(expendTreeNodes, (node, n) => {
+                                if (node.isParent && node.level < this.ztreeSetting.expendLevel) {
+                                    ztree.expandNode(node, true, false, false);
                                 }
                             });
                         }
                     }
-                    
-                    if(!_.isUndefined(this._treeStateKeep))
+
+                    if (!_.isUndefined(this._treeStateKeep))
                         this._treeStateKeep();
-                    
+
                     // this.onAsyncSuccess({event:event,treeId:treeId,treeNode:treeNode,msg:msg});
                 },
 
@@ -227,9 +227,9 @@ export class ZtreeComponent {
                 //     //         });
                 //     //     }
                 //     // }
-                    
+
                 //     // if(angular.isDefined(controller.treeStateKeep))controller.treeStateKeep();
-                    
+
                 //     // scope.onAsyncSuccess({event:event,treeId:treeId,treeNode:treeNode,msg:msg});
                 // },
                 onCheck: (event, treeId, treeNode) => {
@@ -255,20 +255,20 @@ export class ZtreeComponent {
                 // onRename: function (event, treeId, treeNode, isCancel) {
                 //     // scope.nodeRename({event: event, treeId: treeId, treeNode: treeNode, isCancel: isCancel});
                 // }
-//                    onExpand: function (event, treeId, treeNode) {
-                        //只需要简单数据模型进行model同步，普通模型在修改模型时，自动同步所有树的结构
-//                        if (!asyncEnable) {
-//                            var treeModelNode = UIDirectiveService.getTreeSimpleDataModelNode(scope.bindData, "id", treeNode.id);
-//                            treeModelNode = true;
-//                        }
-//                    },
-//                    onCollapse: function (event, treeId, treeNode) {
-//                        if (!asyncEnable) {
-//                            var treeModelNode = UIDirectiveService.getTreeSimpleDataModelNode(scope.bindData, "id", treeNode.id);
-//                            treeModelNode = false;
-//                        }
-//                    }
-                },                      
+                //                    onExpand: function (event, treeId, treeNode) {
+                //只需要简单数据模型进行model同步，普通模型在修改模型时，自动同步所有树的结构
+                //                        if (!asyncEnable) {
+                //                            var treeModelNode = UIDirectiveService.getTreeSimpleDataModelNode(scope.bindData, "id", treeNode.id);
+                //                            treeModelNode = true;
+                //                        }
+                //                    },
+                //                    onCollapse: function (event, treeId, treeNode) {
+                //                        if (!asyncEnable) {
+                //                            var treeModelNode = UIDirectiveService.getTreeSimpleDataModelNode(scope.bindData, "id", treeNode.id);
+                //                            treeModelNode = false;
+                //                        }
+                //                    }
+            },
         };
 
         // let urlSearchParams = new URLSearchParams();
@@ -281,56 +281,60 @@ export class ZtreeComponent {
         //     })
         //     .catch(this.handleError);
 
-        this.zTreeObj = $.fn.zTree.init($('#'+this.ztreeSetting.treeId), setting);               
-            
+        // (require as any).ensure(['jquery'], (require) => {
+        //     require('ztree')
+        //     this.zTreeObj = $.fn.zTree.init($('#' + this.ztreeSetting.treeId), setting);
+        // }, 'test');
+        this.zTreeObj = $.fn.zTree.init($('#' + this.ztreeSetting.treeId), setting);
+        
         // zTree 的数据属性，深入使用请参考 API 文档（zTreeNode 节点数据详解）
 
-        this.rMenu = $("#"+this._rMenuId);
+        this.rMenu = $("#" + this._rMenuId);
         //默认展开root节点
         // this.zTreeObj.expandNode(this.zTreeObj.getNodeByParam("id", 'root', null)
     }
 
-    refresh2(params,openState?,checkState?,selectedState?,node?){
+    refresh2(params, openState?, checkState?, selectedState?, node?) {
         var ztree = this.zTreeObj
-        if(params != undefined && params != null){
+        if (params != undefined && params != null) {
             ztree.setting.async.otherParam = params;
         }
         var idKey = ztree.setting.data.simpleData.idKey;
-        var openNodes = ztree.getNodesByParam("open",true);
+        var openNodes = ztree.getNodesByParam("open", true);
         var checkedNodes = ztree.getCheckedNodes(true);
         var selectedNodes = ztree.getSelectedNodes();
-        this._treeStateKeep = function(){
-            this.treeAsyncSuccess(ztree,openState,checkState,selectedState,openNodes,checkedNodes,selectedNodes);
+        this._treeStateKeep = function () {
+            this.treeAsyncSuccess(ztree, openState, checkState, selectedState, openNodes, checkedNodes, selectedNodes);
         }
-        ztree.reAsyncChildNodes(node,"refresh");
+        ztree.reAsyncChildNodes(node, "refresh");
     }
 
-    private treeAsyncSuccess(ztree,openState,checkState,selectedState,openNodes,checkedNodes,selectedNodes){
+    private treeAsyncSuccess(ztree, openState, checkState, selectedState, openNodes, checkedNodes, selectedNodes) {
         var idKey = ztree.setting.data.simpleData.idKey;
-        if(openState){
-            _.forEach(openNodes,function(v,n){
-                var theKey=v[idKey]?idKey:"name";
-                var nsn = ztree.getNodesByParam(theKey,v[theKey]);
-                if(nsn.length>0)ztree.expandNode(nsn[0],true,false,false);
+        if (openState) {
+            _.forEach(openNodes, function (v, n) {
+                var theKey = v[idKey] ? idKey : "name";
+                var nsn = ztree.getNodesByParam(theKey, v[theKey]);
+                if (nsn.length > 0) ztree.expandNode(nsn[0], true, false, false);
             });
         }
-        if(checkState){
-            _.forEach(checkedNodes,function(v,n){
-                var theKey=v[idKey]?idKey:"name";
-                var nsn = ztree.getNodesByParam(theKey,v[theKey]);
-                if(nsn.length>0)ztree.checkNode(nsn[0],true,false,false);
+        if (checkState) {
+            _.forEach(checkedNodes, function (v, n) {
+                var theKey = v[idKey] ? idKey : "name";
+                var nsn = ztree.getNodesByParam(theKey, v[theKey]);
+                if (nsn.length > 0) ztree.checkNode(nsn[0], true, false, false);
             });
         }
-        if(selectedState){
-            _.forEach(selectedNodes,function(v,n){
-                var theKey=v[idKey]?idKey:"name";
-                var nsn = ztree.getNodesByParam(theKey,v[theKey]);
-                if(nsn.length>0)ztree.selectNode(nsn[0],true);
+        if (selectedState) {
+            _.forEach(selectedNodes, function (v, n) {
+                var theKey = v[idKey] ? idKey : "name";
+                var nsn = ztree.getNodesByParam(theKey, v[theKey]);
+                if (nsn.length > 0) ztree.selectNode(nsn[0], true);
             });
         }
     }
 
-    refreshSelectedNode(){
+    refreshSelectedNode() {
         var sNodes = this.zTreeObj.getSelectedNodes();
         if (sNodes.length > 0) {
             var pnode = sNodes[0].getParentNode();
@@ -338,44 +342,44 @@ export class ZtreeComponent {
         }
     }
 
-    refreshNode(node,id?:string,pid?:string){
-        if(node != undefined){
+    refreshNode(node, id?: string, pid?: string) {
+        if (node != undefined) {
             this.zTreeObj.reAsyncChildNodes(node, "refresh");
-        }else{
+        } else {
             var node = this.zTreeObj.getNodeByParam("id", id, pid);
             this.zTreeObj.reAsyncChildNodes(node, "refresh");
         }
     }
 
-    getSelectedNodes():Array<any>{
+    getSelectedNodes(): Array<any> {
         return this.zTreeObj.getSelectedNodes();
     }
 
-    getCheckedNodes(checked:boolean):Array<any>{
+    getCheckedNodes(checked: boolean): Array<any> {
         return this.zTreeObj.getCheckedNodes(checked)
     }
 
-    refreshTree(){
-        let nodes:Array<any> = this.zTreeObj.getSelectedNodes();   
-        if(nodes.length==1){
-            let node:TreeNode = nodes[0]
-            if(!node.isParent && node.getParentNode()!==null){
+    refreshTree() {
+        let nodes: Array<any> = this.zTreeObj.getSelectedNodes();
+        if (nodes.length == 1) {
+            let node: TreeNode = nodes[0]
+            if (!node.isParent && node.getParentNode() !== null) {
                 this.refreshNode(node.getParentNode())
-            }else{
+            } else {
                 this.refreshNode(nodes[0])
             }
         }
-        this.hideRMenu();       
+        this.hideRMenu();
     }
-    
 
-    private onAction(action:TreeAction){
-        let nodes:Array<any> = this.zTreeObj.getSelectedNodes();
-        let node:TreeNode;
-        if(nodes.length == 1){
+
+    private onAction(action: TreeAction) {
+        let nodes: Array<any> = this.zTreeObj.getSelectedNodes();
+        let node: TreeNode;
+        if (nodes.length == 1) {
             node = nodes[0]
         }
-        let treeEvent:TreeEvent = new TreeEvent(node,this.ztreeSetting.treeId,action,nodes);
+        let treeEvent: TreeEvent = new TreeEvent(node, this.ztreeSetting.treeId, action, nodes);
         this.zevent.emit(treeEvent)
         this.hideRMenu();
     }
@@ -391,8 +395,8 @@ export class ZtreeComponent {
         }
     };
     showRMenu(type, x, y) {
-        $("#"+this._rMenuId+" ul").show();
-        if (type=="root") {
+        $("#" + this._rMenuId + " ul").show();
+        if (type == "root") {
             $("#m_del").hide();
             $("#m_check").hide();
             $("#m_unCheck").hide();
@@ -401,23 +405,23 @@ export class ZtreeComponent {
             $("#m_check").show();
             $("#m_unCheck").show();
         }
-        this.rMenu.css({"top":y+"px", "left":x+"px", "visibility":"visible"});
+        this.rMenu.css({ "top": y + "px", "left": x + "px", "visibility": "visible" });
         $("body").bind("mousedown", this.onBodyMouseDown.bind(this));
     };
     hideRMenu() {
         if (this.rMenu) {
-            this.rMenu.css({"visibility": "hidden"});
+            this.rMenu.css({ "visibility": "hidden" });
         }
         $("body").unbind("mousedown", this.onBodyMouseDown.bind(this));
     };
-    private onBodyMouseDown(event){  
-        if (!(event.target.id == this._rMenuId || $(event.target).parents("#"+this._rMenuId).length>0)) {
-            this.rMenu.css({"visibility" : "hidden"});
+    private onBodyMouseDown(event) {
+        if (!(event.target.id == this._rMenuId || $(event.target).parents("#" + this._rMenuId).length > 0)) {
+            this.rMenu.css({ "visibility": "hidden" });
         }
     };
 
     private handleError(error: any) {
         console.error('An error occurred', error);
         return Promise.reject(error.message || error);
-    }    
+    }
 }
