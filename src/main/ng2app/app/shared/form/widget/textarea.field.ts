@@ -7,5 +7,6 @@ export class TextareaField extends FieldBase<string> {
     constructor(options: {} = {}) {
         super(options);
         this.rows = options['rows'] || 3;
+        this.selector = "f-textarea"
     }
 }

@@ -67,7 +67,14 @@ export class UserinfoComponent implements OnInit, onModalAction {
         ];
     }
 
-    ngOnInit() { }
+    ngOnInit() {
+        if (this.$model.params.type == "edit") {
+            this.userService.getUserByPK(this.$model.params.userId).then(data => {
+                this.$model.user = data
+                this.userForm.form.patchValue(data)
+            })
+        }
+    }
 
     onModalAction(action: ModalAction) {
         if (action.key == "close") {

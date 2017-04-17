@@ -2,14 +2,28 @@ import { Injectable, Inject } from '@angular/core';
 import { Headers, Http, URLSearchParams, RequestOptions } from '@angular/http';
 
 import { Observable } from 'rxjs/Observable';
+import { Resource } from './resource'
 
 @Injectable()
 export class SecurityService {
 
     $window: any
 
+    get subject() {
+        if (!_.isUndefined(this.$window.sessionStorage.subject)
+            && "undefined" != this.$window.sessionStorage.subject) {
+            return JSON.parse(this.$window.sessionStorage.subject);
+        } else {
+            return undefined;
+        }
+    }
+
     constructor(private http: Http, @Inject('Window') window) {
         this.$window = window
+    }
+
+    createRes(r: Resource) {
+
     }
 
     isAuthenticated() {
@@ -19,6 +33,8 @@ export class SecurityService {
             return false;
         }
     }
+
+
     getSubject(): Observable<any> {
         // debugger
         // if (!_.isUndefined(this.$window.sessionStorage.syssubject)

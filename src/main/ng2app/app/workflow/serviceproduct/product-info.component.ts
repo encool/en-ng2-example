@@ -24,10 +24,7 @@ export class ProductInfoComponent implements OnInit {
             new DropdownField({
                 key: 'serviceTypeId',
                 label: '服务分类',
-                options: [
-                    { key: 'F', value: '女' },
-                    { key: 'M', value: '男' },
-                ],
+                dictName: "工作流_事项分类",
                 span: 6,
                 order: 4
             }),
@@ -70,7 +67,7 @@ export class ProductInfoComponent implements OnInit {
 
     ngAfterViewInit() {
         this.myForm.form.valueChanges.subscribe((data) => {
-            
+
         });
     }
 

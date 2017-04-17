@@ -3,14 +3,15 @@ import { FieldBase } from '../field-base';
 
 export class DatetimePickField extends FieldBase<string> {
   controlType = 'datetimepick';
-//   options: {key: string, value: string}[] = [];
-//   optionsUrl: string
-//   optionsOb: Observable<any>
-//   dictName: string
-//   optionId: string
-//   optionName: string
+  //   options: {key: string, value: string}[] = [];
+  //   optionsUrl: string
+  //   optionsOb: Observable<any>
+  //   dictName: string
+  //   optionId: string
+  //   optionName: string
   constructor(options: {} = {}) {
     super(options);
+    this.selector = "f-datetime-pick"
     // this.options = options['options'] || [];
     // this.optionsUrl = options['optionsUrl'] || undefined;
     // this.optionsOb = options['optionsOb'] || undefined;

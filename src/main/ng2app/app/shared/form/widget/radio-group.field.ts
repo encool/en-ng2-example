@@ -3,7 +3,7 @@ import { Observable } from 'rxjs/Observable';
 
 export class RadioGroupField extends FieldBase<string> {
   controlType = 'radiogroup';
-  options: {key: string, value: string}[] = [];
+  options: { key: string, value: string }[] = [];
   optionsUrl: string
   optionsOb: Observable<any>
   dictName: string
@@ -17,5 +17,6 @@ export class RadioGroupField extends FieldBase<string> {
     this.dictName = options['dictName'] || undefined;
     this.optionId = options['optionId'] || "key";
     this.optionName = options['optionName'] || "value";
+    this.selector = "f-radio-group"
   }
 }

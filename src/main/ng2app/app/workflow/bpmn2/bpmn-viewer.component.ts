@@ -18,7 +18,7 @@ import { ModalService } from '../../service/modal.service'
               fill: green !important; /* color elements as green */
             }
         </style>    
-        <div class="modeler" style="height:600px">
+        <div class="modeler" style="height:480px">
           <div id="js-canvas-view" style="height:100%"></div>
           <div id="js-properties-panel"></div>
         </div>
@@ -44,6 +44,7 @@ export class BpmnViewerComponent implements OnInit {
     _bpmnModeler: any
     _curElement: any    //config 当前选中的节点
     _overlays: any
+    _dataUrl: string
 
     _modalContext: {
         vcRef: ViewContainerRef,
@@ -61,18 +62,19 @@ export class BpmnViewerComponent implements OnInit {
     ngOnInit() {
         if (this.$model.params.processDefId != undefined
             && this.$model.params.processInsId != undefined) {
+            this._dataUrl = "/workflow/monitor/wfmonitor?processInstanceId=" + this.$model.params.processInsId;
             (require as any).ensure([], require => {
                 let BpmnModeler = require('bpmn-js/lib/Modeler')
                 let BpmnViewer = require('bpmn-js/lib/Viewer')
                 let propertiesPanelModule = require('bpmn-js-properties-panel')
                 let propertiesProviderModule = require('bpmn-js-properties-panel/lib/provider/camunda')
-                this.initBpmn(BpmnModeler,BpmnViewer,propertiesPanelModule,propertiesProviderModule)
-            });                
+                this.initBpmn(BpmnModeler, BpmnViewer, propertiesPanelModule, propertiesProviderModule)
+            });
             // this.initBpmn()
         }
     }
 
-    initBpmn(BpmnModeler,BpmnViewer,propertiesPanelModule,propertiesProviderModule) {
+    initBpmn(BpmnModeler, BpmnViewer, propertiesPanelModule, propertiesProviderModule) {
         if ((this.$model.params.processDefId == undefined && this.$model.params.processInsId == undefined)) {
             toastr.warning('没有流程信息')
             return
@@ -125,10 +127,10 @@ export class BpmnViewerComponent implements OnInit {
                             if (err) {
                                 return console.error('could not import BPMN 2.0 diagram', err);
                             }
-                            
+
                             var canvas = this._bpmnModeler.get('canvas')
                             let svg = canvas._svg
-                            // let defs = svg.defs 
+                            // 绿色三角的箭头
                             this.addGreenEndMarker(svg)
 
                             // $('path').each(function (e) {
@@ -182,7 +184,10 @@ export class BpmnViewerComponent implements OnInit {
             el.setAttribute(k, attrs[k]);
         return el;
     }
-
+    /**
+     * 绿色的箭头，可以在path的style中用url链过来
+     * @param svg 
+     */
     addGreenEndMarker(svg) {
         function createMarker(id, options) {
             var attrs = _.assign({

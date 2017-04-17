@@ -167,6 +167,10 @@ export class ResourcemanageComponent implements OnInit, onZtreeAction {
                     }
                     break
                 case "edit":
+                    if (!event.rowId) {
+                        toastr.warning('请选择！')
+                        return
+                    }
                     this.jobService.get(event.rowId).then((data) => {
                         this._model.job = data;
                         this._jobinfo_params.type = "edit"
@@ -212,29 +216,31 @@ export class ResourcemanageComponent implements OnInit, onZtreeAction {
         if (treeEvent.businessId == "menutree") {
             switch (treeEvent.action.key) {
                 case "edit":
-                    this.menuService.getMenuByMenuId(treeEvent.node.id).then(data => {
-                        // console.log("geted menu",data);
-                        // this._model.menu = data;
-                        // this._menuinfo_params.type = "edit"
-                        // $('#testmodalid').modal('show')
-
-                        this.modalService.open(
-                            this._modalContext,
-                            {
-                                comp: MenuinfoComponent,
-                                title: "编辑菜单信息"
-                            },
-                            {
-                                model: data,
-                                params: {
-                                    type: "edit"
-                                }
-                            },
-                            () => {
-
+                    // console.log("geted menu",data);
+                    // this._model.menu = data;
+                    // this._menuinfo_params.type = "edit"
+                    // $('#testmodalid').modal('show')
+                    if (!treeEvent.node) {
+                        toastr.warning('请选择！')
+                        return
+                    }
+                    this.modalService.open(
+                        this._modalContext,
+                        {
+                            comp: MenuinfoComponent,
+                            title: "编辑菜单信息"
+                        },
+                        {
+                            params: {
+                                type: "edit",
+                                id: treeEvent.node.id
                             }
-                        )
-                    });
+                        },
+                        () => {
+
+                        }
+                    )
+
                     break
                 case "add":
                     this._model.menu = {};
@@ -275,6 +281,10 @@ export class ResourcemanageComponent implements OnInit, onZtreeAction {
             switch (treeEvent.action.key) {
                 case "edit":
                     let node1: any = treeEvent.node;
+                    if (!node1) {
+                        toastr.warning('请选择！')
+                        return
+                    }
                     this.modalService.open(
                         this._modalContext,
                         {
@@ -442,7 +452,6 @@ export class ResourcemanageComponent implements OnInit, onZtreeAction {
             this._modalContext,
             { message: "是否确认岗位设置资源?<br>待设置岗位：" + jobNames + addResNames + delResNames },
             () => {
-                debugger
                 this.http.post("jobresmgt/setprivileges", { "jobIds": jobIds, "addPrivileges": addResIds, "delPrivileges": delResIds }).toPromise()
                     .then(function (response) {
                         toastr.success('设置资源成功！')

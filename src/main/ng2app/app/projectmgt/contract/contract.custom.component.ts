@@ -10,7 +10,7 @@ import { UIComponent } from '../../decorators/ui-component.decorator'
 @Component({
     selector: 'contract-custom',
     template: `
-        <div>hello world</div>
+        <div class="form-group col-sm-12">处理表单由各种显示元素组成。除了基本表单元素（input、select等），还可以自定义显示元素</div>
     `
 })
 

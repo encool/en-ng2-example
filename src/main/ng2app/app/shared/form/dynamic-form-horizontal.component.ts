@@ -39,6 +39,7 @@ export class DynamicFormHorizontalComponent implements OnInit {
 
     ngOnChanges(changes: { [propertyName: string]: SimpleChange }) {
         if (changes['fields'] && changes['fields'].currentValue) {
+            // _.sortBy(this.fields, "order");
             this.form = this.fcs.toFormGroup(changes['fields'].currentValue)
         }
     }

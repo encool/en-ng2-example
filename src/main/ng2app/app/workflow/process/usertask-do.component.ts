@@ -23,7 +23,8 @@ import { WorkflowService } from '../service/workflow.service'
 import { SecurityService } from '../../service/security.service'
 import { ModalService } from '../../service/modal.service'
 
-import { BpmnViewerComponent } from '../bpmn2/bpmn-viewer.component'
+import { BpmnMonitorComponent } from '../bpmn2/bpmn-monitor.component'
+// import { BpmnViewerComponent } from '../bpmn2/bpmn-viewer.component'
 // <button type="button" *ngIf="processInsId" class="btn btn-default">退回</button>    
 @Component({
     selector: 'usertask-do',
@@ -276,7 +277,7 @@ export class UsertaskDoComponent implements OnInit {
         this.modalService.open(
             this._modalContext,
             {
-                comp: BpmnViewerComponent,
+                comp: BpmnMonitorComponent,
                 title: '流程查看',
                 width: '1000px'
             },
@@ -375,8 +376,9 @@ export class UsertaskDoComponent implements OnInit {
                 case "wftitle":
                     this.titleField = field
                     break
-                case "textinput":
+                case "f-text-input":
                     newFields.push(new TextField({
+                        selector: field.webDisplayTypeId,
                         key: field.fieldNo,
                         label: field.displayName || field.fieldId.fieldName,
                         labelWidth: field.labelWidth,
@@ -389,6 +391,7 @@ export class UsertaskDoComponent implements OnInit {
                     break
                 default:
                     newFields.push(new CustomTemplateField({
+                        selector: field.webDisplayTypeId,
                         key: field.fieldNo,
                         label: field.displayName || field.fieldId.fieldName,
                         labelWidth: field.labelWidth,

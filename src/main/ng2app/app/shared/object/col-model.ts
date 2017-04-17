@@ -15,13 +15,13 @@ export class ColModel {
     resizable: boolean//该类是否可以拖动边界改变宽度。
     sortable: boolean//该列是否可以排序。    
 
-    formatter: string | Function
+    formatter: (value, option, rowObject) => {} | string
     constructor(options: {
         align?: string
         label?: string,
         name?: string,
         width?: number | string,
-        formatter?: string | Function,
+        formatter?: (value, option, rowObject) => {} | string,
         hidden?: boolean,
         key?: boolean
         classes?: string

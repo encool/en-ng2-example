@@ -117,6 +117,10 @@ export class DictdataManageComponent implements OnInit {
                     );
                     break;
                 case 'edit':
+                    if (!node) {
+                        toastr.warning('请选择！')
+                        return
+                    }
                     this.modalService.open(
                         this._modalContext,
                         {
@@ -142,7 +146,6 @@ export class DictdataManageComponent implements OnInit {
                     this.http.post('dicttype/delete', body, options)
                         .toPromise()
                         .then((data) => {
-                            debugger
                             if (data) {
                                 this.dictTree.refresh2({})
                             }
@@ -184,6 +187,10 @@ export class DictdataManageComponent implements OnInit {
                     }
                     break;
                 case 'edit':
+                    if (!rowObject) {
+                        toastr.warning('请选择！')
+                        return
+                    }
                     this.modalService.open(
                         this._modalContext,
                         {

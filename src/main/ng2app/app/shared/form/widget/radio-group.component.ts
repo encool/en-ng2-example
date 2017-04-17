@@ -1,19 +1,25 @@
 import { Component, Input, OnInit, AfterViewInit, Output, EventEmitter } from '@angular/core';
-import { FormGroup, FormControl} from '@angular/forms';
+import { FormGroup, FormControl } from '@angular/forms';
 
 import { Observable } from 'rxjs/Observable';
 
 import { RadioGroupField } from './radio-group.field'
-//TODO ngmodel useless
+
+import { UIComponent } from '../../../decorators/ui-component.decorator'
+
+@UIComponent({
+    selector: 'f-radio-group',
+    component: RadioGroupComponent
+})
 @Component({
     selector: 'f-radio-group',
     template: `
     <div [ngSwitch]="simple">
-        <div *ngSwitchCase="false" [ngSwitch]="field.isObject" [formGroup]="form" [ngClass]="ngclasses()" style="height:34px">
+        <div *ngSwitchCase="false" [formGroup]="form" [ngClass]="ngclasses()" style="height:34px">
             <label [attr.for]="field.key" class="control-label" style="float: left;width:75px">{{field.label}}</label>
-            <div *ngSwitchCase="false" class="" style="margin-left:85px">
+            <div class="" style="margin-left:85px">
                 <label  *ngFor="let opt of field.options" class="radio-inline">  
-                  <input type="radio" [formControlName]="field.key" [name]="field.key" [(ngModel)]="model[field.key]" [id]="opt[optionId]" 
+                  <input type="radio" [formControlName]="field.key" [name]="field.key" [id]="opt[optionId]" 
                   [value]="opt[optionId]" (ngModelChange)="onModelChange($event)"> {{opt[optionName]}}
                 </label> 
             </div>
@@ -75,7 +81,7 @@ export class RadioGroupComponent implements OnInit {
                 this.optionsOb.subscribe(data => this.options = data)
             }
         }
-        if (!(this.options instanceof Array)) {
+        if (this.options && !(this.options instanceof Array)) {
             this.options = this.transform(this.options)
         }
     }

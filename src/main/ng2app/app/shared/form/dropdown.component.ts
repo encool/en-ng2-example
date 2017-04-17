@@ -6,6 +6,12 @@ import { Observable } from 'rxjs/Observable';
 
 import { DropdownField } from './dropdown-field'
 
+import { UIComponent } from '../../decorators/ui-component.decorator'
+
+@UIComponent({
+    selector: 'f-dropdown-input',
+    component: DropdownComponent
+})
 @Component({
     selector: 'f-dropdown-input',
     template: `

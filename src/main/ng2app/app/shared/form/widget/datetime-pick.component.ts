@@ -4,7 +4,12 @@ var moment = require('moment');
 // import Moment as m from 'moment'
 
 import { DatetimePickField } from './datetime-pick.field'
+import { UIComponent } from '../../../decorators/ui-component.decorator'
 
+@UIComponent({
+    selector: 'f-datetime-pick',
+    component: DatetimePickComponent
+})
 @Component({
     selector: 'f-datetime-pick',
     template: `

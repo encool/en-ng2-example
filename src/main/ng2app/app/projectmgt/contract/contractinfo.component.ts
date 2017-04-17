@@ -31,13 +31,15 @@ export class ContractinfoComponent implements OnInit {
         this.taskDo.onFieldInit.subscribe(data => {
             let ptController = this.taskDo.formCom.form.get('projectType');
             let pcController = this.taskDo.formCom.form.get('projectCategory');
+            let cnController = this.taskDo.formCom.form.get('contractName');
             let pcField = this.taskDo.formCom.getField("projectCategory")
             let sdField = this.taskDo.formCom.getField("supervisionDept")
+            let cnField = this.taskDo.formCom.getField("contractName")
             sdField.click = ($event) => {
                 alert("监管部门clicked")
             }
             let pcValue = ptController.value
-// debugger
+            // debugger
             if (pcValue == "ZJ") {
                 pcField.dictName = "项目管理_造价项目类型"
             } else if (pcValue == "ZB") {
@@ -48,8 +50,10 @@ export class ContractinfoComponent implements OnInit {
                 (value: string) => {
                     // debugger
                     if (value == "ZJ") {
+                        cnController.disable()
                         pcField.dictName = "项目管理_造价项目类型"
                     } else if (value == "ZB") {
+                        cnController.enable()
                         pcField.dictName = "项目管理_招标项目类型"
                     }
                 }

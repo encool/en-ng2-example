@@ -1,26 +1,29 @@
 import {
     Component, Type, Input, OnInit, ViewChild,
     AfterViewInit, SimpleChange, ViewContainerRef,
-    ComponentFactoryResolver
+    ComponentFactoryResolver, ComponentRef
 } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { FieldBase } from './field-base';
 import { DropdownField } from './dropdown-field'
 
 import { uimap } from '../../decorators/ui-component.decorator'
+
+// <f-text - input * ngSwitchCase="'textinput'"[simple] = "false"[form] = "form"[field] = "field"[model] = "model" > </f-text-input>
+// <f-dropdown - input * ngSwitchCase="'dropdowninput'"[simple] = "false"[form] = "form"[field] = "field"[model] = "model" > </f-dropdown-input>
+// <df-field - group - hori * ngSwitchCase="'fieldgroup'"[form] = "form"[field] = "field"[model] = "model" > </df-field-group-hori>
+// <f-datetime - pick * ngSwitchCase="'datetimepick'"[simple] = "false"[form] = "form"[field] = "field"[model] = "model" > </f-datetime-pick>
+// <f-select2 * ngSwitchCase="'select2'"[simple] = "false"[form] = "form"[field] = "field"[model] = "model" > </f-select2>
+// <f-checkbox - input * ngSwitchCase="'checkbox'"[simple] = "false"[form] = "form"[field] = "field"[model] = "model" > </f-checkbox-input>
+// <f-textarea * ngSwitchCase="'textarea'"[simple] = "false"[form] = "form"[field] = "field"[model] = "model" > </f-textarea>
+// <f-radio - group * ngSwitchCase="'radiogroup'"[simple] = "false"[form] = "form"[field] = "field"[model] = "model" > </f-radio-group>
+// <f-file - upload * ngSwitchCase="'fileupload'"[simple] = "false"[form] = "form"[field] = "field"[model] = "model" > </f-file-upload>
+
+
 @Component({
     selector: 'df-field-hori',
     template: `
     <div #wrapper *ngFor="let field of fields" [ngSwitch]="field.controlType">
-    	<f-dropdown-input *ngSwitchCase="'dropdowninput'" [simple]="false" [form]="form" [field]="field" [model]="model"></f-dropdown-input>
-    	<f-text-input *ngSwitchCase="'textinput'" [simple]="false" [form]="form" [field]="field" [model]="model"></f-text-input>
-    	<f-datetime-pick *ngSwitchCase="'datetimepick'" [simple]="false" [form]="form" [field]="field" [model]="model"></f-datetime-pick>
-    	<f-textarea *ngSwitchCase="'textarea'" [simple]="false" [form]="form" [field]="field" [model]="model"></f-textarea>
-    	<f-select2 *ngSwitchCase="'select2'" [simple]="false" [form]="form" [field]="field" [model]="model"></f-select2>
-    	<f-checkbox-input *ngSwitchCase="'checkbox'" [simple]="false" [form]="form" [field]="field" [model]="model"></f-checkbox-input>
-    	<f-file-upload *ngSwitchCase="'fileupload'" [simple]="false" [form]="form" [field]="field" [model]="model"></f-file-upload>
-    	<f-radio-group *ngSwitchCase="'radiogroup'" [simple]="false" [form]="form" [field]="field" [model]="model"></f-radio-group>
-    	<df-field-group-hori *ngSwitchCase="'fieldgroup'" [form]="form" [field]="field" [model]="model"></df-field-group-hori>
     </div>    
     `
 })
@@ -38,6 +41,7 @@ export class DynamicfieldHorizontalComponent implements OnInit, AfterViewInit {
         private componentFactoryResolver: ComponentFactoryResolver, ) {
 
     }
+
     ngOnInit() {
 
     }
@@ -53,27 +57,45 @@ export class DynamicfieldHorizontalComponent implements OnInit, AfterViewInit {
     ngOnChanges(changes: { [propertyName: string]: SimpleChange }) {
         if (changes['fields'] && changes['fields'].currentValue) {
             setTimeout(() => {
-                debugger
-                let cstmTpltfields: FieldBase<any>[] = this.getCustomTemplateFields()
-                cstmTpltfields.forEach((field) => {
-                    debugger
-                    let comp: Type<any> = uimap.get("contract-custom")
+                // debugger
+                this.fields.forEach((field) => {
+                    // debugger
+                    let comp: Type<any> = uimap.get(field.selector)
+                    //没有找到对应的模板 就默认文本框吧
+                    if (!comp) {
+                        comp = uimap.get("f-text-input")
+                    }
                     let myComponentFactory
                         = this.componentFactoryResolver.resolveComponentFactory(comp)
-                    this.wrapperRef.createComponent(myComponentFactory,0)
+                    let cmpRef: ComponentRef<any>
+                    // debugger
+                    // if (field.order) {
+                    //     cmpRef = this.wrapperRef.createComponent(myComponentFactory, field.order)
+                    // } else {
+                    //     cmpRef = this.wrapperRef.createComponent(myComponentFactory)
+                    // }
+
+                    //直接插到最后面 外面排好序再进来
+                    cmpRef = this.wrapperRef.createComponent(myComponentFactory)
+                    cmpRef.instance.simple = false
+                    cmpRef.instance.form = this.form
+                    cmpRef.instance.field = field
                 })
-                uimap
+                let value = this.form.value
+                // console.log("form object after fields attach",this.form.controls)
+                console.log("fields attach formvalue-->", value)
+                // this.form.patchValue(value)
             });
         }
     }
 
-    getCustomTemplateFields(): FieldBase<any>[] {
-        let cstmTpltfields: FieldBase<any>[] = new Array<FieldBase<any>>()
-        this.fields.forEach((field) => {
-            if (field.controlType == "customtemplate") {
-                cstmTpltfields.push(field)
-            }
-        })
-        return cstmTpltfields
-    }
+    // getCustomTemplateFields(): FieldBase<any>[] {
+    //     let cstmTpltfields: FieldBase<any>[] = new Array<FieldBase<any>>()
+    //     this.fields.forEach((field) => {
+    //         if (field.controlType == "customtemplate") {
+    //             cstmTpltfields.push(field)
+    //         }
+    //     })
+    //     return cstmTpltfields
+    // }
 }

@@ -22,6 +22,7 @@ import { ChooseCandidateComponent } from './config/choose-candidate.component'
 import { TextinputComponent } from './template/textinput.component'
 import { TodoComponent } from './process/todo.component'
 import { BpmnViewerComponent } from './bpmn2/bpmn-viewer.component'
+import { BpmnMonitorComponent } from './bpmn2/bpmn-monitor.component'
 import { TemplateMgtComponent } from './template/template-mgt.component'
 import { TemplateInfoComponent } from './template/template-info.component'
 import { WftitleComponent } from './template/wftitle.component'
@@ -61,6 +62,7 @@ import { WorkprocessService } from './service/workprocess.service'
         TemplateMgtComponent,
         TemplateInfoComponent,
         WftitleComponent,
+        BpmnMonitorComponent,
     ],
     exports: [
         BpmnEditorComponent,
@@ -81,6 +83,7 @@ import { WorkprocessService } from './service/workprocess.service'
         ChooseCandidateComponent,
         BpmnViewerComponent,
         TemplateInfoComponent,
+        BpmnMonitorComponent,
     ]
 })
 export class WorkflowModule {

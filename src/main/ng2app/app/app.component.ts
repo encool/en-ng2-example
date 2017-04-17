@@ -1,6 +1,8 @@
 import { Component, ViewContainerRef, ComponentFactoryResolver } from '@angular/core';
 
 import { ModalService } from './service/modal.service'
+import { DictdataService } from './service/dictdata.service'
+
 require('jquery')
 let toastr = require('toastr')
 // import { Modal } from 'angular2-modal/plugins/bootstrap';
@@ -10,7 +12,7 @@ let toastr = require('toastr')
 })
 export class AppComponent {
     constructor(private vcRef: ViewContainerRef, private componentFactoryResolver: ComponentFactoryResolver,
-        public modalService: ModalService) {
+        public modalService: ModalService, private dictdataService: DictdataService) {
         let _modalContext = {
             vcRef: vcRef,
             componentFactoryResolver: componentFactoryResolver
@@ -33,5 +35,7 @@ export class AppComponent {
             "showMethod": "fadeIn",
             "hideMethod": "fadeOut"
         }
+
+        this.dictdataService.getDictDataMaps(["工作流_审核状态"])
     }
 }

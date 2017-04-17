@@ -4,7 +4,9 @@ import { Component, OnInit, Input } from '@angular/core';
     selector: 'my-container',
     template: `
         <div class="container-fluid" [ngStyle]="setStyles()">
+            <div class="row">
             <ng-content></ng-content>
+            </div>   
         </div>
     `
 })

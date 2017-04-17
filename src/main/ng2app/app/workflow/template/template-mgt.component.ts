@@ -94,6 +94,7 @@ export class TemplateMgtComponent implements OnInit {
                         }
                     },
                     data => {
+                        this.formGrid.refresh()
                     }
                 );
                 break;

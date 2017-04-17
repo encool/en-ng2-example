@@ -8,6 +8,8 @@ import { HttpModule, JsonpModule } from '@angular/http';
 import { AppComponent } from './app.component';
 import { TopnavComponent } from './topnav.component';
 import { MenusidebarComponent } from './menusidebar.component'
+import { IndexComponent } from './index.component'
+
 import { AppRoutingModule } from './app.routing';
 
 import { SecurityService } from './service/security.service'
@@ -19,6 +21,9 @@ import { OrgService } from './service/org.service'
 import { SharedModule } from './shared/shared.module'
 
 import { ModalService } from './service/modal.service'
+import { DictdataService } from './service/dictdata.service'
+import { ResourceDirective } from './service/resource.directive'
+
 import { BreadcrumbmenuGuard } from './breadcrumbmenu-guard.service'
 
 // import { ModalModule } from 'angular2-modal';
@@ -40,7 +45,12 @@ import { BreadcrumbmenuGuard } from './breadcrumbmenu-guard.service'
     // ModalModule.forRoot(),
     // BootstrapModalModule
   ],
-  declarations: [AppComponent, TopnavComponent, MenusidebarComponent,],
+  declarations: [
+    AppComponent, TopnavComponent, MenusidebarComponent,
+    IndexComponent,
+    ResourceDirective,
+  ],
+
   bootstrap: [AppComponent],
   providers: [
     BreadcrumbmenuGuard,
@@ -50,7 +60,8 @@ import { BreadcrumbmenuGuard } from './breadcrumbmenu-guard.service'
     ModalService,
     UserService,
     { provide: 'Window', useValue: window },
-    SecurityService
+    SecurityService,
+    DictdataService,
   ]
 })
 export class AppModule { }

@@ -19,5 +19,6 @@ export class Select2Field extends FieldBase<string> {
     this.optionId = options['optionId'] || "key";
     this.optionName = options['optionName'] || "value";
     this.multiple = options['multiple'] || false;
+    this.selector = "f-select2"
   }
 }

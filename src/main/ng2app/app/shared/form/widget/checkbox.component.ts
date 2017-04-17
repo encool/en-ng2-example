@@ -3,17 +3,20 @@ import { FormGroup } from '@angular/forms';
 
 import { CheckboxField } from './checkbox.field'
 
+import { UIComponent } from '../../../decorators/ui-component.decorator'
+
+@UIComponent({
+    selector: 'f-checkbox-input',
+    component: CheckboxComponent
+})
 @Component({
     selector: 'f-checkbox-input',
     template: `
     <div [ngSwitch]="simple">
-        <div *ngSwitchCase="false" [ngClass]="ngclasses()" style="padding-left:100px" [ngSwitch]="field.isObject" [formGroup]="form">
-                <label *ngSwitchCase="true" >
-                    <input type="checkbox" [(ngModel)]="model[key1][key2]" [formControlName]="field.key" [value]="field.value">{{field.label}}
-                </label>
-                <label *ngSwitchCase="false" >
-                    <input type="checkbox" [(ngModel)]="model[field.key]" [formControlName]="field.key">{{field.label}}
-                </label>
+        <div *ngSwitchCase="false" [ngClass]="ngclasses()" style="padding-left:100px" [formGroup]="form">
+            <label>
+                <input type="checkbox" [formControlName]="field.key">{{field.label}}
+            </label>
         </div>    
         <div *ngSwitchCase="true"  [ngClass]="ngclasses()" style="padding-left:100px">
             <label>

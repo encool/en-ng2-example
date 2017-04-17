@@ -3,18 +3,20 @@ import { FormGroup } from '@angular/forms';
 
 import { TextareaField } from './textarea.field'
 
+import { UIComponent } from '../../../decorators/ui-component.decorator'
+
+@UIComponent({
+    selector: 'f-textarea',
+    component: TextareaComponent
+})
 @Component({
     selector: 'f-textarea',
     template: `
     <div [ngSwitch]="simple">
-        <div *ngSwitchCase="false" [ngSwitch]="field.isObject" [formGroup]="form" [ngClass]="ngclasses()">
+        <div *ngSwitchCase="false" [formGroup]="form" [ngClass]="ngclasses()">
         	<label [attr.for]="field.key" class="control-label" style="float: left;width:75px">{{field.label}}</label>
-        	<div *ngSwitchCase="true"  class="" style="margin-left:85px">
-        		<input [formControlName]="field.key" [id]="field.key" [(ngModel)]="model[key1][key2]" [id]="field.key"
-        			[type]="field.type" class="form-control" data-toggle="tooltip" [title]="isValid?'':_tipmsg">
-        	</div>
-        	<div *ngSwitchCase="false" class="" style="margin-left:85px">
-                <textarea [formControlName]="field.key" [id]="field.key" [(ngModel)]="model[field.key]" [id]="field.key"
+        	<div class="" style="margin-left:85px">
+                <textarea [formControlName]="field.key" [id]="field.key" [id]="field.key"
         			class="form-control" rows="3"></textarea>            
             </div>            
         </div> 

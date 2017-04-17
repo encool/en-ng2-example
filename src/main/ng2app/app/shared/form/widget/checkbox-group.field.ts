@@ -3,10 +3,10 @@ import { Observable } from 'rxjs/Observable';
 
 export class CheckboxGroupField extends FieldBase<string> {
   controlType = 'checkboxgroup';
-  options: {key: string, value: string}[] = [];
+  options: { key: string, value: string }[] = [];
   optionsUrl: string
   optionsOb: Observable<any>
-//   dictName: string
+  //   dictName: string
   optionId: string
   optionName: string
   constructor(options: {} = {}) {
@@ -17,5 +17,6 @@ export class CheckboxGroupField extends FieldBase<string> {
     // this.dictName = options['dictName'] || undefined;
     this.optionId = options['optionId'] || "key";
     this.optionName = options['optionName'] || "value";
+    this.selector = "f-checkbox-input"
   }
 }

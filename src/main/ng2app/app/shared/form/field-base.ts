@@ -3,6 +3,7 @@ import { ValidatorFn, AsyncValidatorFn, Validators } from '@angular/forms';
 export class FieldBase<T>{
   value: T;
   id: string
+  selector: string
   key: string;
   label: string;
   span: number
@@ -22,6 +23,7 @@ export class FieldBase<T>{
   constructor(options: {
     value?: T,
     id?: string,
+    selector?: string
     key?: string,
     label?: string,
     span?: number,
@@ -41,6 +43,7 @@ export class FieldBase<T>{
   } = {}) {
     this.value = options.value;
     this.id = options.id;
+    this.selector = options.selector || this.controlType; //文本框等基础表单元素可以让 controlType 等于selector
     this.key = options.key || '';
     this.label = options.label || '';
     this.span = options.span === undefined ? 6 : options.span

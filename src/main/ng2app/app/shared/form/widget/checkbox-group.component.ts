@@ -3,6 +3,12 @@ import { FormGroup } from '@angular/forms';
 
 import { CheckboxGroupField } from './checkbox-group.field'
 
+import { UIComponent } from '../../../decorators/ui-component.decorator'
+
+@UIComponent({
+    selector: 'f-checkbox-group',
+    component: CheckboxGroupComponent
+})
 @Component({
     selector: 'f-checkbox-group',
     template: `  

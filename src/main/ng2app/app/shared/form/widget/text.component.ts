@@ -14,7 +14,7 @@ import { UIComponent } from '../../../decorators/ui-component.decorator'
         <div *ngSwitchCase="false" [formGroup]="form" [style.display]="field.hidden ? 'none':'inline'"  [ngClass]="ngclasses()">
         	<label [attr.for]="field.key" class="control-label" style="float: left;width:75px">{{field.label}}</label>
         	<div class="" style="margin-left:85px">
-        		<input [formControlName]="field.key" [id]="field.key" [id]="field.key" (click)="onClick($event)"
+        		<input [formControlName]="field.key" [id]="field.key" (click)="onClick($event)"
         			[type]="field.type" class="form-control" data-toggle="tooltip" [title]="isValid?'':_tipmsg">
             </div>            
         </div> 

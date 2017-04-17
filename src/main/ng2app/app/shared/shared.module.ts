@@ -5,7 +5,6 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 import { PanelComponent } from './component/panel.component'
 import { ZtreeComponent } from './component/ztree.component'
-import { MyModalComponent } from './component/my-modal.component'
 import { JqgridComponent } from './component/jqgrid.component'
 
 import { ContainerComponent } from './layout/container.component'
@@ -33,6 +32,7 @@ import { DatetimePickComponent } from './form/widget/datetime-pick.component'
 import { TextareaComponent } from './form/widget/textarea.component'
 import { Select2Component } from './form/widget/select2.component'
 import { FileUploadComponent } from './form/widget/file-upload.component'
+import { EchartsComponent } from './component/echarts.component'
 
 import { FieldDataService } from './form/field-data.service'
 @NgModule({
@@ -46,7 +46,6 @@ import { FieldDataService } from './form/field-data.service'
     MyrowComponent,
     MycolComponent,
     ContainerComponent,
-    MyModalComponent,
     DynamicFormComponent,
     DynamicFormfieldComponent,
     DynamicFormHorizontalComponent,
@@ -69,6 +68,7 @@ import { FieldDataService } from './form/field-data.service'
     TextareaComponent,
     Select2Component,
     FileUploadComponent,
+    EchartsComponent,
   ],
   exports: [
     CommonModule,
@@ -79,7 +79,6 @@ import { FieldDataService } from './form/field-data.service'
     MyrowComponent,
     MycolComponent,
     ContainerComponent,
-    MyModalComponent,
     DynamicFormComponent,
     DynamicFormfieldComponent,
     DynamicFormHorizontalComponent,
@@ -99,8 +98,21 @@ import { FieldDataService } from './form/field-data.service'
     TextareaComponent,
     Select2Component,
     FileUploadComponent,
+    EchartsComponent,
   ],
-  entryComponents: [SimpleModalComponent]
+  entryComponents: [
+    SimpleModalComponent,
+    TextComponent,
+    DropdownComponent,
+    FieldGroupHoriComponent,
+    DatetimePickComponent,
+    Select2Component,
+    CheckboxComponent,
+    TextareaComponent,
+    CheckboxGroupComponent,
+    RadioGroupComponent,
+    FileUploadComponent,
+  ]
 })
 export class SharedModule {
   static forRoot(): ModuleWithProviders {

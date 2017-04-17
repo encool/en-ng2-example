@@ -2,8 +2,9 @@
     <div class="clearfix">
         <span class="h4">{{jqgridSetting.title}}</span>
         <div class="btn-group pull-right" role="group" aria-label="...">
-            <button *ngFor="let action of jqgridSetting.actions" type="button" class="btn btn-default" (click)="onAction(action)">{{action.name}}</button>
-        </div>  
+            <button *ngFor="let action of jqgridSetting.actions" type="button" en-resource
+                class="btn btn-default" (click)="onAction(action)">{{action.name}}</button>
+        </div>
     </div>
     <table [id]="jqgridSetting.gridId"></table>
     <div [id]="jqgridSetting.gridId+'pager'"></div>

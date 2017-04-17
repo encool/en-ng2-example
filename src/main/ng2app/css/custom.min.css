@@ -280,7 +280,8 @@ body .container.body .right_col {
 		margin: 0
 	}
 	.nav-md .container.body .col-md-3.left_col {
-		display: none
+		margin-left: -220px;
+		transition: 0.3s
 	}
 	.nav-md .container.body .right_col {
 		width: 100%;
@@ -592,7 +593,7 @@ a:hover, a:focus {
 
 .top_nav .navbar-right {
 	margin: 0;
-	width: 70%;
+	width: 25%;
 	float: right
 }
 
@@ -804,7 +805,7 @@ a:hover, a:focus {
 	float: left;
 	margin: 0;
 	padding-top: 16px;
-	width: 70px
+	width: 60px
 }
 
 .toggle a {
@@ -4132,7 +4133,7 @@ a.hiddenanchor {
 
 .login_content div .reset_pass {
 	margin-top: 13px !important;
-	margin-right: 39px;
+	margin-right: 80px;
 	float: right
 }
 

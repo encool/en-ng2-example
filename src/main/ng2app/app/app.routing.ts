@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
+import { IndexComponent } from './index.component'
+
 import { BreadcrumbmenuGuard } from './breadcrumbmenu-guard.service'
 // import { ResourcemanageComponent } from './sysmanage/resourcemanage.component';
 // import { UserorgManageComponent } from './sysmanage/userorg-manage.component'
@@ -48,7 +50,8 @@ export function projectChildren() {
             canActivate: [BreadcrumbmenuGuard],
             canActivateChild: [BreadcrumbmenuGuard],
             children: [
-                { path: 'index', redirectTo: '/sysmgt', pathMatch: 'full' },
+                { path: '', redirectTo: '/index', pathMatch: 'full' },
+                { path: 'index', component: IndexComponent },
                 {
                     path: 'sysmgt', loadChildren: sysmgtChildren
                 },

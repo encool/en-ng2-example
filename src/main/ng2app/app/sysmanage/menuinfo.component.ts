@@ -17,7 +17,7 @@ import { DynamicFormHorizontalComponent } from '../shared/form/dynamic-form-hori
 export class MenuinfoComponent implements OnInit, onModalAction {
 
     @Input() $model: {
-        model: any
+        menu: any
         params: any
     }
     @ViewChild(DynamicFormHorizontalComponent) modelForm: DynamicFormHorizontalComponent
@@ -61,18 +61,21 @@ export class MenuinfoComponent implements OnInit, onModalAction {
             new TextField({
                 key: 'href',
                 label: '菜单Url',
-                required: true,
                 order: 4
             })
         ];
     }
     ngOnInit() {
+        if (this.$model.params.type == "edit") {
+            this.menuService.getMenuByMenuId(this.$model.params.id).then(data => { 
+                this.$model.menu = data
+                this.modelForm.form.patchValue(data)
+            })
+        }
 
     }
     onModalAction() {
-        console.log("save model", this.$model.model)
         if (this.$model.params.type == "edit") {
-            debugger
             return this.menuService.updateMenu(this.modelForm.form.value).then(() => {
                 console.log("update success!")
                 return "menuupdate"

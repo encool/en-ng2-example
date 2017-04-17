@@ -6,6 +6,8 @@ import { JqgridAction } from '../object/jqgrid-action'
 import { JqgridCallback } from '../interface/jqgrid.callback'
 import { JqgridSetting } from '../object/jqgrid-setting'
 
+import { Resource } from '../../service/resource'
+
 let $ = require('jquery')
 
 @Component({
@@ -27,12 +29,19 @@ export class JqgridComponent implements OnInit {
     _gridContainerWidth: number
 
     dataOprations: any
+    resource: Resource
 
     constructor(public renderer: Renderer) {
 
     }
 
     ngOnInit() {
+        this.resource = {
+            sn: this.jqgridSetting.gridId,
+            code: this.jqgridSetting.gridId,
+            name: this.jqgridSetting.title,
+            type: "3"
+        }
         // this.gridContainEle.changes.subscribe(changes => console.log(changes));
     }
 
@@ -43,11 +52,13 @@ export class JqgridComponent implements OnInit {
             // }else{
             //     require('../../../js/jquery.tablednd.js')
             // }
+            require('../../../js/jquery.jqGrid.min.js')
+            require('../../../js/grid.locale-cn.js')
             require('../../../js/jquery.tablednd.js')
             this.initJqgrid()
             this._gridContainerWidth = this.gridContainEle.nativeElement.offsetWidth
             this.recomputeWidth(this._gridContainerWidth, this.jqgridSetting.shrinkToFit)
-        }, 'test');
+        }, 'jquery.tablednd.js');
         // this.initJqgrid()
         // this._gridContainerWidth = this.gridContainEle.nativeElement.offsetWidth
         // this.recomputeWidth(this._gridContainerWidth, this.jqgridSetting.shrinkToFit)
@@ -288,8 +299,13 @@ export class JqgridComponent implements OnInit {
     }
     //返回单个选中的行数据
     getSingleSelectData = function () {
-        var rowId = this.jqgridObject.jqGrid("getGridParam", "selrow");
-        return this.jqgridObject.jqGrid("getRowData", rowId);
+        let rowId = this.jqgridObject.jqGrid("getGridParam", "selrow");
+        let rowData = this.jqgridObject.jqGrid("getRowData", rowId);
+        //如果没有选择行 这里会返回空数组 处理下
+        if (rowData.length == 0) {
+            rowData = undefined
+        }
+        return rowData
     }
     //返回所有选中行数据的数组
     getSelectDatas(): Array<any> {

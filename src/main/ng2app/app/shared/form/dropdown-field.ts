@@ -17,5 +17,6 @@ export class DropdownField extends FieldBase<string> {
     this.dictName = options['dictName'] || undefined;
     this.optionId = options['optionId'] || "key";
     this.optionName = options['optionName'] || "value";
+    this.selector = "f-dropdown-input"
   }
 }

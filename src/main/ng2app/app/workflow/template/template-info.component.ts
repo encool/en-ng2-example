@@ -39,7 +39,7 @@ export class TemplateInfoComponent implements OnInit {
             this.http.get('e/webdisplaycategory/' + this.$model.params.id, options)
                 .toPromise()
                 .then((data) => {
-                    this.$model.template = data.json()
+                    this.myForm.form.patchValue(data.json())
                 })
         }
         this._fields = [
@@ -79,7 +79,7 @@ export class TemplateInfoComponent implements OnInit {
                 label: '描述',
                 required: false,
                 span: 12,
-                order: 3
+                order: 4
             }),
             new TextField({
                 key: 'id',
@@ -107,7 +107,8 @@ export class TemplateInfoComponent implements OnInit {
                     toastr.warning('验证不通过！')
                 })
             }
-        } else if (this.$model.params.type == 'add') {debugger
+        } else if (this.$model.params.type == 'add') {
+            debugger
             if (this.myForm.form.valid) {
                 let body = JSON.stringify(this.myForm.form.value);
                 let urlSearchParams = new URLSearchParams();

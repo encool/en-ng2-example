@@ -7,8 +7,8 @@ import { JobService } from '../service/job.service'
 import { ModalService } from '../service/modal.service'
 import { UserService } from '../service/user.service'
 
-import { JqgridSetting, JqgridAction, JqgridEvent, JqgridCallback, DefaultJqgridCallback, ColModel, JqgridComponent} from '../shared/jqgrid.module'
-import { TreeEvent, ZtreeSetting, ZtreeComponent, onZtreeAction, TreeAction, TreeNode, ZtreeCallback, DefaultZtreeCallBack} from '../shared/ztree.module'
+import { JqgridSetting, JqgridAction, JqgridEvent, JqgridCallback, DefaultJqgridCallback, ColModel, JqgridComponent } from '../shared/jqgrid.module'
+import { TreeEvent, ZtreeSetting, ZtreeComponent, onZtreeAction, TreeAction, TreeNode, ZtreeCallback, DefaultZtreeCallBack } from '../shared/ztree.module'
 
 
 import { ModalAction } from '../shared/object/modal-action'
@@ -37,7 +37,7 @@ export class UserorgManageComponent implements OnInit, onZtreeAction {
         vcRef: ViewContainerRef,
         compiler: Compiler,
         ngModule: Type<any>
-        componentFactoryResolver:ComponentFactoryResolver
+        componentFactoryResolver: ComponentFactoryResolver
     }
     _orginfo_params: any = {}
     _orgtree_actions: Array<TreeAction> = [
@@ -49,9 +49,9 @@ export class UserorgManageComponent implements OnInit, onZtreeAction {
         new TreeAction({ key: "delete", name: "删除", order: 6 }),
     ]
     _orgtree_setting = new ZtreeSetting({
-        treeId:"orgtree",
-        dataUrl:"tree/orgtreenojob",
-        actions:this._orgtree_actions
+        treeId: "orgtree",
+        dataUrl: "tree/orgtreenojob",
+        actions: this._orgtree_actions
     })
 
     _jobtree_actions: Array<TreeAction> = [
@@ -59,15 +59,15 @@ export class UserorgManageComponent implements OnInit, onZtreeAction {
         new TreeAction({ key: "set", name: "设置", order: 4 }),
     ]
     _jobtree_setting = new ZtreeSetting({
-        treeId:"jobtree",
-        dataUrl:"tree/orgjobtree",
-        actions:this._jobtree_actions,
-        checkEnable:true,
-        nameIsHTML:true
+        treeId: "jobtree",
+        dataUrl: "tree/orgjobtree",
+        actions: this._jobtree_actions,
+        checkEnable: true,
+        nameIsHTML: true
     })
 
     _usermodal_actions: Array<ModalAction> = [
-        new ModalAction({ key: "cancel", name: "取消", order: 1, cancel: true, style:"default" }),
+        new ModalAction({ key: "cancel", name: "取消", order: 1, cancel: true, style: "default" }),
         new ModalAction({ key: "close", name: "保存", order: 2 })
     ]
     _usermgt_col_model = [
@@ -82,21 +82,21 @@ export class UserorgManageComponent implements OnInit, onZtreeAction {
         new JqgridAction({ key: "delete", name: "删除", order: 6 }),
     ]
     _usermgt_grid_setting = new JqgridSetting({
-        gridId:"usermanage",
-        primaryKey:"userId",
-        url:"list/orgusercontent",
-        title:"用户管理",
-        actions:this._usermgt_grid_actions,
+        gridId: "usermanage",
+        primaryKey: "userId",
+        url: "list/orgusercontent",
+        title: "用户管理",
+        actions: this._usermgt_grid_actions,
     })
 
-    constructor(private componentFactoryResolver:ComponentFactoryResolver,private vcRef: ViewContainerRef, private compiler: Compiler,
+    constructor(private componentFactoryResolver: ComponentFactoryResolver, private vcRef: ViewContainerRef, private compiler: Compiler,
         private orgService: OrgService, private modalService: ModalService,
         private userService: UserService) {
         this._modalContext = {
             vcRef: vcRef,
             compiler: compiler,
             ngModule: SysmanageModule,
-            componentFactoryResolver:componentFactoryResolver
+            componentFactoryResolver: componentFactoryResolver
         }
     }
 
@@ -113,14 +113,14 @@ export class UserorgManageComponent implements OnInit, onZtreeAction {
                     this.editUser(event)
                     break;
                 case 'delete':
-                    let ids:string[] = this.userGrid.getSelectRowIds();
-                    if(ids!=undefined && ids.length > 0){
-                        this.userService.deleteByIds(ids).then((data)=>{
+                    let ids: string[] = this.userGrid.getSelectRowIds();
+                    if (ids != undefined && ids.length > 0) {
+                        this.userService.deleteByIds(ids).then((data) => {
                             this.userGrid.refresh()
                         })
-                    }else{
+                    } else {
                         toastr.warning('请选择需要删除的记录！')
-                    }          
+                    }
                     break;
                 case 'refresh':
                     break;
@@ -144,7 +144,7 @@ export class UserorgManageComponent implements OnInit, onZtreeAction {
         if (_.isUndefined(selectNode) || _.isUndefined(selectNode.id)) {
             toastr.warning('请选择需要新增用户的机构！')
         } else if ("0" == selectNode.id) {
-            toastr.warning(selectNode.name+"下不允许新增用户！")
+            toastr.warning(selectNode.name + "下不允许新增用户！")
         } else {
             this._model.user = {}
             this.modalService.open(
@@ -152,7 +152,7 @@ export class UserorgManageComponent implements OnInit, onZtreeAction {
                 {
                     comp: UserinfoComponent,
                     width: "800px",
-                    actions:this._usermodal_actions
+                    actions: this._usermodal_actions
                 },
                 {
                     user: this._model.user,
@@ -163,7 +163,7 @@ export class UserorgManageComponent implements OnInit, onZtreeAction {
                 },
                 (data) => {
                     this.userGrid.refresh();
-                    console.log('addUser success',this._model);
+                    console.log('addUser success', this._model);
                 }
             )
 
@@ -183,63 +183,68 @@ export class UserorgManageComponent implements OnInit, onZtreeAction {
         }
     }
 
-    editUser(event:JqgridEvent){
-        if(event.rowId == undefined){
+    editUser(event: JqgridEvent) {
+        if (event.rowId == undefined) {
             toastr.warning("请选择一条用户记录！")
             return
         }
-        if(event.rowDatas.length > 1){
+        if (event.rowDatas.length > 1) {
             toastr.warning('请只选择一条记录！')
             return
         }
         var selectNode = this.orgTree.getSelectedNodes()[0];
-        this.userService.getUserByPK(event.rowId).then(data =>{
-            this._model.user = data
-            this.modalService.open(
-                this._modalContext,
-                {
-                    comp: UserinfoComponent,
-                    width: "800px",
-                    actions:this._usermodal_actions
-                },
-                {
-                    user: this._model.user,
-                    params: {
-                        type: "edit",
-                        // orgId: selectNode.id
-                    }
-                },
-                (data) => {
-                    this.userGrid.refresh();
-                    console.log('addUser success',this._model);
+        this.modalService.open(
+            this._modalContext,
+            {
+                comp: UserinfoComponent,
+                width: "800px",
+                actions: this._usermodal_actions
+            },
+            {
+                user: this._model.user,
+                params: {
+                    type: "edit",
+                    userId: event.rowId
+                    // orgId: selectNode.id
                 }
-            )            
-        })
+            },
+            (data) => {
+                this.userGrid.refresh();
+                console.log('addUser success', this._model);
+            }
+        )
+
     }
 
-    onZtreeAction(treeEvent:TreeEvent) {
+    onZtreeAction(treeEvent: TreeEvent) {
         if (treeEvent.businessId == "orgtree") {
             switch (treeEvent.action.key) {
                 case "edit":
                     let node1: any = treeEvent.node;
-                    this.orgService.getOrgByPK(node1.id, null).then(data => {
-                        this._model.org = data;
-                        this._orginfo_params.pNode = { id: node1.pid };
-                        this._orginfo_params.type = "edit"
+                    this._orginfo_params.pNode = { id: node1.pid };
+                    this._orginfo_params.type = "edit"
+                    this._orginfo_params.id = node1.id
+                    if (!node1) {
+                        toastr.warning('请选择！')
+                        return
+                    }
+                    this.modalService.open(
+                        this._modalContext,
+                        {
+                            comp: OrginfoComponent, width: "600px"
+                        },
+                        {
+                            params: this._orginfo_params
+                        },
+                        (data) => {
+                            this.orgTree.refreshTree()
+                        },
+                        (data) => {
+                            console.log('data', data);
+                        }
+                    )
+                    // $('#orgmodal').modal('show') 
 
-                        this.modalService.open(
-                            this._modalContext,
-                            { comp: OrginfoComponent, width: "600px" },
-                            { org: data, params: this._orginfo_params },
-                            (data) => {
-                                this.orgTree.refreshTree()
-                            },
-                            (data) => {
-                                console.log('data', data);
-                            }
-                        )
-                        // $('#orgmodal').modal('show') 
-                    });
                     break;
                 case "add":
                     this._model.org = {}
@@ -274,51 +279,51 @@ export class UserorgManageComponent implements OnInit, onZtreeAction {
                 default:
                     break;
             }
-        }else if(treeEvent.businessId = "jobtree"){
+        } else if (treeEvent.businessId = "jobtree") {
             switch (treeEvent.action.key) {
                 case "set":
                     this.jobtreeSet()
                     break;
-            
+
                 default:
                     break;
             }
         }
     }
 
-    jobtreeSet(){
+    jobtreeSet() {
         var userIds = [];
         var userNames = "";
         var jobIds = [];
-        var jobNames = "";		
+        var jobNames = "";
         var userSelectNodes = this.userGrid.getSelectDatas();
-        if(_.isArray(userSelectNodes) && userSelectNodes.length>0){		
-            _.forEach(userSelectNodes, function (value:any, key) {
-                    userIds.push(value.userId);
-                    userNames += value.userRealname+",";
-                });        	
-        }else{
+        if (_.isArray(userSelectNodes) && userSelectNodes.length > 0) {
+            _.forEach(userSelectNodes, function (value: any, key) {
+                userIds.push(value.userId);
+                userNames += value.userRealname + ",";
+            });
+        } else {
             toastr.warning('请选择需要设置岗位的用户')
             return;
         }
         var jobSelectNodes = this.jobTree.getCheckedNodes(true);
-        if(_.isArray(jobSelectNodes) && jobSelectNodes.length>0){		
-            _.forEach(jobSelectNodes, function (value:any, key) {				
-                        jobIds.push(value.id);
-                        jobNames += value.hiddenName+",";
-                });     
+        if (_.isArray(jobSelectNodes) && jobSelectNodes.length > 0) {
+            _.forEach(jobSelectNodes, function (value: any, key) {
+                jobIds.push(value.id);
+                jobNames += value.hiddenName + ",";
+            });
             this.modalService.openConfirm(
                 this._modalContext,
                 {
-                    message:"是否确认用户设置岗位?<br>待设置用户："+userNames.substring(0, userNames.length-1)+"<br>被设置岗位："+jobNames.substring(0, jobNames.length-1)
+                    message: "是否确认用户设置岗位?<br>待设置用户：" + userNames.substring(0, userNames.length - 1) + "<br>被设置岗位：" + jobNames.substring(0, jobNames.length - 1)
                 },
-                data =>{
-                    this.userService.setJobs(userIds,jobIds).then(
-                        data =>{
+                data => {
+                    this.userService.setJobs(userIds, jobIds).then(
+                        data => {
                             toastr.success("设置岗位成功！")
                         }
                     )
-                })   
+                })
             // Modal.openConfirm({message:"是否确认用户设置岗位?<br>待设置用户："+userNames.substring(0, userNames.length-1)+"<br>被设置岗位："+jobNames.substring(0, jobNames.length-1)},function(){
             //     $http.post("ws/userSetJobs",{"userIds":userIds,"jobIds":jobIds})
             //             .success(function(data, status, headers, config){
@@ -328,19 +333,19 @@ export class UserorgManageComponent implements OnInit, onZtreeAction {
             //                 });	           
             //             });
             // });		
-        }else{
+        } else {
             this.modalService.openConfirm(
                 this._modalContext,
                 {
-                    message:"是否确认回收用户的所有岗位?<br>待回收岗位的用户："+userNames.substring(0, userNames.length-1)
+                    message: "是否确认回收用户的所有岗位?<br>待回收岗位的用户：" + userNames.substring(0, userNames.length - 1)
                 },
-                data =>{
+                data => {
                     this.userService.removeAllJobs(userIds).then(
-                        data =>{
+                        data => {
                             toastr.success("设置岗位成功！")
                         }
                     )
-                })            
+                })
             // Modal.openConfirm({message:"是否确认回收用户的所有岗位?<br>待回收岗位的用户："+userNames.substring(0, userNames.length-1)},function(){
             //     $http.post("ws/userRemoveAllJobs",{"userIds":userIds})
             //             .success(function(data, status, headers, config){
@@ -350,16 +355,16 @@ export class UserorgManageComponent implements OnInit, onZtreeAction {
             //                 });	           
             //             });
             // });	
-        }      
+        }
     }
 
     userGridCall: JqgridCallback = _.assign(this.userGridCall, DefaultJqgridCallback, {
-        onSelectRow:(rowid:string,status:string,e:any) => {
-            var selectRowIds = this.userGrid.getSelectRowIds();	
-            if(selectRowIds.length>0){		
-                this.refresh2OrgJobTree({userIds:selectRowIds});
-            }else{
-                this.refresh2OrgJobTree({userIds:[]});
+        onSelectRow: (rowid: string, status: string, e: any) => {
+            var selectRowIds = this.userGrid.getSelectRowIds();
+            if (selectRowIds.length > 0) {
+                this.refresh2OrgJobTree({ userIds: selectRowIds });
+            } else {
+                this.refresh2OrgJobTree({ userIds: [] });
             }
         }
     })
@@ -379,7 +384,7 @@ export class UserorgManageComponent implements OnInit, onZtreeAction {
         }
     })
 
-    refresh2OrgJobTree(obj){
-        this.jobTree.refresh2(obj,true,false,false)
+    refresh2OrgJobTree(obj) {
+        this.jobTree.refresh2(obj, true, false, false)
     }
 }

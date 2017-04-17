@@ -114,7 +114,7 @@
 	</listener>   
 
  <!-- 支持gzip压缩，不需要压缩的话可以删除，建议在所有项目都启用该Filter -->
-    <filter>
+     <filter>
         <filter-name>GZIPFilter</filter-name>
         <filter-class>com.chinacreator.c2.web.filter.GZIPFilter</filter-class>
         <init-param>
@@ -127,7 +127,7 @@
     <filter-mapping>
         <filter-name>GZIPFilter</filter-name>
         <url-pattern>/*</url-pattern>
-    </filter-mapping>
+    </filter-mapping> 
 
     <!-- 编码统一使用UTF-8 -->
     <filter>

@@ -5,6 +5,7 @@ export class CheckboxField extends FieldBase<string> {
   controlType = 'checkbox';
   constructor(options: {} = {}) {
     super(options);
+    this.selector = "f-checkbox-input"
     // this.options = options['options'] || [];
     // this.optionsUrl = options['optionsUrl'] || undefined;
     // this.optionsOb = options['optionsOb'] || undefined;

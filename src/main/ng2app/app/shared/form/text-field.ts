@@ -9,5 +9,6 @@ export class TextField extends FieldBase<string> {
     super(options);
     this.type = options['type'] || 'text';
     this.click = options['click']
+    this.selector = "f-text-input"
   }
 }

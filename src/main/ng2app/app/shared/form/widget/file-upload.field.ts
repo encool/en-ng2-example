@@ -7,5 +7,6 @@ export class FileUploadField extends FieldBase<string> {
   constructor(options: {} = {}) {
     super(options);
     this.type = options['type'] || 'text';
+    this.selector = "f-file-upload"
   }
 }

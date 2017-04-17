@@ -1,4 +1,4 @@
-import { ComponentFactory,Component, OnInit, ViewChild, ViewContainerRef, Compiler, Type, ComponentRef, ApplicationRef, ComponentFactoryResolver } from '@angular/core';
+import { ComponentFactory, Component, OnInit, ViewChild, ViewContainerRef, Compiler, Type, ComponentRef, ApplicationRef, ComponentFactoryResolver } from '@angular/core';
 import { SysmanageModule } from '../../sysmanage/sysmanage.module'
 import { ModalAction } from '../object/modal-action'
 import { ModalHook } from '../interface/modal_hook'
@@ -13,7 +13,7 @@ export class SimpleModalComponent implements OnInit {
 
     _actions: ModalAction[]
     _width: string
-    _height: string|number
+    _height: string | number
     _title: string
 
     _content: ModalHook
@@ -22,7 +22,7 @@ export class SimpleModalComponent implements OnInit {
     _success: Function
 
     hidecallback: Function
-    hidecallback_params:any
+    hidecallback_params: any
 
     constructor(private _comp: Compiler, private myComp: ApplicationRef) {
         this._width = "750px"
@@ -30,35 +30,36 @@ export class SimpleModalComponent implements OnInit {
         this._title = "是否确认"
     }
 
-    ngOnInit() { 
+    ngOnInit() {
         this.hidecallback = this._dismiss
         $('#mysimpleModal').on('hidden.bs.modal', (e) => {
-            if(this.hidecallback){
+            if (this.hidecallback) {
                 this.hidecallback(this.hidecallback_params)
             }
-            if(this._content.onModalNativeEvent){
-                this._content.onModalNativeEvent('hidden.bs.modal',e)
+            if (this._content && this._content.onModalNativeEvent) {
+                this._content.onModalNativeEvent('hidden.bs.modal', e)
             }
         })
         $('#mysimpleModal').on('shown.bs.modal', (e) => {
             this._width = this._width
-            if(this._content.onModalNativeEvent){
-                this._content.onModalNativeEvent('shown.bs.modal',e)
+            if (this._content && this._content.onModalNativeEvent) {
+                this._content.onModalNativeEvent('shown.bs.modal', e)
             }
         })
     }
 
-    openConfirm(message,success?: Function, dismisss?: Function) {
+    openConfirm(message, success?: Function, dismisss?: Function) {
         this._message = message
         this.show()
         this._success = success
         this._dismiss = dismisss
     }
 
-    open(myComponentFactory:ComponentFactory<any>, params: any, success?: Function, dismisss?: Function) {
+    open(myComponentFactory: ComponentFactory<any>, params: any, success?: Function, dismisss?: Function) {
         let cmpRef: ComponentRef<any> = this.wrapperRef.createComponent(myComponentFactory);
         this._content = cmpRef.instance
         //兼容设置
+        // debugger
         cmpRef.instance.$model = params
         cmpRef.instance.model = params
         this._success = success
@@ -79,9 +80,9 @@ export class SimpleModalComponent implements OnInit {
     }
 
     onAction(action: ModalAction) {
-        if (action.cancel) {        
+        if (action.cancel) {
             this.hidecallback = this._dismiss
-            this.hidecallback_params = {action:action}
+            this.hidecallback_params = { action: action }
             this.hide()
             return
         }
@@ -90,7 +91,7 @@ export class SimpleModalComponent implements OnInit {
             this._content.onModalAction(action).then(
                 (data) => {
                     this.hidecallback = this._success;
-                    this.hidecallback_params = {action:action,data:data}
+                    this.hidecallback_params = { action: action, data: data }
                     this.hide()
                 },
                 data => {
@@ -98,7 +99,7 @@ export class SimpleModalComponent implements OnInit {
                 })
         } else if (action.close) {
             this.hidecallback = this._success;
-            this.hidecallback_params = {action:action}
+            this.hidecallback_params = { action: action }
             this.hide()
         } else {
             toastr.warning("need handle action:" + action.name)

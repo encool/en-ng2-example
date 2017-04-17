@@ -3,6 +3,7 @@ import { Component, OnInit, ViewContainerRef, Compiler, Type, ComponentFactoryRe
 import { JqgridSetting, JqgridAction, JqgridEvent, JqgridCallback, DefaultJqgridCallback, ColModel, JqgridComponent } from '../../shared/jqgrid.module'
 
 import { ModalService } from '../../service/modal.service'
+import { DictdataService } from '../../service/dictdata.service'
 
 import { Router } from '@angular/router'
 
@@ -25,7 +26,7 @@ export class ContractmgtComponent implements OnInit {
     }
 
     constructor(private vcRef: ViewContainerRef, private componentFactoryResolver: ComponentFactoryResolver,
-        private modalService: ModalService, private router: Router) {
+        private modalService: ModalService, private dictdataService: DictdataService, private router: Router) {
         this._modalContext = {
             vcRef: vcRef,
             componentFactoryResolver: componentFactoryResolver
@@ -37,7 +38,16 @@ export class ContractmgtComponent implements OnInit {
         new ColModel({ label: "合同名称", name: "contractName", width: 20 }),
         new ColModel({ label: "承办方", name: "undertaker", width: 20 }),
         new ColModel({ label: "经办人", name: "excutorName", width: 20 }),
-        new ColModel({ label: "状态", name: "instStatus", width: 20 }),
+        new ColModel({
+            label: "状态", name: "instStatus", width: 20,
+            formatter: (cellvalue, a, b) => {
+                let value = this.dictdataService.getDictDataValue("工作流_审核状态", cellvalue)
+                if (!value) {
+                    value = cellvalue
+                }
+                return '<a class="contractstatus">' + value + '</a>'
+            }
+        }),
     ]
     _spmgt_grid_actions = [
         new JqgridAction({ key: "add", name: "新增", order: 2 }),
@@ -56,7 +66,7 @@ export class ContractmgtComponent implements OnInit {
     callback = new DefaultJqgridCallback(
         {
             gridComplete: () => {
-                $('a[class=tasktodotitle]').each((index, ele: any) => {
+                $('a[class=contractstatus]').each((index, ele: any) => {
                     ele.onclick = (e: Event) => {
                         let target: any = e.target
                         let attr = target.attributes
@@ -93,5 +103,9 @@ export class ContractmgtComponent implements OnInit {
                     break;
             }
         }
+    }
+
+    statusClicked() {
+        debugger
     }
 }

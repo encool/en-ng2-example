@@ -2,6 +2,7 @@ import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { Menu } from './object/menu';
 import { MenuService } from './service/menu.service';
+import { SecurityService } from './service/security.service';
 
 
 @Component({
@@ -11,7 +12,10 @@ import { MenuService } from './service/menu.service';
 export class MenusidebarComponent {
     menus: Menu[];
     selectedMenus: Menu[];
-    constructor(private menuService: MenuService, private router: Router) { }
+    constructor(private securityService: SecurityService, private menuService: MenuService,
+        private router: Router) {
+
+    }
 
     geMenus() {
         return this.menuService.getMenus();
@@ -95,6 +99,7 @@ export class MenusidebarComponent {
 
     menuClick(menu: Menu, e) {
         if (menu.l) {
+            this.right_colClick()
             this.router.navigate([menu.l, menu])
         }
         var $this = $(e.target);
@@ -107,5 +112,10 @@ export class MenusidebarComponent {
             }
             actives.collapse('hide');
         }
+    }
+
+    private right_colClick() {
+        let right_col = $(".nav-md .container.body .right_col ")
+        right_col.click()
     }
 }

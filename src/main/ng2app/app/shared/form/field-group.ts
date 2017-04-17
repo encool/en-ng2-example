@@ -11,5 +11,6 @@ export class FieldGroup extends FieldBase<any>{
         this.controlType = "fieldgroup"
         this.groupName = options.groupName
         this.fields = options.fields || []
+        this.selector = "df-field-group-hori"
     }
 }
