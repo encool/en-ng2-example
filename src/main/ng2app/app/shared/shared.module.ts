@@ -32,6 +32,7 @@ import { DatetimePickComponent } from './form/widget/datetime-pick.component'
 import { TextareaComponent } from './form/widget/textarea.component'
 import { Select2Component } from './form/widget/select2.component'
 import { FileUploadComponent } from './form/widget/file-upload.component'
+import { FileUploadInrowComponent } from './form/widget/file-upload-inrow.component'
 import { EchartsComponent } from './component/echarts.component'
 
 import { FieldDataService } from './form/field-data.service'
@@ -68,6 +69,7 @@ import { FieldDataService } from './form/field-data.service'
     TextareaComponent,
     Select2Component,
     FileUploadComponent,
+    FileUploadInrowComponent,
     EchartsComponent,
   ],
   exports: [
@@ -98,6 +100,7 @@ import { FieldDataService } from './form/field-data.service'
     TextareaComponent,
     Select2Component,
     FileUploadComponent,
+    FileUploadInrowComponent,
     EchartsComponent,
   ],
   entryComponents: [
@@ -112,6 +115,7 @@ import { FieldDataService } from './form/field-data.service'
     CheckboxGroupComponent,
     RadioGroupComponent,
     FileUploadComponent,
+    FileUploadInrowComponent,
   ]
 })
 export class SharedModule {

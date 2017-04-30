@@ -73,7 +73,7 @@ export class UsertaskDoComponent implements OnInit {
     @ViewChild(DynamicFormHorizontalComponent) formCom: DynamicFormHorizontalComponent;
     @Output() modelinit = new EventEmitter()
     @Input() isCustomForm = true
-    @Input() check: Function
+    @Input() check: Function //外面自定义表单的check 废弃
     @Input() outFormData: Function
     _modalContext: {
         vcRef: ViewContainerRef,
@@ -371,6 +371,28 @@ export class UsertaskDoComponent implements OnInit {
                         required: permissiondata[field.fieldNo].fillnecessary,
                         disable: !permissiondata[field.fieldNo].writePermission,
                         hidden: !permissiondata[field.fieldNo].visible,
+                        params: {
+                            writePermission: permissiondata[field.fieldNo].writePermission,
+                            businessKey: this.businessKey,
+                            businessType: this.product.productNo
+                        }
+                    }))
+                    break
+                case "f-file-upload-inrow":
+                    newFields.push(new FileUploadField({
+                        key: field.fieldNo,
+                        type: "inrow",
+                        label: field.displayName || field.fieldId.fieldName,
+                        labelWidth: field.labelWidth,
+                        span: field.displaySpan,
+                        required: permissiondata[field.fieldNo].fillnecessary,
+                        disable: !permissiondata[field.fieldNo].writePermission,
+                        hidden: !permissiondata[field.fieldNo].visible,
+                        params: {
+                            writePermission: permissiondata[field.fieldNo].writePermission,
+                            businessKey: this.businessKey,
+                            businessType: this.product.productNo
+                        }
                     }))
                     break
                 case "wftitle":
@@ -399,7 +421,17 @@ export class UsertaskDoComponent implements OnInit {
                         required: permissiondata[field.fieldNo].fillnecessary,
                         disable: !permissiondata[field.fieldNo].writePermission,
                         hidden: !permissiondata[field.fieldNo].visible,
-                        click: field.click || (() => { })
+                        click: field.click || (() => { }),
+                        params: {
+                            processDefinitionId: this.processDefinitionId,
+                            processInsId: this.processInsId,
+                            moduleId: this.moduleId,
+                            product: this.product,
+                            taskDefKey: this.taskDefKey,
+                            taskId: this.taskId,
+                            formId: this.formId,
+                            businessKey: this.businessKey,
+                        }
                     }))
             }
 

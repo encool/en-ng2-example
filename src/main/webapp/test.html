@@ -44,27 +44,15 @@
     <!--<script src="dist/assets/js/jquery.jqGrid.min.js"></script>
     <script src="dist/assets/js/grid.locale-cn.js"></script>-->
     <script src="dist/assets/js/toastr.min.js"></script>
-    <!--datepicker-->
-    <!--<script src="dist/assets/js/bootstrap-datepicker.min.js"></script>-->
-    <!--<script src="dist/assets/js/bootstrap-datepicker.zh-CN.min.js"></script>-->
-
-    <!--<script src="dist/assets/js/bpmn-modeler.js"></script>-->
-    <!--<script src="lib/js/bpmn-panel.js"></script>
-    <script src="lib/js/bpmn-panel-property-camunda.js"></script>
-    <script src="lib/js/bpmn-modeler-custom.js"></script>
-    <script src="lib/js/bpmn-viewer-custom.js"></script>-->
-    <!--<script>
-      System.import('app').catch(function(err){ console.error(err); });
-    </script>-->
-  <!--<link href="angularrc5/dist/app.css" rel="stylesheet">-->
-  </head>
-  <!-- 3. Display the application -->
-  <body class="nav-md">
-    <my-app>Loading..</my-app>
-  <!--<script type="text/javascript" src="dist/polyfills.js"></script>
-  <script type="text/javascript" src="dist/vendor.js"></script>-->
-    <script type="text/javascript" src="dist/polyfills.js"></script>
-  <script type="text/javascript" src="dist/vendor.js"></script>
-  <script type="text/javascript" src="dist/app.js"></script>
-  </body>
+</head>
+<body>
+        <div class="form-group col-sm-12">处理表单由各种显示元素组成。除了基本表单元素（input、select等），还可以自定义显示元素
+        
+        <form id="testform" action="iframefile/qybdirprocess/upload" method="post" enctype="multipart/form-data">
+    <input type="text" name="description" />
+    <input type="file" name="file" />
+    <input type="submit" (click)="click()"/>
+</form>
+        </div>   
+</body>
 </html>

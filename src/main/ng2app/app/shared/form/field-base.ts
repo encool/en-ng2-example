@@ -40,6 +40,7 @@ export class FieldBase<T>{
     isObject?: boolean
     disable?: boolean
     hidden?: boolean
+    params?: Object
   } = {}) {
     this.value = options.value;
     this.id = options.id;

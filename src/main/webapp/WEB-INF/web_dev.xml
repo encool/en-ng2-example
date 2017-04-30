@@ -45,50 +45,10 @@
         <listener-class>org.apache.shiro.web.env.EnvironmentLoaderListener</listener-class>
     </listener>
 	<!-- 静态资源 -->
-	<servlet-mapping>
-		<servlet-name>default</servlet-name>
-		<url-pattern>*.woff</url-pattern>
-	</servlet-mapping>	
-	<servlet-mapping>
-		<servlet-name>default</servlet-name>
-		<url-pattern>*.woff2</url-pattern>
-	</servlet-mapping>		
-	<servlet-mapping>
-		<servlet-name>default</servlet-name>
-		<url-pattern>*.ttf</url-pattern>
-	</servlet-mapping>		
-	<servlet-mapping>
-		<servlet-name>default</servlet-name>
-		<url-pattern>*.html</url-pattern>
-	</servlet-mapping>	
-	<servlet-mapping>
-		<servlet-name>default</servlet-name>
-		<url-pattern>*.map</url-pattern>
-	</servlet-mapping>	
-	<servlet-mapping>
-		<servlet-name>default</servlet-name>
-		<url-pattern>*.jpg</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>default</servlet-name>
-		<url-pattern>*.png</url-pattern>
-	</servlet-mapping>	
-	<servlet-mapping>
-		<servlet-name>default</servlet-name>
-		<url-pattern>*.gif</url-pattern>
-	</servlet-mapping>	
-	<servlet-mapping>
-		<servlet-name>default</servlet-name>
-		<url-pattern>*.ico</url-pattern>
-	</servlet-mapping>			
-	<servlet-mapping>
-		<servlet-name>default</servlet-name>
-		<url-pattern>*.js</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>default</servlet-name>
-		<url-pattern>*.css</url-pattern>
-	</servlet-mapping>     
+	<servlet-mapping>  
+	    <servlet-name>default</servlet-name>  
+	    <url-pattern>/dist/*</url-pattern>    
+	</servlet-mapping> 	   
     <!-- Servlet注册 -->
     <servlet>
         <servlet-name>example</servlet-name>
@@ -114,20 +74,20 @@
 	</listener>   
 
  <!-- 支持gzip压缩，不需要压缩的话可以删除，建议在所有项目都启用该Filter -->
-    <filter>
+<!--     <filter>
         <filter-name>GZIPFilter</filter-name>
         <filter-class>com.chinacreator.c2.web.filter.GZIPFilter</filter-class>
         <init-param>
             <param-name>excludeURL</param-name>
-<!--             在这里配置不要启用数据压缩的url，支持正则匹配
-            主要文件下载类的请求不要启用数据压缩，会导致下载的文件不正确 -->
+            在这里配置不要启用数据压缩的url，支持正则匹配
+            主要文件下载类的请求不要启用数据压缩，会导致下载的文件不正确
             <param-value>/file/*</param-value>
         </init-param>
     </filter>
     <filter-mapping>
         <filter-name>GZIPFilter</filter-name>
         <url-pattern>/*</url-pattern>
-    </filter-mapping>
+    </filter-mapping> -->
 
     <!-- 编码统一使用UTF-8 -->
     <filter>

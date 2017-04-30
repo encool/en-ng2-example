@@ -14,14 +14,14 @@ import { UIComponent } from '../../../decorators/ui-component.decorator'
     template: `
     <div [ngSwitch]="simple">
         <div *ngSwitchCase="false" [id]="_instanceId" [formGroup]="form" [ngClass]="ngclasses()" style="height: 34px;">
-        	<label [attr.for]="field.key" class="control-label" style="float: left;width:75px">{{field.label}}</label>
+        	<label [attr.for]="key" class="control-label" style="float: left;width:75px">{{label}}</label>
         	<div class="" style="margin-left:85px" [id]="getWrapperId()">
                 <span [id]="_contentId">
                     <form [formGroup]="form" #uploadfileform [action]="_url" [id]="_formId" [name]="_formId" 
                         enctype="multipart/form-data" method="post" [target]="_iframeId">
                         <label class="ace-file-input">
                             <input [name]="_fileinputId" [id]="_fileinputId" type="file" 
-                                [id]="key" [formControlName]="field.key" [id]="field.key" class="form-control">
+                                [id]="key" [formControlName]="key" [id]="key" class="form-control">
                             <span class="ace-file-container" data-title="浏览...">
                                 <span class="ace-file-name" data-title="未选中文件 ..."><i class=" ace-icon fa fa-upload"></i></span>
                             </span>
@@ -35,13 +35,6 @@ import { UIComponent } from '../../../decorators/ui-component.decorator'
                     </form>
                 </span>      
             </div>            
-        </div> 
-        <div *ngSwitchCase="true"  [style.display]="hidden ? 'none':'inline'" [ngClass]="ngclasses()">
-        	<label [attr.for]="key" class="control-label" style="float: left;width:75px">{{label}}</label>
-        	<div class="" style="margin-left:85px">
-        		<input [id]="key" [(ngModel)]="model[key]" [id]="key" [disabled]="disabled"
-        			type="text" class="form-control">
-        	</div>         
         </div>         
     </div>           
     `
@@ -56,12 +49,14 @@ export class FileUploadComponent implements OnInit {
     @Input() hidden: boolean = false
     @Input() disabled: boolean = false
     @Input() autosubmit: boolean = true
+    @Input() params: Object
 
     @Input() field: FileUploadField;
     @Input() form: FormGroup;
     @Input() model: any;
 
     @Input() process: string = "qybdirprocess"
+
 
     _url: string
     _instanceId: string
@@ -80,16 +75,9 @@ export class FileUploadComponent implements OnInit {
 
     ngOnInit() {
         if (!this.simple) {
-            let key = this.field.key
+            this.params = this.field.params
             this.key = this.field.key
-            if (this.field.isObject && key.indexOf(".") != -1) {
-                let keys = key.split(".")
-                this.key1 = keys[0]
-                if (this.model[this.key1] == undefined) {
-                    this.model[this.key1] = {}
-                }
-                this.key2 = keys[1]
-            }
+            this.label = this.field.label
         }
         // debugger
         this._url = "iframefile/" + this.process + "/upload"
@@ -103,8 +91,12 @@ export class FileUploadComponent implements OnInit {
     ngAfterViewInit() {
         let fileinput = $("#" + this.key)
         fileinput.change(e => {
-            // debugger
+            debugger
             let value = this.getInputEventTargetValue(e)
+            //没选中文件
+            if (value === "") {
+                return
+            }
             let filename = this.getFileNameFromPath(value)
             this.setDisplayFileName(filename)
             if (this.autosubmit) {
@@ -134,11 +126,9 @@ export class FileUploadComponent implements OnInit {
 
     successCallback(data) {
         $("#" + this._overlayId).css("display", "none")
-
+        toastr.success('上传成功')
         this.uploading = false
-
         // $("#formGroup-" + directiveId).find(".message-loading-overlay").remove();
-
         if (this.successEvent) {
             this.successEvent(data.data);
         }
@@ -151,14 +141,13 @@ export class FileUploadComponent implements OnInit {
     errorCallback(data) {
         this.uploading = false;
         $("#" + this._overlayId).css("display", "none")
+        toastr.warning(data.data.errorMsg)
         if (this.errorEvent) {
             this.errorEvent(data.data);
         }
-
         if (this.onError) {
             this.onError(data);
         }
-        toastr.warning(data.data.errorMsg)
     }
 
     upload(scEvent?, erEvent?) {
@@ -173,6 +162,23 @@ export class FileUploadComponent implements OnInit {
         //     // Messenger.post({ type: 'error', message: '附件不能为空！' });
         //     return;
         // }
+        // debugger
+        //准备动态参数
+        if (this.params instanceof Object) {
+            for (let name in this.params) {
+                if (this.params.hasOwnProperty(name)) {
+                    // let form = this.fromref.element.nativeElement
+                    let form = $("#" + this._formId)
+                    let input = form.find("#" + name)
+                    if (input.length > 0) {
+                        input.val(this.params[name]);
+                    } else {
+                        form.append("<input type=\"hidden\" id=\"" + name + "\" name=\"" + name
+                            + "\" value=\"" + this.params[name] + "\">");
+                    }
+                }
+            }
+        }
 
         //js动态注册事件
         if (scEvent != undefined && $.isFunction(scEvent)) {

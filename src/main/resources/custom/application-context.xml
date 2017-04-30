@@ -31,6 +31,7 @@
         <property name="prefix" value="/dist/" />
         <property name="suffix" value=".html" />
         <property name="templateMode" value="HTML5" />
+        <property name="characterEncoding" value="UTF-8" /> 
     </bean>
 
     <bean id="templateEngine"
@@ -40,12 +41,15 @@
 
     <bean class="org.thymeleaf.spring4.view.ThymeleafViewResolver">
         <property name="templateEngine" ref="templateEngine" />
+        <property name="contentType" value="text/html;charset=UTF-8"/>
+        <property name="characterEncoding" value="UTF-8" /> 
     </bean>
     
 <!--     <bean class="com.chinacreator.c2.qyb.workflow.module.impl.MyExtendServiceImpl"></bean> -->
+<!--     <mvc:resources location="/**" mapping="/**"/>
     
-<!--     <mvc:default-servlet-handler /> -->
+    <mvc:default-servlet-handler />  -->
 	<mvc:annotation-driven />
-	<mvc:resources location="/dist/" mapping="/dist/**"/>    
+	<mvc:resources location="dist" mapping="dist/**"/>    
 	<!-- <context:property-placeholder location="classpath*:*-config.properties,classpath*:en-default-config.properties"/>     -->
 </beans>    

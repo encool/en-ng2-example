@@ -29,36 +29,36 @@ export class UserService {
             this.http.get(this._username_validate_url, options)
                 .map(res => res.json())
                 .subscribe(
-                    data => {
-                        if (data.validate === "success") {
-                            resolve(null);
-                        } else {
-                            resolve({ userName: false });
-                        }
-                    },
-                    err => {
+                data => {
+                    if (data.validate === "success") {
+                        resolve(null);
+                    } else {
                         resolve({ userName: false });
                     }
+                },
+                err => {
+                    resolve({ userName: false });
+                }
                 )
         });
     }
 
-    create(userDTO,orgId):Promise<any>{
+    create(userDTO, orgId): Promise<any> {
         let body = JSON.stringify(
             {
-                userDTO:userDTO,
-                orgId:orgId,
-                sn:999
+                userDTO: userDTO,
+                orgId: orgId,
+                sn: 999
             });
         let headers = new Headers({ 'Content-Type': 'application/json;charset=UTF-8' });
         let options = new RequestOptions({ headers: headers });
         return this.http.post(this._user_add_url, body, options)
-                        .toPromise()
-                        .then(()=>{return true})
-                        .catch(this.handleError);
+            .toPromise()
+            .then(() => { return true })
+            .catch(this.handleError);
     }
 
-    getUserByPK(userId:string){
+    getUserByPK(userId: string) {
         let headers = new Headers({ 'Content-Type': 'application/json;charset=UTF-8' });
         let options = new RequestOptions({
             headers: headers,
@@ -67,53 +67,53 @@ export class UserService {
         return this.http.get(url)
             .toPromise()
             .then(
-                data => {
-                    return data.json()
-                }
+            data => {
+                return data.json()
+            }
             )
     }
 
-    update(userDTO){
+    update(userDTO) {
         let body = JSON.stringify(userDTO);
         let headers = new Headers({ 'Content-Type': 'application/json;charset=UTF-8' });
-        let options = new RequestOptions({ headers: headers });     
+        let options = new RequestOptions({ headers: headers });
         return this.http.post(this._user_update_url, body, options)
-                        .toPromise()
-                        .then((data)=>{return data.json()})
-                        .catch(this.handleError);        
+            .toPromise()
+            .then((data) => { return data.json() })
+            .catch(this.handleError);
     }
 
-    deleteByIds(ids:string[]){
+    deleteByIds(ids: string[]) {
         let body = JSON.stringify(ids);
         let headers = new Headers({ 'Content-Type': 'application/json;charset=UTF-8' });
-        let options = new RequestOptions({ headers: headers });     
+        let options = new RequestOptions({ headers: headers });
         return this.http.post(this._user_deletebyids_url, body, options)
-                        .toPromise()
-                        .then((data)=>{return true})
-                        .catch(this.handleError);         
+            .toPromise()
+            .then((data) => { return true })
+            .catch(this.handleError);
     }
 
-    setJobs(userIds:string[],jobIds:string[]){
+    setJobs(userIds: string[], jobIds: string[]) {
         let body = JSON.stringify({
-            userIds:userIds,
-            jobIds:jobIds
+            userIds: userIds,
+            jobIds: jobIds
         });
         let headers = new Headers({ 'Content-Type': 'application/json;charset=UTF-8' });
-        let options = new RequestOptions({ headers: headers });     
+        let options = new RequestOptions({ headers: headers });
         return this.http.post(this._user_setjobs_url, body, options)
-                        .toPromise()
-                        .then((data)=>{return data.json()})
-                        .catch(this.handleError);          
+            .toPromise()
+            .then((data) => { return data.json() })
+            .catch(this.handleError);
     }
 
-    removeAllJobs(userIds:string[]){
+    removeAllJobs(userIds: string[]) {
         let body = JSON.stringify(userIds);
         let headers = new Headers({ 'Content-Type': 'application/json;charset=UTF-8' });
-        let options = new RequestOptions({ headers: headers });     
+        let options = new RequestOptions({ headers: headers });
         return this.http.post(this._user_removealljobs_url, body, options)
-                        .toPromise()
-                        .then((data)=>{return data.json()})
-                        .catch(this.handleError);  
+            .toPromise()
+            .then((data) => { return data.json() })
+            .catch(this.handleError);
     }
 
     private handleError(error: any) {

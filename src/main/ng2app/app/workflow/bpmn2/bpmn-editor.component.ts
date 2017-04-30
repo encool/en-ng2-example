@@ -48,6 +48,7 @@ export class BpmnEditorComponent implements OnInit {
         if (this.model.params.processDefId != undefined
             || this.model.params.type == "add") {
             // (require as any).ensure([], require => {
+            // debugger
             let BpmnModeler = require('bpmn-js/lib/Modeler')
             let BpmnViewer = require('bpmn-js/lib/Viewer')
             let propertiesPanelModule = require('bpmn-js-properties-panel')
