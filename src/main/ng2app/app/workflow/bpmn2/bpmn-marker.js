@@ -10,7 +10,7 @@ var BpmnRenderer = require('bpmn-js/lib/draw/BpmnRenderer');
 
 
 function ColorRenderer(eventBus, styles, pathMap) {
-
+debugger
     BpmnRenderer.call(this, eventBus, styles, pathMap, 1200);
 
 

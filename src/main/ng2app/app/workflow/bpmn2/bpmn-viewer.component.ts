@@ -3,6 +3,13 @@ import { Headers, Http, URLSearchParams, RequestOptions } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/forkJoin'
 
+var svgAppend = require('tiny-svg/lib/append'),
+    svgAttr = require('tiny-svg/lib/attr'),
+    svgCreate = require('tiny-svg/lib/create'),
+    svgClasses = require('tiny-svg/lib/classes');
+
+var domQuery = require('min-dom/lib/query');
+
 import { FormConfigComponent } from '../config/form-config.component'
 import { ActivityConfigComponent } from '../config/activity-config.component'
 
@@ -131,7 +138,8 @@ export class BpmnViewerComponent implements OnInit {
                             var canvas = this._bpmnModeler.get('canvas')
                             let svg = canvas._svg
                             // 绿色三角的箭头
-                            this.addGreenEndMarker(svg)
+                            this.addMarker('greenendmark-end-white-black', {}, canvas)
+                            // this.addGreenEndMarker()
 
                             // $('path').each(function (e) {
                             //     var path = $(this);
@@ -177,18 +185,70 @@ export class BpmnViewerComponent implements OnInit {
             )
         }
     }
+    /**
+     * 绿色的箭头，可以在path的style中用url链过来
+     * @param id 
+     * @param options 
+     * @param canvas 
+     */
+    addMarker(id, options, canvas) {
+        var attrs = _.assign({
+            fill: '#00ff00',
+            strokeWidth: 1,
+            strokeLinecap: 'round',
+            strokeDasharray: 'none'
 
-    makeSVG(tag, attrs) {
-        var el = document.createElementNS('http://www.w3.org/2000/svg', tag);
-        for (var k in attrs)
-            el.setAttribute(k, attrs[k]);
-        return el;
+        }, options.attrs);
+
+        var ref = options.ref || { x: 11, y: 10 };
+
+        var scale = options.scale || 0.5;
+
+        // fix for safari / chrome / firefox bug not correctly
+        // resetting stroke dash array
+        if (attrs.strokeDasharray === 'none') {
+            attrs.strokeDasharray = [10000, 1];
+        }
+
+        var marker = svgCreate('marker');
+
+        if (!options.element) {
+            options.element = svgCreate('path');
+            svgAttr(options.element, { d: 'M 1 5 L 11 10 L 1 15 Z' });
+        }
+
+        svgAttr(options.element, attrs);
+
+        svgAppend(marker, options.element);
+
+        svgAttr(marker, {
+            id: id,
+            viewBox: '0 0 20 20',
+            refX: ref.x,
+            refY: ref.y,
+            markerWidth: 20 * scale,
+            markerHeight: 20 * scale,
+            orient: 'auto'
+        });
+
+        var defs = domQuery('defs', canvas._svg);
+
+        if (!defs) {
+            defs = svgCreate('defs');
+
+            svgAppend(canvas._svg, defs);
+        }
+
+        svgAppend(defs, marker);
+
+        // markers[id] = marker;
     }
     /**
      * 绿色的箭头，可以在path的style中用url链过来
      * @param svg 
+     * 
      */
-    addGreenEndMarker(svg) {
+    addGreenEndMarker() {
         function createMarker(id, options) {
             var attrs = _.assign({
                 fill: '#00ff00',
@@ -219,9 +279,12 @@ export class BpmnViewerComponent implements OnInit {
             // return addMarker(id, marker);
         }
 
+        let path = svgCreate('path');
+        svgAttr(path, { d: 'M 1 5 L 11 10 L 1 15 Z' });
 
         createMarker('sequenceflow-end', {
-            element: svg.path('M 1 5 L 11 10 L 1 15 Z'),
+            // element: svg.path('M 1 5 L 11 10 L 1 15 Z'),
+            element: path,
             ref: { x: 11, y: 10 },
             scale: 0.5
         });
