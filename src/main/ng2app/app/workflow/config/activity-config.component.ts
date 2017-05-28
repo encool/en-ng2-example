@@ -103,6 +103,7 @@ export class ActivityConfigComponent implements OnInit {
         this.http.post('workflow/getactivityconfig', body, options)
             .map(res => res.json())
             .subscribe(data => {
+                // debugger
                 this.$model.activityConfig = data;
                 if (_.isUndefined(this.$model.activityConfig.taskDefId) || _.isNull(this.$model.activityConfig.taskDefId)) {
                     this.$model.activityConfig.taskDefId = this.$model.curActivity.businessObject.id;
@@ -113,12 +114,12 @@ export class ActivityConfigComponent implements OnInit {
                 } else {
                     this.$model.params.allowReject = true;
                 }
-                var returnindex = this.has_action("freechoose");
-                if (returnindex == undefined) {
-                    this.$model.freeChoose = false;
+                var freechooseindex = this.has_action("freechoose");
+                if (freechooseindex == undefined) {
+                    this.$model.params.freeChoose = false;
                     this.$model.activityConfig.freeshooseUrl = "f/choosetaskhandler";
                 } else {
-                    this.$model.freeChoose = true;
+                    this.$model.params.freeChoose = true;
                 }
                 var filtervalue = this.get_action("filtertype");
                 if (filtervalue) {
@@ -173,7 +174,7 @@ export class ActivityConfigComponent implements OnInit {
     }
 
     onModalAction(): Promise<any> {
-        
+
         let param = {
             processDefinitionId: this.$model.params.processDefId,
             taskDefinitionId: this.$model.curActivity.businessObject.id,

@@ -19,13 +19,14 @@ import { ServiceproductEntryComponent } from './entry/serviceproduct-entry.compo
 import { FormConfigComponent } from './config/form-config.component'
 import { ActivityConfigComponent } from './config/activity-config.component'
 import { ChooseCandidateComponent } from './config/choose-candidate.component'
-import { TextinputComponent } from './template/textinput.component'
 import { TodoComponent } from './process/todo.component'
 import { BpmnViewerComponent } from './bpmn2/bpmn-viewer.component'
 import { BpmnMonitorComponent } from './bpmn2/bpmn-monitor.component'
 import { TemplateMgtComponent } from './template/template-mgt.component'
 import { TemplateInfoComponent } from './template/template-info.component'
 import { WftitleComponent } from './template/wftitle.component'
+import { AuditinfoComponent } from './template/auditinfo.component'
+import { CustomComponent } from './template/custom.component'
 
 import { routing } from './workflow.routing';
 
@@ -51,7 +52,6 @@ import { WorkprocessService } from './service/workprocess.service'
         RelAddComponent,
         UsertaskDoComponent,
         TaskFormComponent,
-        TextinputComponent,
         ServiceproductEntryComponent,
         BpmnEditorComponent,
         FormConfigComponent,
@@ -63,6 +63,8 @@ import { WorkprocessService } from './service/workprocess.service'
         TemplateInfoComponent,
         WftitleComponent,
         BpmnMonitorComponent,
+        AuditinfoComponent,
+        CustomComponent,
     ],
     exports: [
         BpmnEditorComponent,
@@ -83,7 +85,10 @@ import { WorkprocessService } from './service/workprocess.service'
         ChooseCandidateComponent,
         BpmnViewerComponent,
         TemplateInfoComponent,
+        WftitleComponent,
         BpmnMonitorComponent,
+        AuditinfoComponent,
+        CustomComponent,
     ]
 })
 export class WorkflowModule {

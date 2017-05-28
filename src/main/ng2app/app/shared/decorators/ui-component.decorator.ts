@@ -11,10 +11,10 @@ export function UIComponent(options: {
     // debugger
     uilist.push(options)
     uimap.set(options.selector, options.component)
-    console.log("uicomponent(): evaluated");
+    console.log("uicomponent: selector", options.selector);
+    console.log("uicomponent: component", options.component);
     return function ({ constructor: Function }) {
 
-        console.log("uicomponent(): called");
     }
 }
 export { uimap, uilist }

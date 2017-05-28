@@ -12,6 +12,9 @@ import { SecurityService } from './service/security.service';
 export class MenusidebarComponent {
     menus: Menu[];
     selectedMenus: Menu[];
+
+    userDTO: any = {}
+
     constructor(private securityService: SecurityService, private menuService: MenuService,
         private router: Router) {
 
@@ -26,6 +29,10 @@ export class MenusidebarComponent {
             this.menus = menus;
             console.log("this.menus", this.menus)
         });
+        this.securityService.getSubject().subscribe((data) => {
+            this.userDTO = data.userDTO
+        }
+        )
     }
 
     ngAfterViewInit() {

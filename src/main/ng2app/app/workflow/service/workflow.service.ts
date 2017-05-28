@@ -3,6 +3,15 @@ import { Headers, Http, URLSearchParams, RequestOptions, Response } from '@angul
 import 'rxjs/add/operator/toPromise';
 import { Observable } from 'rxjs/Observable';
 
+import { TextField } from '../../shared'
+import { DropdownField } from '../../shared'
+import { DatetimePickField } from '../../shared'
+import { TextareaField } from '../../shared'
+import { Select2Field } from '../../shared'
+import { CheckboxField } from '../../shared'
+import { FileUploadField } from '../../shared'
+import { CustomTemplateField } from '../../shared'
+
 @Injectable()
 export class WorkflowService {
 
@@ -160,6 +169,165 @@ export class WorkflowService {
                 headers: new Headers({ 'Content-Type': 'application/json;charset=UTF-8' }),
                 search: new URLSearchParams("procDefId=" + procDefId)
             })).map(resp => resp.json())
+    }
+
+
+    getActions(moduleId: string, activityId: string): Observable<any> {
+        return this.http.post('flowservice/getactions',
+            {
+                moduleId: moduleId,
+                activityId: activityId
+            }
+        ).map(resp => resp.json())
+    }
+
+    toWfFormGroupField(fields: any[], permissiondata: any, params: any): any[] {
+        // debugger
+        let newFields = new Array()
+        fields.forEach(field => {
+            switch (field.webDisplayTypeId) {
+                case "dropdowninput":
+                    newFields.push(new DropdownField({
+                        key: field.fieldNo,
+                        label: field.displayName || field.fieldId.fieldName,
+                        labelWidth: field.labelWidth,
+                        span: field.displaySpan,
+                        dictName: field.dictName,
+                        required: permissiondata[field.fieldNo].fillnecessary,
+                        disable: !permissiondata[field.fieldNo].writePermission,
+                        hidden: !permissiondata[field.fieldNo].visible,
+                    }))
+                    break
+                case "datetimepick":
+                    newFields.push(new DatetimePickField({
+                        key: field.fieldNo,
+                        label: field.displayName || field.fieldId.fieldName,
+                        labelWidth: field.labelWidth,
+                        span: field.displaySpan,
+                        required: permissiondata[field.fieldNo].fillnecessary,
+                        disable: !permissiondata[field.fieldNo].writePermission,
+                        hidden: !permissiondata[field.fieldNo].visible,
+                    }))
+                    break
+                case "textarea":
+                    newFields.push(new TextareaField({
+                        key: field.fieldNo,
+                        label: field.displayName || field.fieldId.fieldName,
+                        labelWidth: field.labelWidth,
+                        span: field.displaySpan,
+                        required: permissiondata[field.fieldNo].fillnecessary,
+                        disable: !permissiondata[field.fieldNo].writePermission,
+                        hidden: !permissiondata[field.fieldNo].visible,
+                    }))
+                    break
+                case "select2":
+                    newFields.push(new Select2Field({
+                        key: field.fieldNo,
+                        label: field.displayName || field.fieldId.fieldName,
+                        labelWidth: field.labelWidth,
+                        span: field.displaySpan,
+                        required: permissiondata[field.fieldNo].fillnecessary,
+                        disable: !permissiondata[field.fieldNo].writePermission,
+                        hidden: !permissiondata[field.fieldNo].visible,
+                        dictName: field.dictName,
+                        optionsUrl: field.remark1,
+                        optionId: field.remark2,
+                        optionName: field.remark3,
+                        multiple: (field.remark4 === "true" || field.remark4 == true) ? true : false
+                    }))
+                    break
+                case "checkbox":
+                    newFields.push(new CheckboxField({
+                        key: field.fieldNo,
+                        label: field.displayName || field.fieldId.fieldName,
+                        labelWidth: field.labelWidth,
+                        span: field.displaySpan,
+                        required: permissiondata[field.fieldNo].fillnecessary,
+                        disable: !permissiondata[field.fieldNo].writePermission,
+                        hidden: !permissiondata[field.fieldNo].visible,
+                    }))
+                    break
+                case "fileupload":
+                    newFields.push(new FileUploadField({
+                        key: field.fieldNo,
+                        label: field.displayName || field.fieldId.fieldName,
+                        labelWidth: field.labelWidth,
+                        span: field.displaySpan,
+                        required: permissiondata[field.fieldNo].fillnecessary,
+                        disable: !permissiondata[field.fieldNo].writePermission,
+                        hidden: !permissiondata[field.fieldNo].visible,
+                        params: {
+                            writePermission: permissiondata[field.fieldNo].writePermission,
+                            businessKey: params.businessKey,
+                            businessType: params.productNo
+                        }
+                    }))
+                    break
+                case "f-file-upload-inrow":
+                    newFields.push(new FileUploadField({
+                        key: field.fieldNo,
+                        type: "inrow",
+                        label: field.displayName || field.fieldId.fieldName,
+                        labelWidth: field.labelWidth,
+                        span: field.displaySpan,
+                        required: permissiondata[field.fieldNo].fillnecessary,
+                        disable: !permissiondata[field.fieldNo].writePermission,
+                        hidden: !permissiondata[field.fieldNo].visible,
+                        params: {
+                            writePermission: permissiondata[field.fieldNo].writePermission,
+                            businessKey: params.businessKey,
+                            businessType: params.product.productNo
+                        }
+                    }))
+                    break
+                case "f-text-input":
+                    newFields.push(new TextField({
+                        selector: field.webDisplayTypeId,
+                        key: field.fieldNo,
+                        label: field.displayName || field.fieldId.fieldName,
+                        labelWidth: field.labelWidth,
+                        span: field.displaySpan,
+                        required: permissiondata[field.fieldNo].fillnecessary,
+                        disable: !permissiondata[field.fieldNo].writePermission,
+                        hidden: !permissiondata[field.fieldNo].visible,
+                        click: field.click || (() => { })
+                    }))
+                    break
+                default:
+                    newFields.push(new CustomTemplateField({
+                        selector: field.webDisplayTypeId,
+                        key: field.fieldNo,
+                        label: field.displayName || field.fieldId.fieldName,
+                        labelWidth: field.labelWidth,
+                        span: field.displaySpan,
+                        required: permissiondata[field.fieldNo].fillnecessary,
+                        disable: !permissiondata[field.fieldNo].writePermission,
+                        hidden: !permissiondata[field.fieldNo].visible,
+                        click: field.click || (() => { }),
+                        params: {
+                            remark1: field.remark1,
+                            remark2: field.remark2,
+                            remark3: field.remark3,
+                            remark4: field.remark4,
+                            processDefinitionId: params.processDefinitionId,
+                            processInsId: params.processInsId,
+                            moduleId: params.moduleId,
+                            product: params.product,
+                            taskDefKey: params.taskDefKey,
+                            taskId: params.taskId,
+                            formId: params.formId,
+                            businessKey: params.businessKey,
+                            transitions: params.transitions,
+                            permissiondata: permissiondata[field.fieldNo],
+                            properties: params.properties,
+                            global: params.global,
+                            preview: params.preview || false
+                        }
+                    }))
+            }
+
+        })
+        return newFields
     }
 
     private handleError(error: any) {

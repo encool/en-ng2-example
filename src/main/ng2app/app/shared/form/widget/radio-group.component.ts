@@ -5,7 +5,7 @@ import { Observable } from 'rxjs/Observable';
 
 import { RadioGroupField } from './radio-group.field'
 
-import { UIComponent } from '../../../decorators/ui-component.decorator'
+import { UIComponent } from '../../decorators/ui-component.decorator'
 
 @UIComponent({
     selector: 'f-radio-group',

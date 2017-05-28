@@ -53,6 +53,7 @@ export class ContractmgtComponent implements OnInit {
         new JqgridAction({ key: "add", name: "新增", order: 2 }),
         new JqgridAction({ key: "edit", name: "编辑", order: 3 }),
         new JqgridAction({ key: "refresh", name: "刷新", order: 1 }),
+        new JqgridAction({ key: "query", name: "查询", isQuery: true, order: 1 }),
         new JqgridAction({ key: "delete", name: "删除", order: 6 }),
     ]
     grid_setting = new JqgridSetting({

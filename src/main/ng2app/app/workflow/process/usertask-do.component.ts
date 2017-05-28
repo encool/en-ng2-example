@@ -6,16 +6,6 @@ import 'rxjs/add/observable/forkJoin'
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Headers, Http, URLSearchParams, RequestOptions } from '@angular/http';
 
-import { TextField } from '../../shared/form/text-field'
-import { DropdownField } from '../../shared/form/dropdown-field'
-import { DatetimePickField } from '../../shared/form/widget/datetime-pick.field'
-import { TextareaField } from '../../shared/form/widget/textarea.field'
-import { Select2Field } from '../../shared/form/widget/select2.field'
-import { CheckboxField } from '../../shared/form/widget/checkbox.field'
-import { FileUploadField } from '../../shared/form/widget/file-upload.field'
-import { CustomTemplateField } from '../../shared/form/custom-template.field'
-
-
 import { DynamicFormHorizontalComponent } from '../../shared/form/dynamic-form-horizontal.component'
 
 import { WorkprocessService } from '../service/workprocess.service'
@@ -30,12 +20,11 @@ import { BpmnMonitorComponent } from '../bpmn2/bpmn-monitor.component'
     selector: 'usertask-do',
     template: `
         <my-div [hidden]="completed" [styles]="'background: #fff; border: 2px solid #dadada; box-shadow: 0 0 10px #d0d0d0;'">
-            <my-div span=12>
+            <my-div span=12 [hidden]="global.handleinline">
                 <button type="button" *ngIf="!processInsId" class="btn btn-primary" (click)="submitFlow()">提交</button>
-                <button type="button" *ngIf="processInsId" class="btn btn-primary" (click)="completeTask()">提交</button>
+                <button type="button" *ngIf="processInsId" class="btn btn-primary" (click)="autoswitchcommit()">提交</button>
                 <button type="button" *ngIf="processInsId" class="btn btn-primary" (click)="processMonitor()">流程监控</button>                
             </my-div>
-            <wf-title *ngIf="titleField" [field]="titleField"></wf-title>
             <dynamic-form-hori *ngIf="!isCustomForm" [fields]="fields" ></dynamic-form-hori>
             <ng-content></ng-content>
         </my-div>    
@@ -63,17 +52,33 @@ export class UsertaskDoComponent implements OnInit {
     subject: any
     transitions: any[]
     transition: any
+    properties: any
 
     formDataSubject: Subject<any> = new Subject();
     onFieldInit: Subject<any> = new Subject();
+    global: {
+        handleinline?: any
+        oppositive?: boolean
+        operatefuncs: {
+            submitFlow: Function,
+            completeTask: Function,
+            processMonitor: Function,
+        }
+    } = {
+        operatefuncs: {
+            submitFlow: this.submitFlow.bind(this),
+            completeTask: this.autoswitchcommit.bind(this),
+            processMonitor: this.processMonitor.bind(this),
+        }
+    }
 
     completed: boolean = false
-    titleField: any
+    // titleField: any
 
     @ViewChild(DynamicFormHorizontalComponent) formCom: DynamicFormHorizontalComponent;
     @Output() modelinit = new EventEmitter()
     @Input() isCustomForm = true
-    @Input() check: Function //外面自定义表单的check 废弃
+    // @Input() check: Function //外面自定义表单的check 废弃
     @Input() outFormData: Function
     _modalContext: {
         vcRef: ViewContainerRef,
@@ -90,7 +95,7 @@ export class UsertaskDoComponent implements OnInit {
     }
 
     ngOnInit() {
-
+        // this.global.handleinline
     }
 
     ngAfterViewInit() {
@@ -113,6 +118,7 @@ export class UsertaskDoComponent implements OnInit {
                 this.flowService.getformdata(this.formId, formBusinessKey, this.processInsId),
                 this.securityService.getSubject(),
                 this.flowService.getformfield(this.formId, null, false),
+                this.flowService.getActions(this.moduleId, this.taskDefKey)
             ]
             //开始流程
             if (this.processInsId == undefined) {
@@ -121,7 +127,6 @@ export class UsertaskDoComponent implements OnInit {
 
 
             Observable.forkJoin(forkTask).subscribe(res => {
-                // debugger
                 this.product = res[0]
 
                 this.subject = res[2]
@@ -131,24 +136,24 @@ export class UsertaskDoComponent implements OnInit {
                 this.primaryFormData = formValue
                 this.formDataSubject.next(formValue)
                 this.modelinit.emit(formValue)
-
-                if (res.length === 5) {
-                    this.startInfo = res[4]
-                    this.taskDefKey = res[4].startActivity.id
-                    this.processDefinitionId = res[4].processDefinitionId
+                this.properties = res[4]
+                if (res.length === 6) { //开始 有获取开始信息
+                    this.startInfo = res[5]
+                    this.taskDefKey = res[5].startActivity.id
+                    this.processDefinitionId = res[5].processDefinitionId
                 }
                 Observable.forkJoin(
                     this.flowService.getfieldpermissiondata(this.product, this.taskDefKey),
                     this.flowService.getTransitions(this.processDefinitionId, this.taskDefKey),
                 ).subscribe(res => {
                     this.permissiondata = res[0]
-                    this.fields = this.toFormGroupField(this.formfields, this.permissiondata)
+                    this.transitions = res[1]
+                    this.transition = res[1][0]
+                    this.fields = this.flowService.toWfFormGroupField(this.formfields, this.permissiondata, this)
                     setTimeout(() => {
                         this.formCom.form.patchValue(formValue)
                         this.onFieldInit.next("data")
                     })
-                    this.transitions = res[1]
-                    this.transition = res[1][0]
                 })
 
             });
@@ -178,10 +183,7 @@ export class UsertaskDoComponent implements OnInit {
             toastr.warning('验证失败')
             return
         }
-        if (this.check && !this.check()) {
-            toastr.warning('验证失败')
-            return
-        }
+
         let variables = {}
         let body = JSON.stringify(
             {
@@ -215,17 +217,97 @@ export class UsertaskDoComponent implements OnInit {
 
     }
 
-    completeTask() {
-        debugger
-        if (this.formCom && !this.formCom.form.valid) {
-            toastr.warning('验证失败')
-            return
-        }
-        if (this.check && !this.check()) {
-            toastr.warning('验证失败')
-            return
-        }
+    //提交 自动决定退回与流转
+    autoswitchcommit($event) {
+        //func 为业务表单提交前验证函数
+        /*	if(!angular.isUndefined($model.func)){
+                var a = $model.func();
+                if(a==false){
+                    Messenger.post({
+                        'message': "必填项为空！",
+                        'type': 'error',
+                        'hideAfter':4
+                    });	
+                    return;
+                }	
+            }
+        */
+        if (this.global.oppositive || this.properties.return == undefined) { //积极意见或者流程没有退回配置 流转流程
 
+            if (!this.global.oppositive && this.properties.return == undefined) {
+                console.warn("本环节没有退回配置，但是是否定意见。默认继续走流程！")
+            }
+
+            if (this.formCom && !this.formCom.form.valid) {
+                toastr.warning('验证失败')
+                return
+            }
+            //func 为业务表单提交前验证函数
+            // if (!_.isUndefined($model.func)) {
+            //     var a = $model.func("submit");
+            //     if (a == false) {
+            //         Messenger.post({
+            //             'message': "必填项为空！",
+            //             'type': 'error',
+            //             'hideAfter': 3
+            //         });
+            //         return;
+            //     }
+            // }
+            //如果有下一步选人页面弹出就不用 确认页面了？
+            var hasSelectPage = !this.global.handleinline
+                && this.properties.freechoose != undefined
+                && this.properties.freechoose != "";
+            if (!hasSelectPage) {
+                this.modalService.openConfirm(this._modalContext, { title: "是否确认", message: '确定提交？' }, (data) => {
+                    debugger
+                    this.completeTask()
+                })
+                // Modal.openConfirm({ message: '确定提交？' }, function () {
+                //     functions.commit($event)
+                // })
+            } else {
+                this.completeTask()
+            }
+        } else {
+            if (this.properties.return == undefined) {
+                toastr.warning('本环节没有退回配置，请联系系统维护人员！')
+                // Messenger.post({
+                //     'message': "本环节没有退回配置，请联系系统维护人员！",
+                //     'type': 'error',
+                //     'hideAfter': 4
+                // });
+                return
+            }
+            //退回 需不需要必填项验证？
+            // if (!_.isUndefined($model.func)) {
+            //     var a = $model.func("return");
+            //     if (a == false) {
+            //         Messenger.post({
+            //             'message': "必填项为空！",
+            //             'type': 'error',
+            //             'hideAfter': 4
+            //         });
+            //         return;
+            //     }
+            // }
+            //退回 需不需要必填项验证？
+            if (this.formCom && !this.formCom.form.valid) {
+                toastr.warning('验证失败')
+                return
+            }
+
+            //否定意见 退回流程
+            this.modalService.openConfirm(this._modalContext, { title: "是否确认", message: '确定提交？' }, (data) => {
+                this.rejectTask()
+            })
+            // this.modalService.openConfirm({ message: '确定提交？' }, function () {
+            //     functions.newField_click($event)
+            // })
+        }
+    }
+
+    completeTask() {
         let variables = {}
         let body = {
             // ccInform:$model.ccInform,
@@ -273,6 +355,54 @@ export class UsertaskDoComponent implements OnInit {
 
     }
 
+    //回退
+    rejectTask($event?: any) {
+
+        //提交前函数 各字段可以在这里把自己的数据放入业务js对象
+        // $model.funcsbeforsubmit();
+
+        var userId = this.subject.id
+        var processDefinitionId = this.processDefinitionId
+        var moduleId = this.moduleId
+        var taskDefKey = this.taskDefKey
+        let variables = {
+        }
+        this.http.post("flow/reject",
+            {
+                rejectMessage: "reject",
+
+                formId: this.formId,
+                wfOperator: {
+                    userId: userId,
+                    businessData: {
+                        moduleId: moduleId,
+                        businessKey: this.businessKey
+                    }
+                },
+                curActivity: this.transition.src,
+                businessKey: this.businessKey,
+                isStart: false,
+                processDefinitionId: this.processDefinitionId,
+                moduleId: this.moduleId,
+                currenTaskId: this.taskId,
+                destTaskDefinitionKey: this.properties.return.returnTo,
+                useHisAssignee: true,
+                variables: variables,
+                entity: this.formData,
+                proInsId: this.processInsId,
+                taskDefKey: this.taskDefKey,
+                // opinion: ""
+            }).map(data => data.json()).subscribe(data => {
+                debugger
+                if (data.result == '200') {
+                    this.completed = true
+                    toastr.success('退回成功！')
+                } else {
+                    toastr.warning('something wrong！')
+                }
+            })
+    }
+
     processMonitor() {
         this.modalService.open(
             this._modalContext,
@@ -297,145 +427,5 @@ export class UsertaskDoComponent implements OnInit {
         return this.moduleId + "_" + new Date().getTime();
     }
 
-    toFormGroupField(fields: any[], permissiondata: any[]): any[] {
-        let newFields = new Array()
-        fields.forEach(field => {
-            switch (field.webDisplayTypeId) {
-                case "dropdowninput":
-                    newFields.push(new DropdownField({
-                        key: field.fieldNo,
-                        label: field.displayName || field.fieldId.fieldName,
-                        labelWidth: field.labelWidth,
-                        span: field.displaySpan,
-                        dictName: field.dictName,
-                        required: permissiondata[field.fieldNo].fillnecessary,
-                        disable: !permissiondata[field.fieldNo].writePermission,
-                        hidden: !permissiondata[field.fieldNo].visible,
-                    }))
-                    break
-                case "datetimepick":
-                    newFields.push(new DatetimePickField({
-                        key: field.fieldNo,
-                        label: field.displayName || field.fieldId.fieldName,
-                        labelWidth: field.labelWidth,
-                        span: field.displaySpan,
-                        required: permissiondata[field.fieldNo].fillnecessary,
-                        disable: !permissiondata[field.fieldNo].writePermission,
-                        hidden: !permissiondata[field.fieldNo].visible,
-                    }))
-                    break
-                case "textarea":
-                    newFields.push(new TextareaField({
-                        key: field.fieldNo,
-                        label: field.displayName || field.fieldId.fieldName,
-                        labelWidth: field.labelWidth,
-                        span: field.displaySpan,
-                        required: permissiondata[field.fieldNo].fillnecessary,
-                        disable: !permissiondata[field.fieldNo].writePermission,
-                        hidden: !permissiondata[field.fieldNo].visible,
-                    }))
-                    break
-                case "select2":
-                    newFields.push(new Select2Field({
-                        key: field.fieldNo,
-                        label: field.displayName || field.fieldId.fieldName,
-                        labelWidth: field.labelWidth,
-                        span: field.displaySpan,
-                        required: permissiondata[field.fieldNo].fillnecessary,
-                        disable: !permissiondata[field.fieldNo].writePermission,
-                        hidden: !permissiondata[field.fieldNo].visible,
-                        dictName: field.dictName,
-                        optionsUrl: field.remark1,
-                        optionId: field.remark2,
-                        optionName: field.remark3,
-                        multiple: (field.remark4 === "true" || field.remark4 == true) ? true : false
-                    }))
-                    break
-                case "checkbox":
-                    newFields.push(new CheckboxField({
-                        key: field.fieldNo,
-                        label: field.displayName || field.fieldId.fieldName,
-                        labelWidth: field.labelWidth,
-                        span: field.displaySpan,
-                        required: permissiondata[field.fieldNo].fillnecessary,
-                        disable: !permissiondata[field.fieldNo].writePermission,
-                        hidden: !permissiondata[field.fieldNo].visible,
-                    }))
-                    break
-                case "fileupload":
-                    newFields.push(new FileUploadField({
-                        key: field.fieldNo,
-                        label: field.displayName || field.fieldId.fieldName,
-                        labelWidth: field.labelWidth,
-                        span: field.displaySpan,
-                        required: permissiondata[field.fieldNo].fillnecessary,
-                        disable: !permissiondata[field.fieldNo].writePermission,
-                        hidden: !permissiondata[field.fieldNo].visible,
-                        params: {
-                            writePermission: permissiondata[field.fieldNo].writePermission,
-                            businessKey: this.businessKey,
-                            businessType: this.product.productNo
-                        }
-                    }))
-                    break
-                case "f-file-upload-inrow":
-                    newFields.push(new FileUploadField({
-                        key: field.fieldNo,
-                        type: "inrow",
-                        label: field.displayName || field.fieldId.fieldName,
-                        labelWidth: field.labelWidth,
-                        span: field.displaySpan,
-                        required: permissiondata[field.fieldNo].fillnecessary,
-                        disable: !permissiondata[field.fieldNo].writePermission,
-                        hidden: !permissiondata[field.fieldNo].visible,
-                        params: {
-                            writePermission: permissiondata[field.fieldNo].writePermission,
-                            businessKey: this.businessKey,
-                            businessType: this.product.productNo
-                        }
-                    }))
-                    break
-                case "wftitle":
-                    this.titleField = field
-                    break
-                case "f-text-input":
-                    newFields.push(new TextField({
-                        selector: field.webDisplayTypeId,
-                        key: field.fieldNo,
-                        label: field.displayName || field.fieldId.fieldName,
-                        labelWidth: field.labelWidth,
-                        span: field.displaySpan,
-                        required: permissiondata[field.fieldNo].fillnecessary,
-                        disable: !permissiondata[field.fieldNo].writePermission,
-                        hidden: !permissiondata[field.fieldNo].visible,
-                        click: field.click || (() => { })
-                    }))
-                    break
-                default:
-                    newFields.push(new CustomTemplateField({
-                        selector: field.webDisplayTypeId,
-                        key: field.fieldNo,
-                        label: field.displayName || field.fieldId.fieldName,
-                        labelWidth: field.labelWidth,
-                        span: field.displaySpan,
-                        required: permissiondata[field.fieldNo].fillnecessary,
-                        disable: !permissiondata[field.fieldNo].writePermission,
-                        hidden: !permissiondata[field.fieldNo].visible,
-                        click: field.click || (() => { }),
-                        params: {
-                            processDefinitionId: this.processDefinitionId,
-                            processInsId: this.processInsId,
-                            moduleId: this.moduleId,
-                            product: this.product,
-                            taskDefKey: this.taskDefKey,
-                            taskId: this.taskId,
-                            formId: this.formId,
-                            businessKey: this.businessKey,
-                        }
-                    }))
-            }
 
-        })
-        return newFields
-    }
 }

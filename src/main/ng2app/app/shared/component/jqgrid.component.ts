@@ -5,6 +5,11 @@ import { ColModel } from '../object/col-model'
 import { JqgridAction } from '../object/jqgrid-action'
 import { JqgridCallback } from '../interface/jqgrid.callback'
 import { JqgridSetting } from '../object/jqgrid-setting'
+import { DynamicFormHorizontalComponent } from '../form/dynamic-form-horizontal.component'
+
+import { FieldBase } from '../form/field-base'
+import { Rule } from '../object/query/rule'
+import { Conditions } from '../object/query/conditions'
 
 import { Resource } from '../../service/resource'
 
@@ -17,17 +22,24 @@ let $ = require('jquery')
 export class JqgridComponent implements OnInit {
 
     jqgridObject: any
-    @Input() postParams: any = {}
+    //表格的初始化参数
+    @Input() originParams: any = {}
+    //初始化的查询参数
+    originQueryParams: any = {}
+
     @Input() colModel: ColModel[]
     @Input() jqgridSetting: JqgridSetting
     @Input() callback: JqgridCallback
 
     @Output() jqgridevent = new EventEmitter();
 
+    //jqgrid 对象？
     eleJqGrid: any
     @ViewChild('gridContain') gridContainEle: ElementRef;
-    _gridContainerWidth: number
+    @ViewChild("gridqueryform") gridqueryform: DynamicFormHorizontalComponent
 
+    _gridContainerWidth: number
+    //行内编辑？
     dataOprations: any
     resource: Resource
 
@@ -36,6 +48,9 @@ export class JqgridComponent implements OnInit {
     }
 
     ngOnInit() {
+        //把原始参数保存起来 以后的查询自动加上
+        this.originParams = this.jqgridSetting.postData
+
         this.resource = {
             sn: this.jqgridSetting.gridId,
             code: this.jqgridSetting.gridId,
@@ -63,6 +78,62 @@ export class JqgridComponent implements OnInit {
         // this._gridContainerWidth = this.gridContainEle.nativeElement.offsetWidth
         // this.recomputeWidth(this._gridContainerWidth, this.jqgridSetting.shrinkToFit)
 
+        //初始化参数出现在查询字段里面 则初始化查询表单值
+        if (this.hasQueryAction()) {
+            // debugger
+            this.gridqueryform.form.patchValue(this.jqgridSetting.postData)
+            _.assign(this.originQueryParams, this.gridqueryform.form.value)
+        }
+
+    }
+
+    query($event) {
+        let postData = this.gridqueryform.form.value
+        let queryParams = {}
+        _.assign(queryParams, this.originParams, postData)
+        // debugger
+        this.doQueryParams(queryParams, this.jqgridSetting.queryfields)
+        this.refresh(queryParams)
+    }
+
+    reset($event) {
+        // debugger
+        this.gridqueryform.form.reset()
+        this.gridqueryform.form.patchValue(this.originQueryParams)
+        this.refresh(this.originParams)
+    }
+
+    private doQueryParams(queryParams: any, fields: FieldBase<any>[]) {
+        let rules: Rule[] = []
+        for (let p in queryParams) {
+            fields.forEach((v) => {
+                if (v.key == p && queryParams[p] && v.fuzzy == true) {
+                    let filtersbefore = queryParams.filters
+                    let rule = new Rule(v.key, "cn", queryParams[p])
+                    rules.push(rule)
+
+                    delete queryParams[p]
+                    // queryParams.
+                }
+                // debugger
+            })
+        }
+        if (rules.length > 0) {
+            let con = new Conditions("AND", rules, [])
+            queryParams.filters = con
+        }
+    }
+
+    hasQueryAction() {
+        let result: boolean = false
+        if (this.jqgridSetting.actions) {
+            this.jqgridSetting.actions.forEach((v) => {
+                if (v.isQuery) {
+                    result = true
+                }
+            })
+        }
+        return result
     }
 
     initJqgrid() {
@@ -238,7 +309,7 @@ export class JqgridComponent implements OnInit {
      * param:表格查询传递的参数对象{xx:xx,xxx:xxx}
      */
     refresh(param?) {
-        this.postParams = param;
+        // this.postParams = param;
         if (param != undefined) {
             var pd = this.jqgridObject.jqGrid("getGridParam", "postData");
             for (var p in pd) {

@@ -1,16 +1,20 @@
 import { Component, OnInit, ViewContainerRef, ComponentFactoryResolver, ViewChild } from '@angular/core';
 import { Headers, Http, URLSearchParams, RequestOptions } from '@angular/http';
+import { Observable } from 'rxjs/Observable';
+
 import { JqgridSetting, JqgridAction, JqgridEvent, JqgridCallback, DefaultJqgridCallback, ColModel, JqgridComponent } from '../../shared/jqgrid.module'
 
 import { FormEditComponent } from './form-edit.component'
 import { RelAddComponent } from './rel-add.component'
 import { RelEditComponent } from './rel-edit.component'
 import { ModalService } from '../../service/modal.service'
+import { WorkflowService } from '../service/workflow.service'
 
 @Component({
     selector: 'form-manage',
     template: `
-        <my-div span="12">
+    <my-container>
+        <my-div span="6">
                 <my-div [span]="12">
                     <my-grid #formmanagegrid_ref [colModel]="_formmgt_col_model" [jqgridSetting]="_formmgt_grid_setting"
                         (jqgridevent)="onGridAction($event)" [callback]="fgridCall">
@@ -21,7 +25,11 @@ import { ModalService } from '../../service/modal.service'
                         (jqgridevent)="onGridAction($event)" [callback]="relgridCall">
                     </my-grid>                 
                 </my-div>         
-        </my-div>    
+        </my-div>   
+        <my-div span="6">
+            <dynamic-form-hori [fields]="fields" ></dynamic-form-hori>           
+        </my-div>
+    </my-container> 
     `
 })
 export class FormManageComponent implements OnInit {
@@ -49,9 +57,10 @@ export class FormManageComponent implements OnInit {
 
     fgridCall = new DefaultJqgridCallback({
         onSelectRow: (rowid: string, status: string, e: any) => {
-            var formId: any = {};
+            let formId: any = {};
             formId.formId = rowid;
             this.formRelGrid.setParams({ "formId": formId }, true);
+            this.reloadPreviewFields(rowid)
         }
     })
 
@@ -96,8 +105,10 @@ export class FormManageComponent implements OnInit {
 
     isSortField: boolean
 
+    fields: any[] = []
+
     constructor(private http: Http, private vcRef: ViewContainerRef, private componentFactoryResolver: ComponentFactoryResolver,
-        private modalService: ModalService) {
+        private modalService: ModalService, private flowService: WorkflowService) {
         this._modalContext = {
             vcRef: vcRef,
             componentFactoryResolver: componentFactoryResolver
@@ -105,6 +116,43 @@ export class FormManageComponent implements OnInit {
     }
 
     ngOnInit() { }
+
+    reloadPreviewFields(formId?: string) {
+        if (formId == null) {
+            formId = this.formGrid.getSingleSelectRowId()
+        }
+        if (formId == undefined) {
+            toastr.warning('請選擇表單')
+            return
+        }
+        this.getFormField(formId).subscribe((data) => {
+            // debugger
+            let fields = data.all
+            let pms = this.getfakePermission(fields)
+            this.fields = this.flowService.toWfFormGroupField(data.all, pms,
+                {
+                    product: { productNo: "productNo" },
+                    preview: true
+                })
+        })
+    }
+
+    getFormField(formId: string): Observable<any> {
+        return this.flowService.getformfield(formId, null, false)
+    }
+
+    private getfakePermission(fields: any[]): any {
+        let pms = {}
+        fields.forEach((v) => {
+            // debugger
+            pms[v.fieldNo] = {
+                fillnecessary: false,
+                writePermission: true,
+                visible: true,
+            }
+        })
+        return pms
+    }
 
     onGridAction(event: JqgridEvent) {
         if (event.businessId == 'formmgtgrid') {
@@ -188,6 +236,7 @@ export class FormManageComponent implements OnInit {
                             }
                         },
                         data => {
+                            this.reloadPreviewFields()
                             this.formRelGrid.refresh()
                         }
                     )
@@ -206,6 +255,7 @@ export class FormManageComponent implements OnInit {
                             }
                         },
                         data => {
+                            this.reloadPreviewFields()
                             this.formRelGrid.refresh()
                         }
                     );
@@ -222,6 +272,7 @@ export class FormManageComponent implements OnInit {
                     this.http.delete('e/workflowformfieldrel/' + idstr, options)
                         .toPromise()
                         .then((data) => {
+                            this.reloadPreviewFields()
                             this.formRelGrid.refresh();
                         })
                     break;
@@ -238,6 +289,7 @@ export class FormManageComponent implements OnInit {
                         var ids = this.formRelGrid.getDataIDs();
                         this.http.post("formmgt/sortFormFieldRel", { "rowNum": rowNum, "page": page, "ids": ids })
                             .toPromise().then(() => {
+                                this.reloadPreviewFields()
                                 toastr.info("排序成功")
                             })
                     });

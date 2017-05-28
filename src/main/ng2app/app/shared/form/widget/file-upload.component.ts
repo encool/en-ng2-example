@@ -2,7 +2,7 @@ import { Component, OnInit, Input, ViewContainerRef, ViewChild } from '@angular/
 import { FormGroup } from '@angular/forms';
 
 import { FileUploadField } from './file-upload.field'
-import { UIComponent } from '../../../decorators/ui-component.decorator'
+import { UIComponent } from '../../decorators/ui-component.decorator'
 
 @UIComponent({
     selector: 'f-file-upload',

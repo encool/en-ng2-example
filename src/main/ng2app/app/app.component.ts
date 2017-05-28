@@ -36,6 +36,6 @@ export class AppComponent {
             "hideMethod": "fadeOut"
         }
 
-        this.dictdataService.getDictDataMaps(["工作流_审核状态"])
+        this.dictdataService.getDictDataMaps(["工作流_审核状态", "工作流_处理结论"])
     }
 }

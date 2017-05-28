@@ -7,7 +7,7 @@ import { FormGroup } from '@angular/forms';
 import { FieldBase } from './field-base';
 import { DropdownField } from './dropdown-field'
 
-import { uimap } from '../../decorators/ui-component.decorator'
+import { uimap } from '../decorators/ui-component.decorator'
 
 // <f-text - input * ngSwitchCase="'textinput'"[simple] = "false"[form] = "form"[field] = "field"[model] = "model" > </f-text-input>
 // <f-dropdown - input * ngSwitchCase="'dropdowninput'"[simple] = "false"[form] = "form"[field] = "field"[model] = "model" > </f-dropdown-input>
@@ -61,19 +61,21 @@ export class DynamicfieldHorizontalComponent implements OnInit, AfterViewInit {
                 this.fields.forEach((field) => {
                     // debugger
                     let comp: Type<any> = uimap.get(field.selector)
-                    //没有找到对应的模板 就默认文本框吧
+                    //没有找到对应的模板
                     if (!comp) {
-                        comp = uimap.get("f-text-input")
+                        comp = uimap.get("wf-custom")
                     }
                     let myComponentFactory
-                        = this.componentFactoryResolver.resolveComponentFactory(comp)
+                    try {
+                        myComponentFactory
+                            = this.componentFactoryResolver.resolveComponentFactory(comp)
+
+                    } catch (error) {//业务模块的模板解析不出来
+                        comp = uimap.get("wf-custom")
+                        myComponentFactory
+                            = this.componentFactoryResolver.resolveComponentFactory(comp)
+                    }
                     let cmpRef: ComponentRef<any>
-                    // debugger
-                    // if (field.order) {
-                    //     cmpRef = this.wrapperRef.createComponent(myComponentFactory, field.order)
-                    // } else {
-                    //     cmpRef = this.wrapperRef.createComponent(myComponentFactory)
-                    // }
 
                     //直接插到最后面 外面排好序再进来
                     cmpRef = this.wrapperRef.createComponent(myComponentFactory)
@@ -81,9 +83,9 @@ export class DynamicfieldHorizontalComponent implements OnInit, AfterViewInit {
                     cmpRef.instance.form = this.form
                     cmpRef.instance.field = field
                 })
-                let value = this.form.value
+                // let value = this.form.value
                 // console.log("form object after fields attach",this.form.controls)
-                console.log("fields attach formvalue-->", value)
+                // console.log("fields attach formvalue-->", value)
                 // this.form.patchValue(value)
             });
         }

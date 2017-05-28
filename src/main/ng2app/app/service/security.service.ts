@@ -2,6 +2,7 @@ import { Injectable, Inject } from '@angular/core';
 import { Headers, Http, URLSearchParams, RequestOptions } from '@angular/http';
 
 import { Observable } from 'rxjs/Observable';
+
 import { Resource } from './resource'
 
 @Injectable()
@@ -36,26 +37,27 @@ export class SecurityService {
 
 
     getSubject(): Observable<any> {
-        // debugger
-        // if (!_.isUndefined(this.$window.sessionStorage.syssubject)
-        //     && "undefined" != this.$window.sessionStorage.syssubject) {
-        //     var source = Observable.create(observer => {
-        //         return JSON.parse(this.$window.sessionStorage.syssubject);
-        //     });
-        //     return source
-        // } else {
-        let urlSearchParams = new URLSearchParams();
-        let headers = new Headers({ 'Content-Type': 'application/json;charset=UTF-8' });
-        let options = new RequestOptions({
-            headers: headers,
-            search: urlSearchParams
-        });
-        return this.http.get('getsubject', options)
-            .map(res => {
-                // this.$window.sessionStorage.syssubject = res.json()
-                return res.json()
-            })
-        // }
+        if (!_.isUndefined(this.$window.sessionStorage.subject)
+            && "undefined" != this.$window.sessionStorage.subject) {
+            var source = Observable.create(observer => {
+                observer.next(JSON.parse(this.$window.sessionStorage.subject));
+                observer.complete();
+            });
+            return source
+        } else {
+            let urlSearchParams = new URLSearchParams();
+            let headers = new Headers({ 'Content-Type': 'application/json;charset=UTF-8' });
+            let options = new RequestOptions({
+                headers: headers,
+                search: urlSearchParams
+            });
+            return this.http.get('getsubject', options)
+                .map(res => {
+                    window.sessionStorage.subject = JSON.stringify(res.json());
+                    // this.$window.sessionStorage.syssubject = res.json()
+                    return res.json()
+                })
+        }
     }
     login(username, password, url, errFun) {
 

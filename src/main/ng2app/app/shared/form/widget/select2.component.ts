@@ -6,7 +6,7 @@ import { Observable } from 'rxjs/Observable';
 
 import { Select2Field } from './select2.field'
 
-import { UIComponent } from '../../../decorators/ui-component.decorator'
+import { UIComponent } from '../../decorators/ui-component.decorator'
 
 let $ = require('jquery')
 @UIComponent({

@@ -1,6 +1,9 @@
 import { Component, OnInit, ViewContainerRef, ComponentFactoryResolver, ViewChild } from '@angular/core';
 import { Headers, Http, URLSearchParams, RequestOptions } from '@angular/http';
-import { JqgridSetting, JqgridAction, JqgridEvent, JqgridCallback, DefaultJqgridCallback, ColModel, JqgridComponent } from '../../shared/jqgrid.module'
+import {
+    JqgridSetting, JqgridAction, JqgridEvent, JqgridCallback, DefaultJqgridCallback, ColModel, JqgridComponent,
+    TextQueryField,
+} from '../../shared'
 
 import { ModalService } from '../../service/modal.service'
 
@@ -31,18 +34,22 @@ export class FieldManageComponent implements OnInit {
         new ColModel({ label: "字段名称", name: "fieldName", width: 20 }),
         new ColModel({ label: "字段描述", name: "fieldDescribe", width: 20 }),
     ]
-    _fieldmgt_grid_actions = [
-        new JqgridAction({ key: "add", name: "新增", order: 2 }),
-        new JqgridAction({ key: "edit", name: "编辑", order: 3 }),
-        new JqgridAction({ key: "refresh", name: "刷新", order: 1 }),
-        new JqgridAction({ key: "delete", name: "删除", order: 6 }),
-    ]
     _fieldmgt_grid_setting = new JqgridSetting({
         gridId: "fieldmgtgrid",
         primaryKey: "fieldId",
         url: "list/e/workflowformfield",
         title: "字段管理",
-        actions: this._fieldmgt_grid_actions,
+        actions: [
+            new JqgridAction({ key: "add", name: "新增", order: 2 }),
+            new JqgridAction({ key: "edit", name: "编辑", order: 3 }),
+            new JqgridAction({ isQuery: true, order: 3 }),
+            new JqgridAction({ key: "refresh", name: "刷新", order: 1 }),
+            new JqgridAction({ key: "delete", name: "删除", order: 6 }),
+        ],
+        queryfields: [
+            new TextQueryField({ key: "fieldNo", label: "字段编码", span: 3, fuzzy: true }),
+            new TextQueryField({ key: "fieldName", label: "字段名称", span: 3, fuzzy: true }),
+        ]
     })
 
     fgridCall = new DefaultJqgridCallback({

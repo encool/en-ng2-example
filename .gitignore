@@ -11,3 +11,4 @@ src/main/webapp/dist/
 .settings/
 src/main/ng2app/node_modules/
 src/main/ng2app/dist/
+.vscode/settings.json

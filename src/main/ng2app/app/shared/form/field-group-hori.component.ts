@@ -3,7 +3,7 @@ import { FormGroup } from '@angular/forms';
 import { FieldGroup } from './field-group';
 import { FieldControlService } from './field-control.service';
 
-import { UIComponent } from '../../decorators/ui-component.decorator'
+import { UIComponent } from '../decorators/ui-component.decorator'
 
 @UIComponent({
     selector: 'df-field-group-hori',

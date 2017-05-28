@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 
-import { UIComponent } from '../../../decorators/ui-component.decorator'
+import { UIComponent } from '../../decorators/ui-component.decorator'
 
 @UIComponent({
     selector: 'f-text-input',

@@ -1,8 +1,10 @@
-import { JqgridAction} from './jqgrid-action'
+import { JqgridAction } from './jqgrid-action'
+import { FieldBase } from '../form/field-base'
 
 export class JqgridSetting {
     primaryKey: string
     actions: JqgridAction[]
+    queryfields: FieldBase<any>[]
     title: string
     gridId: string
 
@@ -103,18 +105,20 @@ export class JqgridSetting {
         url?: string
         primaryKey?: string
         title?: string
+        queryfields?: FieldBase<any>[]
         actions?: Array<JqgridAction>
         defaultaction?: boolean
         multiselect?: boolean
         mtype?: string
         rowNum?: number
-        postData?:any
+        postData?: any
     } = {}) {
         this.gridId = options.gridId
         this.url = options.url
         this.primaryKey = options.primaryKey
         this.multiselect = options.multiselect == undefined ? true : options.multiselect
-        this.title = options.title 
+        this.title = options.title
+        this.queryfields = options.queryfields || []
         this.mtype = options.mtype == undefined ? "get" : options.mtype
         this.actions = options.defaultaction == true ? [
             new JqgridAction({ key: "add", name: "新增", order: 2 }),
@@ -122,7 +126,7 @@ export class JqgridSetting {
             new JqgridAction({ key: "refresh", name: "刷新", order: 1 }),
             new JqgridAction({ key: "delete", name: "删除", order: 6 }),
         ] : options.actions
-        this.rowNum = options.rowNum == undefined?10:options.rowNum
-        this.postData = options.postData == undefined?{}:options.postData
+        this.rowNum = options.rowNum == undefined ? 10 : options.rowNum
+        this.postData = options.postData == undefined ? {} : options.postData
     }
 }

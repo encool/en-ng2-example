@@ -1,5 +1,10 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { UIComponent } from '../../shared'
 
+@UIComponent({
+    selector: 'wf-title',
+    component: WftitleComponent
+})
 @Component({
     selector: 'wf-title',
     template: `
@@ -16,8 +21,9 @@ export class WftitleComponent implements OnInit {
     constructor() { }
 
     ngOnInit() {
+        // debugger
         this.span = this.field.displaySpan == undefined ? 12 : this.field.displaySpan
-        this.title = this.field.remark1 == undefined ? "属性1标题" : this.field.remark1
+        this.title = this.field.params.remark1 == undefined ? "属性1标题" : this.field.params.remark1
     }
 
     groupClass() {

@@ -6,7 +6,7 @@ import { Observable } from 'rxjs/Observable';
 
 import { DropdownField } from './dropdown-field'
 
-import { UIComponent } from '../../decorators/ui-component.decorator'
+import { UIComponent } from '../decorators/ui-component.decorator'
 
 @UIComponent({
     selector: 'f-dropdown-input',
@@ -16,7 +16,7 @@ import { UIComponent } from '../../decorators/ui-component.decorator'
     selector: 'f-dropdown-input',
     template: `
     <div [ngSwitch]="simple">
-        <div *ngSwitchCase="false" [formGroup]="form" [ngClass]="ngclasses()">
+        <div *ngSwitchCase="false" [formGroup]="form" [style.display]="field.hidden ? 'none':'inline'" [ngClass]="ngclasses()">
     	    <label [attr.for]="field.key" class="control-label" style="float: left;width:75px">{{field.label}}</label>
             <div style="margin-left:85px">
                 <select [id]="field.key" [formControlName]="field.key"
@@ -58,22 +58,27 @@ export class DropdownComponent implements OnInit {
 
     key1: string
     key2: string
-    constructor(private http: Http) { }
+    constructor(private http: Http) {
+
+    }
 
     ngOnInit() {
         if (this.model == undefined) {
             this.model = {}
         }
         if (!this.simple) {
-            let key = this.field.key
-            if (this.field.isObject && key.indexOf(".") != -1) {
-                let keys = key.split(".")
-                this.key1 = keys[0]
-                if (this.model[this.key1] == undefined) {
-                    this.model[this.key1] = {}
-                }
-                this.key2 = keys[1]
-            }
+            this.field._view = this
+            this.field._control = this.form.get(this.field.key)
+
+            // let key = this.field.key
+            // if (this.field.isObject && key.indexOf(".") != -1) {
+            //     let keys = key.split(".")
+            //     this.key1 = keys[0]
+            //     if (this.model[this.key1] == undefined) {
+            //         this.model[this.key1] = {}
+            //     }
+            //     this.key2 = keys[1]
+            // }
             if (this.field.options == undefined
                 || this.field.options.length == 0) {
                 if (this.field.optionsOb) {
@@ -141,5 +146,22 @@ export class DropdownComponent implements OnInit {
         // if (changes['field'] && changes['field'].currentValue) {
         //     debugger
         // }
+    }
+
+    getOptionObj(optionId: string) {
+        if (this.field.options && this.field.options.length > 0) {
+            this.field.options.forEach(option => {
+                if (option[this.field.optionId] == optionId) {
+                    return option
+                }
+            })
+        } else if (this.options && this.options.length > 0) {
+            this.options.forEach(option => {
+                if (option[this.optionId] == optionId) {
+                    return option
+                }
+            })
+        }
+        return null
     }
 }

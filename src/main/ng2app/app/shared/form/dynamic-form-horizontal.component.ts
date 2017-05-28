@@ -5,7 +5,7 @@ import { FieldControlService } from './field-control.service';
 @Component({
     selector: 'dynamic-form-hori',
     template: `
-        <form (ngSubmit)="onSubmit()" [formGroup]="form" class="form-horizontal row" role="form">
+        <form (ngSubmit)="onSubmit()" [formGroup]="form" class="form-horizontal clearfix" role="form">
             <df-field-hori [fields]="fields" [form]="form" [model]="model"></df-field-hori>
         </form>    
     `,
@@ -44,7 +44,7 @@ export class DynamicFormHorizontalComponent implements OnInit {
         }
     }
 
-    getField(fieldNo: string) {
+    getField(fieldNo: string): FieldBase<any> {
         let result = null
         this.fields.forEach(v => {
             if (v.key == fieldNo) {

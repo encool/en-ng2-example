@@ -4,7 +4,7 @@ var moment = require('moment');
 // import Moment as m from 'moment'
 
 import { DatetimePickField } from './datetime-pick.field'
-import { UIComponent } from '../../../decorators/ui-component.decorator'
+import { UIComponent } from '../../decorators/ui-component.decorator'
 
 @UIComponent({
     selector: 'f-datetime-pick',
@@ -14,7 +14,7 @@ import { UIComponent } from '../../../decorators/ui-component.decorator'
     selector: 'f-datetime-pick',
     template: `
     <div [ngSwitch]="simple">
-        <div *ngSwitchCase="false"  [formGroup]="form" [ngClass]="ngclasses()">
+        <div *ngSwitchCase="false"  [formGroup]="form" [style.display]="field.hidden ? 'none':'inline'" [ngClass]="ngclasses()">
         	<label [attr.for]="field.key" class="control-label" style="float: left;width:75px">{{field.label}}</label>
         	<div class="input-group date" style="margin-left:85px" data-provide="datepicker" [id]="datepickid">
         		<input [formControlName]="field.key" [id]="field.key" [id]="field.key"

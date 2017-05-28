@@ -1,10 +1,11 @@
-import { FieldBase } from './field-base';
+import { TextField } from './text-field';
 import { ValidatorFn, AsyncValidatorFn, Validators } from '@angular/forms';
 
-export class TextField extends FieldBase<string> {
+export class TextQueryField extends TextField {
   controlType = 'textinput';
   type: string;
   click: Function = () => { }
+  fuzzy: boolean
 
   constructor(options: {
     value?: string,
@@ -30,10 +31,13 @@ export class TextField extends FieldBase<string> {
     type?: string
     labelWidth?: number
     click?: () => {}
+    //for query
+    fuzzy?: boolean //模糊检索
   } = {}) {
     super(options);
     this.type = options['type'] || 'text';
     this.click = options['click']
     this.selector = "f-text-input"
+    this.fuzzy = options.fuzzy
   }
 }

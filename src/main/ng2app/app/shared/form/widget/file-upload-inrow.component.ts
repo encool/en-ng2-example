@@ -3,7 +3,7 @@ import { FormGroup } from '@angular/forms';
 import { Http, RequestOptions, URLSearchParams, Headers } from '@angular/http'
 
 import { FileUploadField } from './file-upload.field'
-import { UIComponent } from '../../../decorators/ui-component.decorator'
+import { UIComponent } from '../../decorators/ui-component.decorator'
 
 @UIComponent({
     selector: 'f-file-upload-inrow',

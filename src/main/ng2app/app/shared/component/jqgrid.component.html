@@ -2,8 +2,24 @@
     <div class="clearfix">
         <span class="h4">{{jqgridSetting.title}}</span>
         <div class="btn-group pull-right" role="group" aria-label="...">
-            <button *ngFor="let action of jqgridSetting.actions" type="button" en-resource
-                class="btn btn-default" (click)="onAction(action)">{{action.name}}</button>
+            <button *ngFor="let action of jqgridSetting.actions" type="button"
+                data-toggle="collapse" [attr.data-target]="action.isQuery?('#' + jqgridSetting.gridId + 'querydiv'):'-1'"
+                en-resource class="btn btn-default" (click)="onAction(action)">{{action.name}}</button>
+        </div>
+    </div>
+
+    <div *ngIf="hasQueryAction()" class="collapse" [id]="jqgridSetting.gridId + 'querydiv'">
+        <div style="margin-top:15px">
+            <dynamic-form-hori #gridqueryform [fields]="jqgridSetting.queryfields"></dynamic-form-hori>
+            <div class="btn-toolbar" role="toolbar" aria-label="...">
+                <div class="btn-group col-sm-push-9" role="group" style="padding-bottom:5px;"
+                    aria-label="...">
+                    <button type="button" aria-label="查询" class="btn btn-default btn-sm"
+                        (click)="query($event)">查询</button>
+                    <button type="button" aria-label="重置" class="btn btn-warning btn-sm"
+                        (click)="reset($event)">重置</button>
+                </div>
+            </div>
         </div>
     </div>
     <table [id]="jqgridSetting.gridId"></table>

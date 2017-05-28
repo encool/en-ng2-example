@@ -11,7 +11,7 @@ import { DynamicFormComponent } from '../../shared/form/dynamic-form.component'
 @Component({
     selector: 'field-edit',
     template: `
-       <dynamic-form-hori #df_ref [fields]="_fields" [model]="$model.model" ></dynamic-form-hori>
+       <dynamic-form-hori #df_ref [fields]="_fields"></dynamic-form-hori>
     `
 })
 export class FieldEditComponent implements OnInit {
