@@ -82,10 +82,10 @@ export class AuditinfoComponent implements OnInit {
     _fieldmgt_grid_setting: any
     isStart: boolean
     isviewpage: boolean = false
-
+    choosed: Array<any> = new Array()
 
     constructor(private http: Http, private securityService: SecurityService, private dictdataService: DictdataService) {
-        
+
     }
 
     ngOnInit() {
@@ -211,6 +211,7 @@ export class AuditinfoComponent implements OnInit {
         setTimeout(() => {
             this.auditform.form.valueChanges.subscribe((value) => {
                 this.auditState_change(value.ad.auditState)
+                this.selectSimple1_change(value.nextHandler)
                 // debugger
             })
         });
@@ -260,7 +261,7 @@ export class AuditinfoComponent implements OnInit {
             result.variables.assigneeList = candidateUsersStr;
         } else if (freechoose) {
             result.variables.candidateUsers = candidateUsersStr;
-        }
+        } debugger
         //下一步普通任务 验证是否选人
         if (freechoose && result.transition.dest.porperties.type != "endEvent"
             && "" == result.variables.candidateUsers && result.variables.assigneeList == undefined) {
@@ -322,7 +323,11 @@ export class AuditinfoComponent implements OnInit {
                 this.nextHandlerField.options = candidates
                 this.nextHandlerField.optionId = "id"
                 this.nextHandlerField.optionName = "name"
+                //初始化选中第一个
                 let nextHandler = candidates[0].id
+                let choosed: any = {}
+                choosed.id = nextHandler
+                this.choosed.push(choosed)
                 this.auditform.form.patchValue({ [this.nextHandlerField.key]: nextHandler })
             }
         })
@@ -333,8 +338,8 @@ export class AuditinfoComponent implements OnInit {
         // })
     }
 
-    choosed: Array<any>
-    //选择人
+
+    //选择人 单选
     selectSimple1_change(nextHandler) {
         this.choosed = new Array()
         let choosed: any = {}

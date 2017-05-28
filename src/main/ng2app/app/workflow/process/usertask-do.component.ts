@@ -308,7 +308,62 @@ export class UsertaskDoComponent implements OnInit {
     }
 
     completeTask() {
+        //没有集成那个处理模板 并且是自由选择
+        if (!this.global.handleinline
+            && this.properties.freechoose != undefined
+            && this.properties.freechoose != "") {
+            var url = this.properties.freechoose.openUrl;
+
+            //     Modal.open(
+            //         url,
+            //         {
+            //             actions: $model.actions,
+            //             formentity: $scope.formentity,
+            //             params: $params.params,
+            //             transitions: $model.getOutTransition.result,
+            //             curUserId: $scope.subject.id
+            //         },
+            //         function (data) {
+            //             console.log("choosed", data);
+            //             $model.assigneeList = data.assigneeList == "" ? undefined : data.assigneeList;//避免传空字符进去，影响判断;
+            //             $model.assigneeid = data.assignee == "" ? undefined : data.assignee;
+            //             $model.nexthandlegroupid = data.candidateGroups == "" ? undefined : data.candidateGroups;
+            //             $model.nexthandleid = data.candidateUsers == "" ? undefined : data.candidateUsers;
+            //             $model.ccInform = data.ccInform;
+            //             $model.transition = data.transition;
+            //             $model.dest = $model.transition.dest;
+            //             $model.transitionId = $model.transition.id;
+
+            //             $model.variables = {
+            //                 assignee: $model.assigneeid,
+            //                 candidateGroups: $model.nexthandlegroupid,
+            //                 candidateUsers: $model.nexthandleid,
+            //                 assigneeList: $model.assigneeList,
+            //                 wfComment: $model.opinion
+            //             }
+
+            //             functions.newField5_click($event);
+
+            //         });
+            //     return;
+        }
+
+
         let variables = {}
+        if (!this.global.handleinline) {
+            // $model.variables = {
+            //     assignee: $model.assigneeid,
+            //     candidateGroups: $model.nexthandlegroupid,
+            //     candidateUsers: $model.nexthandleid,
+            //     assigneeList: $model.assigneeList,
+            //     wfComment: $model.opinion
+            // }
+        } else {  //集成处理页面模板了 一些参数用模板设置到全局中的值
+            variables = this.global.handleinline.variables
+            this.transition = this.global.handleinline.transition
+            // $model.transitionId = $model.transition.id
+            // $model.dest = $model.transition.dest
+        }
         let body = {
             // ccInform:$model.ccInform,
             transition: this.transition,
@@ -393,7 +448,6 @@ export class UsertaskDoComponent implements OnInit {
                 taskDefKey: this.taskDefKey,
                 // opinion: ""
             }).map(data => data.json()).subscribe(data => {
-                debugger
                 if (data.result == '200') {
                     this.completed = true
                     toastr.success('退回成功！')
