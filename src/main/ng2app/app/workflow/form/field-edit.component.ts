@@ -57,6 +57,13 @@ export class FieldEditComponent implements OnInit {
                     { key: "TIME", value: "时间" }
                 ]
             }),
+            new CheckboxField({
+                key: 'isProcVar',
+                label: '是否流程变量',
+                required: true,
+                span: 6,
+                order: 3,
+            }),
             new DropdownField({
                 key: 'webDisplayTypeId',
                 label: '模板类型',

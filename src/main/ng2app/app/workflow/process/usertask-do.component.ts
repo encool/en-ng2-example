@@ -260,7 +260,7 @@ export class UsertaskDoComponent implements OnInit {
                 && this.properties.freechoose != "";
             if (!hasSelectPage) {
                 this.modalService.openConfirm(this._modalContext, { title: "是否确认", message: '确定提交？' }, (data) => {
-                    debugger
+                    // debugger
                     this.completeTask()
                 })
                 // Modal.openConfirm({ message: '确定提交？' }, function () {

@@ -284,6 +284,7 @@ export class WorkflowService {
                     newFields.push(new TextField({
                         selector: field.webDisplayTypeId,
                         key: field.fieldNo,
+                        type: field.fieldType == 'INT' ? 'number' : null,
                         label: field.displayName || field.fieldId.fieldName,
                         labelWidth: field.labelWidth,
                         span: field.displaySpan,

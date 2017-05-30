@@ -237,7 +237,7 @@ export class AuditinfoComponent implements OnInit {
     }
 
     completeTask() {
-        // debugger
+        debugger
         if (this.needAudit()) {
             this.form.patchValue({ "inlineaudit": this.auditform.form.value.ad })
             // $scope.formentity.inlineaudit = $model.ad
@@ -261,7 +261,7 @@ export class AuditinfoComponent implements OnInit {
             result.variables.assigneeList = candidateUsersStr;
         } else if (freechoose) {
             result.variables.candidateUsers = candidateUsersStr;
-        } debugger
+        }
         //下一步普通任务 验证是否选人
         if (freechoose && result.transition.dest.porperties.type != "endEvent"
             && "" == result.variables.candidateUsers && result.variables.assigneeList == undefined) {
@@ -341,10 +341,12 @@ export class AuditinfoComponent implements OnInit {
 
     //选择人 单选
     selectSimple1_change(nextHandler) {
-        this.choosed = new Array()
-        let choosed: any = {}
-        choosed.id = nextHandler
-        this.choosed.push(choosed)
+        if (nextHandler != null) {
+            this.choosed = new Array()
+            let choosed: any = {}
+            choosed.id = nextHandler
+            this.choosed.push(choosed)
+        }
     }
 
     isFreeChoose(wfproperties) {

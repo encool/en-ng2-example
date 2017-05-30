@@ -13,7 +13,7 @@ import { UIComponent } from '../../decorators/ui-component.decorator'
     selector: 'f-checkbox-input',
     template: `
     <div [ngSwitch]="simple">
-        <div *ngSwitchCase="false" [ngClass]="ngclasses()" style="padding-left:100px" [formGroup]="form">
+        <div *ngSwitchCase="false" [ngClass]="ngclasses()" style="padding-left:100px;min-height:34px;margin-bottom:15px" [formGroup]="form">
             <label>
                 <input type="checkbox" [formControlName]="field.key">{{field.label}}
             </label>
@@ -61,7 +61,7 @@ export class CheckboxComponent implements OnInit {
 
     ngclasses() {
         let classExpression = {
-            // 'form-group': true,
+            'form-group': true,
             // 'row': true,
             'checkbox': true,
             // 'has-error':!this.isValid,
