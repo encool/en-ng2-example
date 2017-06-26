@@ -34,6 +34,10 @@ var paths = {
         js: [
             'js/jquery.jqGrid.min.js',
             'js/grid.locale-cn.js',
+            // 'js/bpmn-modeler-custom.js',
+            'js/bootstrap-datepicker.zh-CN.min.js',
+            'js/bootstrap-datepicker.min.js',
+
             'node_modules/ztree/js/jquery.ztree.all.min.js',
             'node_modules/core-js/client/shim.min.js',
             // 'node_modules/zone.js/dist/zone.js',
@@ -46,9 +50,6 @@ var paths = {
             // 'node_modules/jqgrid/js/i18n/grid.locale-en.js',
             // 'node_modules/jqgrid/js/jquery.jqGrid.src.js',
             'node_modules/toastr/build/toastr.min.js',
-            'js/bpmn-modeler-custom.js',
-            'js/bootstrap-datepicker.zh-CN.min.js',
-            'js/bootstrap-datepicker.min.js',
         ],
         css: [
             'node_modules/bootstrap/dist/css/bootstrap.min.css',
