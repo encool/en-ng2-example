@@ -10,7 +10,7 @@ import { DynamicFormHorizontalComponent } from '../../shared/form/dynamic-form-h
 
 import { WorkprocessService } from '../service/workprocess.service'
 import { WorkflowService } from '../service/workflow.service'
-import { SecurityService } from '../../service/security.service'
+import { SecurityService } from '../../core/security/security.service'
 import { ModalService } from '../../service/modal.service'
 
 import { BpmnMonitorComponent } from '../bpmn2/bpmn-monitor.component'
@@ -21,9 +21,9 @@ import { BpmnMonitorComponent } from '../bpmn2/bpmn-monitor.component'
     template: `
         <my-div [hidden]="completed" [styles]="'background: #fff; border: 2px solid #dadada; box-shadow: 0 0 10px #d0d0d0;'">
             <my-div span=12 [hidden]="global.handleinline">
-                <button type="button" *ngIf="!processInsId" class="btn btn-primary" (click)="submitFlow()">提交</button>
-                <button type="button" *ngIf="processInsId" class="btn btn-primary" (click)="autoswitchcommit()">提交</button>
-                <button type="button" *ngIf="processInsId" class="btn btn-primary" (click)="processMonitor()">流程监控</button>                
+                <button type="button" *ngIf="isstart" class="btn btn-primary" (click)="submitFlow()">提交</button>
+                <button type="button" *ngIf="!isstart" class="btn btn-primary" (click)="autoswitchcommit()">提交</button>
+                <button type="button" *ngIf="!isstart" class="btn btn-primary" (click)="processMonitor()">流程监控</button>                
             </my-div>
             <dynamic-form-hori *ngIf="!isCustomForm" [fields]="fields" ></dynamic-form-hori>
             <ng-content></ng-content>
@@ -73,11 +73,11 @@ export class UsertaskDoComponent implements OnInit {
     }
 
     completed: boolean = false
-    // titleField: any
+    isstart: boolean = true
 
     @ViewChild(DynamicFormHorizontalComponent) formCom: DynamicFormHorizontalComponent;
     @Output() modelinit = new EventEmitter()
-    @Input() isCustomForm = true
+    @Input() isCustomForm = false
     // @Input() check: Function //外面自定义表单的check 废弃
     @Input() outFormData: Function
     _modalContext: {
@@ -108,6 +108,12 @@ export class UsertaskDoComponent implements OnInit {
             this.processInsId = data["PROC_INST_ID_"]
             this.processDefinitionId = data["processDefinitionId"] || data["PROC_DEF_ID_"]
             this.taskId = data["taskId"]
+
+            if (!this.taskId) {
+                setTimeout(function () {
+                    this.isstart = false
+                });
+            }
             //formBusinessKey一定有业务数据预期对应的
             let formBusinessKey
             if (this.processInsId || data["businessKey"]) {
@@ -212,7 +218,12 @@ export class UsertaskDoComponent implements OnInit {
         this.http.post('flow/startflow', body, options)
             .toPromise()
             .then((data) => {
-                this.completed = true
+                if (data.json().result == "200") {
+                    this.completed = true
+                    toastr.success('操作成功！')
+                } else {
+                    toastr.warning('something wrong！')
+                }
             })
 
     }

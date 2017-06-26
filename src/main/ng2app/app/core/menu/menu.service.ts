@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Menu } from '../object/menu';
+import { Menu } from './menu';
 import { Headers, Http, URLSearchParams, RequestOptions } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 @Injectable()
@@ -34,7 +34,7 @@ export class MenuService {
                 } else if (menu.c && menu.c.length > 0) {
                     let result = this.setMenuSelected(menulink, menu.c)
                     menu.isSelected = result
-                    if(result){
+                    if (result) {
                         this.selectedMenus.push(menu)
                     }
                 } else {
@@ -52,7 +52,7 @@ export class MenuService {
                 } else if (menu.c && menu.c.length > 0) {
                     let result = this.setMenuSelected(menulink, menu.c)
                     menu.isSelected = result
-                    if(result){
+                    if (result) {
                         this.selectedMenus.push(menu)
                     }
                 } else {

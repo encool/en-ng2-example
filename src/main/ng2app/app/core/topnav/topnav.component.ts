@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
-import { SecurityService } from './service/security.service'
+import { SecurityService } from '../security/security.service'
 
 import { Router } from '@angular/router';
 
-import { Menu } from './object/menu';
-import { MenuService } from './service/menu.service';
+import { Menu } from '../menu/menu';
+import { MenuService } from '../menu/menu.service';
 
 @Component({
     selector: 'top-nav',

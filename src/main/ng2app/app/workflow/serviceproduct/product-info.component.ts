@@ -57,7 +57,7 @@ export class ProductInfoComponent implements OnInit {
             new TextField({
                 key: 'wfProcessstartUrl',
                 label: '处理URL',
-                required: true,
+                required: false,
                 span: 6,
                 order: 3
             }),
@@ -74,7 +74,7 @@ export class ProductInfoComponent implements OnInit {
     onModalAction(): Promise<any> {
         if (this.$model.params.type == 'edit') {
             if (this.myForm.form.valid) {
-                debugger
+                // debugger
                 let body = JSON.stringify(this.myForm.form.value);
                 // let urlSearchParams = new URLSearchParams();
                 // urlSearchParams.set('', );
@@ -94,6 +94,17 @@ export class ProductInfoComponent implements OnInit {
             }
         } else if (this.$model.params.type == 'add') {
             if (this.myForm.form.valid) {
+                let body = JSON.stringify(this.myForm.form.value);
+                // let urlSearchParams = new URLSearchParams();
+                // urlSearchParams.set('', );
+                let headers = new Headers({ 'Content-Type': 'application/json;charset=UTF-8' });
+                let options = new RequestOptions({
+                    headers: headers,
+                    // search: urlSearchParams
+                });
+                return this.http.post('e/workflowserviceproduct', body, options)
+                    .toPromise()
+                    .then((data) => { return data })
             } else {
                 return new Promise((resolve, reject) => {
                     reject('no valid');

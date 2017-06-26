@@ -11,11 +11,11 @@ import { UIComponent } from '../../decorators/ui-component.decorator'
     selector: 'f-text-input',
     template: `
     <div [ngSwitch]="simple">
-        <div *ngSwitchCase="false" [formGroup]="form" [style.display]="field.hidden ? 'none':'inline'"  [ngClass]="ngclasses()">
+        <div *ngSwitchCase="false" [formGroup]="form" [style.display]="field.hidden ? 'none':'inline'"  [ngClass]="classExpression">
         	<label [attr.for]="field.key" class="control-label" style="float: left;width:75px">{{field.label}}</label>
         	<div class="" style="margin-left:85px">
         		<input [formControlName]="field.key" [id]="field.key" (click)="onClick($event)"
-        			[type]="field.type" class="form-control" data-toggle="tooltip" [title]="isValid?'':_tipmsg">
+        			[type]="field.type" class="form-control" data-toggle="tooltip">
             </div>            
         </div> 
         <div *ngSwitchCase="true"  [style.display]="hidden ? 'none':'inline'" [ngClass]="ngclasses()">
@@ -45,6 +45,8 @@ export class TextComponent implements OnInit {
     key1: string
     key2: string
 
+    classExpression: any = {}
+
     constructor() { }
 
     ngOnInit() {
@@ -59,6 +61,20 @@ export class TextComponent implements OnInit {
                 this.key2 = keys[1]
             }
         }
+
+        this.classExpression = {
+            'form-group': true,
+            // 'row': true
+            // 'has-error':!this.isValid,
+        }
+        if (this.simple) {
+            this.classExpression["col-sm-" + this.span] = true;
+            this.classExpression["col-md-offset-" + this.offset] = this.offset == 0 ? false : true;
+        } else {
+            let span = this.field.span || 4
+            this.classExpression["col-sm-" + span] = true;
+        }
+
     }
 
     ngclasses() {

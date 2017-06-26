@@ -6,7 +6,7 @@ export class CheckboxGroupField extends FieldBase<string> {
   options: { key: string, value: string }[] = [];
   optionsUrl: string
   optionsOb: Observable<any>
-  //   dictName: string
+  dictName: string
   optionId: string
   optionName: string
   constructor(options: {} = {}) {
@@ -14,9 +14,9 @@ export class CheckboxGroupField extends FieldBase<string> {
     this.options = options['options'] || [];
     this.optionsUrl = options['optionsUrl'] || undefined;
     this.optionsOb = options['optionsOb'] || undefined;
-    // this.dictName = options['dictName'] || undefined;
+    this.dictName = options['dictName'] || undefined;
     this.optionId = options['optionId'] || "key";
     this.optionName = options['optionName'] || "value";
-    this.selector = "f-checkbox-input"
+    this.selector = "f-checkbox-group"
   }
 }

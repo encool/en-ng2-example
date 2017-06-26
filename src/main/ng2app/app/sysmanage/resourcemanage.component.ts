@@ -13,7 +13,7 @@ import { MenuinfoComponent } from './menuinfo.component'
 import { JobinfoComponent } from './jobinfo.component'
 import { OrginfoComponent } from './orginfo.component'
 
-import { MenuService } from '../service/menu.service'
+import { MenuService } from '../core/menu/menu.service'
 import { OrgService } from '../service/org.service'
 import { JobService } from '../service/job.service'
 import { ModalService } from '../service/modal.service'

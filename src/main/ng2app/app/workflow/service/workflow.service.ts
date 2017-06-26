@@ -9,6 +9,7 @@ import { DatetimePickField } from '../../shared'
 import { TextareaField } from '../../shared'
 import { Select2Field } from '../../shared'
 import { CheckboxField } from '../../shared'
+import { CheckboxGroupField } from '../../shared'
 import { FileUploadField } from '../../shared'
 import { CustomTemplateField } from '../../shared'
 
@@ -242,6 +243,21 @@ export class WorkflowService {
                         label: field.displayName || field.fieldId.fieldName,
                         labelWidth: field.labelWidth,
                         span: field.displaySpan,
+                        required: permissiondata[field.fieldNo].fillnecessary,
+                        disable: !permissiondata[field.fieldNo].writePermission,
+                        hidden: !permissiondata[field.fieldNo].visible,
+                    }))
+                    break
+                case "f-checkbox-group":
+                    newFields.push(new CheckboxGroupField({
+                        key: field.fieldNo,
+                        label: field.displayName || field.fieldId.fieldName,
+                        labelWidth: field.labelWidth,
+                        span: field.displaySpan,
+                        dictName: field.dictName,
+                        optionsUrl: field.remark1,
+                        optionId: field.remark2,
+                        optionName: field.remark3,
                         required: permissiondata[field.fieldNo].fillnecessary,
                         disable: !permissiondata[field.fieldNo].writePermission,
                         hidden: !permissiondata[field.fieldNo].visible,

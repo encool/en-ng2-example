@@ -6,8 +6,8 @@ import {
   ActivatedRoute
 } from '@angular/router';
 
-import { MenuService } from './service/menu.service';
-import { Menu } from './object/menu';
+import { MenuService } from './menu/menu.service';
+import { Menu } from './menu/menu';
 
 @Injectable()
 export class BreadcrumbmenuGuard implements CanActivate {

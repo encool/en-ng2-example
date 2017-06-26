@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
 
 import { FieldDataService } from '../shared/form/field-data.service'
-import { MenuService } from '../service/menu.service'
+import { MenuService } from '../core/menu/menu.service'
 
 import { DropdownField } from '../shared/form/dropdown-field';
 import { FieldBase } from '../shared/form/field-base';
@@ -67,7 +67,7 @@ export class MenuinfoComponent implements OnInit, onModalAction {
     }
     ngOnInit() {
         if (this.$model.params.type == "edit") {
-            this.menuService.getMenuByMenuId(this.$model.params.id).then(data => { 
+            this.menuService.getMenuByMenuId(this.$model.params.id).then(data => {
                 this.$model.menu = data
                 this.modelForm.form.patchValue(data)
             })

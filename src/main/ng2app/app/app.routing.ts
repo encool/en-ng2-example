@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { IndexComponent } from './index.component'
 
-import { BreadcrumbmenuGuard } from './breadcrumbmenu-guard.service'
+import { BreadcrumbmenuGuard } from './core'
 // import { ResourcemanageComponent } from './sysmanage/resourcemanage.component';
 // import { UserorgManageComponent } from './sysmanage/userorg-manage.component'
 

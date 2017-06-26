@@ -60,7 +60,7 @@ export class FieldEditComponent implements OnInit {
             new CheckboxField({
                 key: 'isProcVar',
                 label: '是否流程变量',
-                required: true,
+                required: false,
                 span: 6,
                 order: 3,
             }),

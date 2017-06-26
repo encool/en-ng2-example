@@ -7,6 +7,7 @@ import { Observable } from 'rxjs/Observable';
 import { Select2Field } from './select2.field'
 
 import { UIComponent } from '../../decorators/ui-component.decorator'
+import { UtilService } from '../../../service/util.service'
 
 let $ = require('jquery')
 @UIComponent({
@@ -15,9 +16,10 @@ let $ = require('jquery')
 })
 @Component({
     selector: 'f-select2',
+    styles: ['.select2-container {box-sizing: border-box; display: inline-block;   margin: 0;   position: relative;   vertical-align: middle;   border-radius: 4px;}'],
     template: `
     <div [ngSwitch]="simple">
-        <div *ngSwitchCase="false" [formGroup]="form" [style.display]="field.hidden ? 'none':'inline'" [ngClass]="ngclasses()">
+        <div *ngSwitchCase="false" [id]="instanceId" [formGroup]="form" [style.display]="field.hidden ? 'none':'inline'" [ngClass]="classExpression">
     	    <label [attr.for]="field.key" class="control-label" style="float: left;width:75px">{{field.label}}</label>
             <div style="margin-left:85px"> 
                 <select [id]="field.key" class="form-control" [disabled]="field.disable"> 
@@ -60,6 +62,7 @@ export class Select2Component implements OnInit {
     @Input() form: FormGroup;
     @Input() model: any = {};
 
+    instanceId: string
     multiple: boolean = false
     select2: any
     _tipmsg: string = "必填项";
@@ -69,13 +72,31 @@ export class Select2Component implements OnInit {
 
     key1: string
     key2: string
-    constructor(private http: Http) { }
+
+    classExpression: any = {}
+
+    constructor(private http: Http, private utilService: UtilService) { }
 
     ngOnInit() {
+
+        this.instanceId = this.utilService.guid()
 
         if (this.model == undefined) {
             this.model = {}
         }
+
+        this.classExpression = {
+            'form-group': true,
+            // 'row': true
+            // 'has-error':!this.isValid,
+        }
+        if (this.simple) {
+            this.classExpression["col-sm-" + this.span] = true;
+            this.classExpression["col-md-offset-" + this.offset] = this.offset == 0 ? false : true;
+        } else {
+            this.classExpression["col-sm-" + (this.field.span | 4)] = true;
+        }
+
         if (!this.simple) {
             this.multiple = this.field.multiple
             let key = this.field.key
@@ -83,7 +104,7 @@ export class Select2Component implements OnInit {
             this.controll = this.form.get(this.key)
             this.controll.valueChanges.forEach(
                 (data) => {
-                    // debugger
+                    //debugger
                     //select2已经初始化好了 但是没有把 值初始化好
                     if (!this._isDataInit && this.select2) {
                         if (this.controll.value) {
@@ -94,15 +115,17 @@ export class Select2Component implements OnInit {
                     }
                 }
             )
-            if (this.field.isObject && key.indexOf(".") != -1) {
-                let keys = key.split(".")
-                this.key1 = keys[0]
-                if (this.model[this.key1] == undefined) {
-                    this.model[this.key1] = {}
+
+            this.controll.statusChanges.subscribe(data => {
+                if (data === 'INVALID') {
+                    let e = $("#" + this.instanceId + " .select2-selection")
+                    e.css("border-left", "5px solid #a94442")
+                } else if (data === 'VALID') {
+                    let e = $("#" + this.instanceId + " .select2-selection")
+                    e.css("border-left", "1px solid #ccc")
                 }
-                this.key2 = keys[1]
-                this.key = this.key2
-            }
+            })
+
             if (this.field.options == undefined
                 || this.field.options.length == 0) {
                 if (this.field.optionsOb) {
@@ -168,37 +191,41 @@ export class Select2Component implements OnInit {
             select2.select2({
                 multiple: this.multiple
             })
+
+            this.controll.updateValueAndValidity()
+
             //init data
             this.initData()
             //init listener
             select2.on('change', (evt, b, c) => {
+                // debugger
                 if (this.multiple) {
                     let oValue: Array<string> = select2.val()
                     let value = oValue.join(',')
                     // debugger
-                    if (value) {
-                        if (!this.simple) {
+                    // if (value) {
+                    if (!this.simple) {
 
-                            setTimeout(() => {
-                                //注意此处不能出现 又触发change事件的情况 否则infinity loop
-                                //目前似乎正常
-                                this.form.patchValue(
-                                    {
-                                        [this.field.key]: value
-                                    }
-                                )
-                            })
+                        setTimeout(() => {
+                            //注意此处不能出现 又触发change事件的情况 否则infinity loop
+                            //目前似乎正常
+                            this.form.patchValue(
+                                {
+                                    [this.field.key]: value
+                                }
+                            )
+                        })
 
-                            // let key = this.field.key
-                            // if (this.field.isObject && key.indexOf(".") != -1) {
-                            //     this.model[this.key1][this.key2] = value
-                            // } else {
-                            //     this.model[this.field.key] = value
-                            // }
-                        } else {
-                            this.model[this.key] = value
-                        }
+                        // let key = this.field.key
+                        // if (this.field.isObject && key.indexOf(".") != -1) {
+                        //     this.model[this.key1][this.key2] = value
+                        // } else {
+                        //     this.model[this.field.key] = value
+                        // }
+                    } else {
+                        this.model[this.key] = value
                     }
+                    // }
                 } else {
                     let value = select2.val()
                     if (!this.simple) {
@@ -221,21 +248,6 @@ export class Select2Component implements OnInit {
         if (!this.select2)
             return
         if (this.multiple) {
-            // if (!this.simple) {
-            //     let key = this.field.key
-            //     if (this.field.isObject && key.indexOf(".") != -1
-            //         && this.model[this.key1][this.key2]) {
-            //         value = this.model[this.key1][this.key2]
-            //     } else if (this.model[this.field.key]) {
-            //         value = this.model[this.field.key]
-            //     }
-            // } else {
-            //     value = this.model[this.key]
-            // }
-            // if (value) {
-            //     let select2Value = value.split(',')
-            //     this.select2.val(select2Value).trigger("change")
-            // }
 
             //此处有可能 value 并没有值而 select2 已经初始化完成了
             let control = this.form.get(this.key)

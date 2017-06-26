@@ -47,25 +47,26 @@ export class FieldBase<T>{
     hidden?: boolean
     params?: Object
   } = {}) {
+    // debugger
     this.value = options.value;
     this.id = options.id;
     this.selector = options.selector || this.controlType; //文本框等基础表单元素可以让 controlType 等于selector
     this.key = options.key || '';
     this.label = options.label || '';
-    this.span = options.span === undefined ? 6 : options.span
+    this.span = options.span == null ? 6 : options.span
     this.required = !!options.required;
-    this.order = options.order === undefined ? 1 : options.order;
+    this.order = options.order == null ? 1 : options.order;
     this.controlType = options.controlType || '';
     this.validator = options.validator
     this.asyncValidator = options.asyncValidator
     this.minLength = options.minLength
     this.maxLength = options.maxLength
     this.pattern = options.pattern
-    this.labelOffset = options.labelOffset === undefined ? 75 : options.labelOffset
-    this.labelSpan = options.labelSpan === undefined ? 3 : options.labelSpan
-    this.isObject = options.isObject === undefined ? false : options.isObject
-    this.disable = options.disable === undefined ? false : options.disable
-    this.hidden = options.hidden === undefined ? false : options.hidden
+    this.labelOffset = options.labelOffset == null ? 75 : options.labelOffset
+    this.labelSpan = options.labelSpan == null ? 3 : options.labelSpan
+    this.isObject = options.isObject == null ? false : options.isObject
+    this.disable = options.disable == null ? false : options.disable
+    this.hidden = options.hidden == null ? false : options.hidden
     this.params = options.params
   }
 }

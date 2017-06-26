@@ -16,7 +16,7 @@ import { UIComponent } from '../decorators/ui-component.decorator'
     selector: 'f-dropdown-input',
     template: `
     <div [ngSwitch]="simple">
-        <div *ngSwitchCase="false" [formGroup]="form" [style.display]="field.hidden ? 'none':'inline'" [ngClass]="ngclasses()">
+        <div *ngSwitchCase="false" [formGroup]="form" [style.display]="field.hidden ? 'none':'inline'" [ngClass]="classExpression">
     	    <label [attr.for]="field.key" class="control-label" style="float: left;width:75px">{{field.label}}</label>
             <div style="margin-left:85px">
                 <select [id]="field.key" [formControlName]="field.key"
@@ -58,6 +58,9 @@ export class DropdownComponent implements OnInit {
 
     key1: string
     key2: string
+
+    classExpression: any = {}
+
     constructor(private http: Http) {
 
     }
@@ -98,6 +101,20 @@ export class DropdownComponent implements OnInit {
                 this.optionsOb.subscribe(data => this.options = data)
             }
         }
+
+        this.classExpression = {
+            'form-group': true,
+            // 'row': true
+            // 'has-error':!this.isValid,
+        }
+        if (this.simple) {
+            this.classExpression["col-sm-" + this.span] = true;
+            this.classExpression["col-md-offset-" + this.offset] = this.offset == 0 ? false : true;
+        } else {
+            let span = this.field.span || 4
+            this.classExpression["col-sm-" + span] = true;
+        }
+
     }
 
     ngclasses() {

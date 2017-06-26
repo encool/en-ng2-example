@@ -3,7 +3,7 @@ import { Headers, Http, URLSearchParams, RequestOptions } from '@angular/http';
 
 import { Observable } from 'rxjs/Observable';
 
-import { Resource } from './resource'
+// import { Resource } from './resource'
 
 @Injectable()
 export class SecurityService {
@@ -23,9 +23,9 @@ export class SecurityService {
         this.$window = window
     }
 
-    createRes(r: Resource) {
+    // createRes(r: Resource) {
 
-    }
+    // }
 
     isAuthenticated() {
         if (!_.isUndefined(this.$window.sessionStorage.authenticated)) {

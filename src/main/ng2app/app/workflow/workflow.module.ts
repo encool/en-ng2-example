@@ -14,6 +14,7 @@ import { FormEditComponent } from './form/form-edit.component'
 import { RelEditComponent } from './form/rel-edit.component'
 import { RelAddComponent } from './form/rel-add.component'
 import { UsertaskDoComponent } from './process/usertask-do.component'
+import { UsertaskDoCommonComponent } from './process/usertask-do-common.component'
 import { TaskFormComponent } from './process/task-form.component'
 import { ServiceproductEntryComponent } from './entry/serviceproduct-entry.component'
 import { FormConfigComponent } from './config/form-config.component'
@@ -65,6 +66,7 @@ import { WorkprocessService } from './service/workprocess.service'
         BpmnMonitorComponent,
         AuditinfoComponent,
         CustomComponent,
+        UsertaskDoCommonComponent,
     ],
     exports: [
         BpmnEditorComponent,

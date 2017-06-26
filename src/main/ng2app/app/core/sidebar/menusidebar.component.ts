@@ -1,8 +1,8 @@
 import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
-import { Menu } from './object/menu';
-import { MenuService } from './service/menu.service';
-import { SecurityService } from './service/security.service';
+import { Menu } from '../menu/menu';
+import { MenuService } from '../menu/menu.service';
+import { SecurityService } from '../security/security.service';
 
 
 @Component({

@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { Headers, Http, URLSearchParams, RequestOptions } from '@angular/http';
+import { Validators } from '@angular/forms'
 
 import { DropdownField } from '../../shared/form/dropdown-field';
 import { FieldBase } from '../../shared/form/field-base';
@@ -48,14 +49,14 @@ export class FormEditComponent implements OnInit {
             new TextField({
                 key: 'operateBean',
                 label: 'beanName',
-                required: true,
+                required: false,
                 span: 6,
                 order: 3,
             }),
             new RadioGroupField({
                 key: 'isTableStorage',
                 label: '是否单独表',
-                required: true,
+                required: false,
                 span: 6,
                 order: 8,
                 options: [{ key: true, value: "是" }, { key: false, value: "否" }]
@@ -63,14 +64,14 @@ export class FormEditComponent implements OnInit {
             new TextField({
                 key: 'tableName',
                 label: '数据库表名',
-                required: true,
+                required: false,
                 span: 6,
                 order: 9
             }),
             new TextField({
                 key: 'remark2',
                 label: '关联字段',
-                required: true,
+                required: false,
                 span: 6,
                 order: 9
             }),
@@ -96,12 +97,61 @@ export class FormEditComponent implements OnInit {
                     this.modelForm.form.patchValue(d)
                 })
         }
+        setTimeout(() => {
+            this.modelForm.form.valueChanges.subscribe(data => {
+                // debugger
+                let bncontroller = this.modelForm.form.get('operateBean')
+                let tableNamecontroller = this.modelForm.form.get('tableName')
+                let remark2controller = this.modelForm.form.get('remark2')
+                if (!data.isTableStorage) {
+                    bncontroller.clearValidators()
+                    tableNamecontroller.clearValidators()
+                    remark2controller.clearValidators()
+                    bncontroller.updateValueAndValidity({
+                        onlySelf: true,
+                        emitEvent: false
+                    })
+                    tableNamecontroller.updateValueAndValidity({
+                        onlySelf: true,
+                        emitEvent: false
+                    })
+                    remark2controller.updateValueAndValidity({
+                        onlySelf: true,
+                        emitEvent: false
+                    })
+                } else {
+                    bncontroller.setValidators(Validators.required)
+                    tableNamecontroller.setValidators(Validators.required)
+                    remark2controller.setValidators(Validators.required)
+                    bncontroller.updateValueAndValidity({
+                        onlySelf: false,
+                        emitEvent: false
+                    })
+                    tableNamecontroller.updateValueAndValidity({
+                        onlySelf: false,
+                        emitEvent: false
+                    })
+                    remark2controller.updateValueAndValidity({
+                        onlySelf: false,
+                        emitEvent: false
+                    })
+                }
+                this.modelForm.form.updateValueAndValidity({
+                    onlySelf: true,
+                    emitEvent: false
+                })
+            })
+        });
     }
 
     onModalAction(): Promise<any> {
+        let value = this.modelForm.form.value
+        if (value.operateBean == null) {
+            value.operateBean = 'processvariableformoperate'
+        }
         if (this.$model.params.type == 'edit') {
             if (this.modelForm.form.valid) {
-                let body = JSON.stringify(this.modelForm.form.value);
+                let body = JSON.stringify(value);
                 let headers = new Headers({ 'Content-Type': 'application/json;charset=UTF-8' });
                 let options = new RequestOptions({
                     headers: headers,
@@ -120,7 +170,7 @@ export class FormEditComponent implements OnInit {
             }
         } else if (this.$model.params.type == 'add') {
             if (this.modelForm.form.valid) {
-                let body = JSON.stringify(this.modelForm.form.value);
+                let body = JSON.stringify(value);
                 let headers = new Headers({ 'Content-Type': 'application/json;charset=UTF-8' });
                 let options = new RequestOptions({
                     headers: headers,

@@ -1,10 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { JqgridSetting, JqgridAction, JqgridEvent, JqgridCallback, DefaultJqgridCallback, ColModel, JqgridComponent } from '../../shared/jqgrid.module'
+import { JqgridSetting, JqgridAction, JqgridEvent, JqgridCallback, DefaultJqgridCallback, ColModel, JqgridComponent } from '../../shared'
+import { JqgridFormatter } from '../../shared'
 
 import { Router } from '@angular/router'
 
 import { WorkflowService } from '../service/workflow.service'
-
+import { DictdataService } from '../../service/dictdata.service'
 
 @Component({
     selector: 'task-todo',
@@ -28,7 +29,7 @@ export class TodoComponent implements OnInit {
         }),
 
         new ColModel({ label: "服务名称", name: "productName", width: 20 }),
-        new ColModel({ label: "服务类型", name: "serviceTypeId", width: 20 }),
+        new ColModel({ label: "服务类型", name: "serviceTypeId", width: 20, formatter: new JqgridFormatter.DictData(this.dictdataService, "工作流_事项分类").formatter }),
         new ColModel({ label: "PROC_INST_ID_", name: "PROC_INST_ID_", width: 20, hidden: true }),
         new ColModel({ label: "businessKey", name: "businessKey", width: 20, hidden: true }),
         new ColModel({ label: "moduleId", name: "moduleId", width: 20, hidden: true }),
@@ -79,7 +80,7 @@ export class TodoComponent implements OnInit {
         }
     )
 
-    constructor(private router: Router, private workflowService: WorkflowService) { }
+    constructor(private router: Router, private workflowService: WorkflowService, private dictdataService: DictdataService) { }
 
     ngOnInit() { }
 }

@@ -55,6 +55,21 @@ export class ProductManageComponent implements OnInit {
         if (event.businessId == 'spmgntgrid') {
             switch (event.action.key) {
                 case 'add':
+                    this.modalService.open(
+                        this._modalContext,
+                        {
+                            comp: ProductInfoComponent,
+                            title: "新增服务",
+                            width: "800px"
+                        },
+                        {
+                            params: {
+                                type: "add"
+                            }
+                        },
+                        data => {
+                            this.formGrid.refresh()
+                        })
                     break;
                 case 'edit':
                     this.workflowService.getProduct(rowData.productId).then(data => {
@@ -78,7 +93,7 @@ export class ProductManageComponent implements OnInit {
                             })
                     })
                     break;
-                case 'delete': 
+                case 'delete':
                     let ids = this.formGrid.getSelectRowIds()
                     if (ids) {
                         this.modalService.openConfirm(

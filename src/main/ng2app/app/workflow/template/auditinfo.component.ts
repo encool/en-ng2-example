@@ -14,7 +14,7 @@ import { DatetimePickField } from '../../shared/form/widget/datetime-pick.field'
 import { TextareaField } from '../../shared/form/widget/textarea.field'
 import { DynamicFormHorizontalComponent } from '../../shared/form/dynamic-form-horizontal.component'
 
-import { SecurityService } from '../../service/security.service'
+import { SecurityService } from '../../core/security/security.service'
 import { DictdataService } from '../../service/dictdata.service'
 
 @UIComponent({
@@ -175,6 +175,13 @@ export class AuditinfoComponent implements OnInit {
                             }),
                         ]
                     }),
+                    new DatetimePickField({
+                        key: "auditTime",
+                        label: '处理时间',
+                        value: new Date(),
+                        disable: true,
+                        hidden: this.isStart || !this.field.params.permissiondata.writePermission,
+                    }),
                     new DropdownField({
                         key: 'auditState',
                         label: '处理结论',
@@ -183,13 +190,6 @@ export class AuditinfoComponent implements OnInit {
                         dictName: "工作流_处理结论",
                         span: 6,
                         order: 2,
-                        hidden: this.isStart || !this.field.params.permissiondata.writePermission,
-                    }),
-                    new DatetimePickField({
-                        key: "auditTime",
-                        label: '处理时间',
-                        value: new Date(),
-                        disable: true,
                         hidden: this.isStart || !this.field.params.permissiondata.writePermission,
                     }),
                     new TextareaField({
