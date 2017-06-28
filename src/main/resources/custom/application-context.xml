@@ -21,29 +21,7 @@
     <mvc:annotation-driven />
 <!--   	<context:property-placeholder location="classpath:*-application.properties"/> -->
  	<context:component-scan base-package="com.cool.*"/>
-    <!-- **************************************************************** -->
-    <!--  THYMELEAF-SPECIFIC ARTIFACTS                                    -->
-    <!--  TemplateResolver <- TemplateEngine <- ViewResolver              -->
-    <!-- **************************************************************** -->
 
-    <bean id="templateResolver"
-          class="org.thymeleaf.templateresolver.ServletContextTemplateResolver">
-        <property name="prefix" value="/dist/" />
-        <property name="suffix" value=".html" />
-        <property name="templateMode" value="HTML5" />
-        <property name="characterEncoding" value="UTF-8" /> 
-    </bean>
-
-    <bean id="templateEngine"
-          class="org.thymeleaf.spring4.SpringTemplateEngine">
-        <property name="templateResolver" ref="templateResolver" />
-    </bean>
-
-    <bean class="org.thymeleaf.spring4.view.ThymeleafViewResolver">
-        <property name="templateEngine" ref="templateEngine" />
-        <property name="contentType" value="text/html;charset=UTF-8"/>
-        <property name="characterEncoding" value="UTF-8" /> 
-    </bean>
     
 <!--     <bean class="com.chinacreator.c2.qyb.workflow.module.impl.MyExtendServiceImpl"></bean> -->
 <!--     <mvc:resources location="/**" mapping="/**"/>
