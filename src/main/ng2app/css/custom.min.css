@@ -234,14 +234,14 @@ div#rMenu ul li {
 	border-bottom: 1px solid #D9DEE4;
 	margin-bottom: 10px;
 	width: 100%;
-	position: relative
+	position: fixed
 }
 
-@media ( min-width : 480px) {
+/*@media ( min-width : 480px) {
 	.nav_menu {
 		position: static
 	}
-}
+}*/
 
 .nav-md .container.body .col-md-3.left_col {
 	width: 230px;
