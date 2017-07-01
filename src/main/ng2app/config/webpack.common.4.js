@@ -8,7 +8,8 @@ module.exports = {
   entry: {
     'polyfills': './app/polyfills.ts',
     'vendor': './app/vendor.ts',
-    'app': './app/main.ts'
+    'app': './app/main.ts',
+    'mobileapp': './app/mobileapp/main.ts'
   },
 
   externals: {
@@ -28,8 +29,8 @@ module.exports = {
           {
             loader: 'awesome-typescript-loader',
             options: { configFileName: helpers.root('/', 'tsconfig.json') }
-         
-         }, 'angular2-template-loader'
+
+          }, 'angular2-template-loader'
         ]
         // loaders: '@ngtools/webpack',
       },
@@ -69,7 +70,7 @@ module.exports = {
     ),
 
     new webpack.optimize.CommonsChunkPlugin({
-      name: ['app', 'vendor', 'polyfills']
+      name: ['vendor', 'polyfills']
     }),
 
     new webpack.ProvidePlugin({

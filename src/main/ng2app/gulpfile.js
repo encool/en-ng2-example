@@ -22,7 +22,7 @@ var paths = {
         'images/*'
     ],
     html: [
-        'html/*'
+        'html/**/*'
     ],
     tplhtml: [
         'app/**/*.html'
