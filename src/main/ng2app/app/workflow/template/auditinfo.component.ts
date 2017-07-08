@@ -169,7 +169,7 @@ export class AuditinfoComponent implements OnInit {
                                 required: true,
                                 span: 6,
                                 order: 2,
-                                value: this.securityService.subject.userDTO.userRealname,
+                                value: this.securityService.subject().userDTO.userRealname,
                                 disable: true,
                                 hidden: this.isStart || !this.field.params.permissiondata.writePermission,
                             }),
@@ -315,7 +315,7 @@ export class AuditinfoComponent implements OnInit {
             moduleId: this.field.params.moduleId,
             taskDefKey: this.transition.destid,
             filterType: undefined,  //这个参数应该要后台去获取 而不是前台从后台get后又传回给后台
-            curUserId: this.securityService.subject.id
+            curUserId: this.securityService.subject().id
         }
         ).map(data => data.json()).subscribe(data => {
             if (data.length > 0) {

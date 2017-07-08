@@ -12,9 +12,12 @@ import { MenuService } from '../menu/menu.service';
 })
 export class TopnavComponent {
 
+    subject: any
     constructor(private securityService: SecurityService, private menuService: MenuService,
         private router: Router) {
-
+        this.securityService.getSubject().subscribe((data) => {
+            this.subject = data
+        })
     }
 
     onMenuToggle($event) {

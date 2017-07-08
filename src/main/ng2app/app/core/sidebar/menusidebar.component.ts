@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { Menu } from '../menu/menu';
 import { MenuService } from '../menu/menu.service';
@@ -8,15 +8,16 @@ import { SecurityService } from '../security/security.service';
 @Component({
     selector: 'my-menubar',
     templateUrl: './menusidebar.component.html',
+    // changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MenusidebarComponent {
-    menus: Menu[];
-    selectedMenus: Menu[];
+    menus: Menu[] = new Array();
+    selectedMenus: Menu[] = new Array();;
 
     userDTO: any = {}
 
     constructor(private securityService: SecurityService, private menuService: MenuService,
-        private router: Router) {
+        private router: Router, private cdr: ChangeDetectorRef) {
 
     }
 
@@ -27,6 +28,7 @@ export class MenusidebarComponent {
     ngOnInit() {
         this.geMenus().then(menus => {
             this.menus = menus;
+            this.cdr.detectChanges()
             console.log("this.menus", this.menus)
         });
         this.securityService.getSubject().subscribe((data) => {
@@ -36,7 +38,7 @@ export class MenusidebarComponent {
     }
 
     ngAfterViewInit() {
-
+        this.cdr.detach()
     }
 
     ngDoCheck() {
@@ -87,6 +89,7 @@ export class MenusidebarComponent {
     }
 
     setMenuId(menu, index, isherf) {
+        // debugger
         var a = decodeURI(menu.t);
         a = a.replace(/%/g, 'a');
         if (isherf) {

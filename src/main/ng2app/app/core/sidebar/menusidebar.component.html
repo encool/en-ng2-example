@@ -26,20 +26,20 @@
         <h3>&nbsp;</h3>
         <ul class="nav side-menu">
           <li [ngClass]="setfirstLiClass(menu)" *ngFor="let menu of menus;let i = index">
-            <a data-toggle="collapse" (click)="menuClick(menu,$event)" [href]="setMenuId(menu,i,'herf')" data-parent="#navmenus1111">
+            <a data-toggle="collapse" (click)="menuClick(menu,$event)" [attr.href]="setMenuId(menu,i,'herf')" data-parent="#navmenus1111">
               <i [ngClass]="setIconClasses(menu)"></i> {{menu.t}} 
               <span *ngIf="menu.c" class="fa fa-chevron-down"></span>
             </a>
-            <ul *ngIf="menu.c" [id]="setMenuId(menu,i)" aria-expanded="false" [attr.aria-controls]="setMenuId(menu,i)" class="nav child_menu collapse">
+            <ul *ngIf="menu.c" [attr.id]="setMenuId(menu,i)" aria-expanded="false" [attr.aria-controls]="setMenuId(menu,i)" class="nav child_menu collapse">
               <li *ngFor="let cmenu of menu.c;let i = index" [ngClass]=setOtherLiClass(cmenu)>
-                <a data-toggle="collapse" (click)="menuClick(cmenu,$event)" [href]="setMenuId(cmenu,i,'herf')" [attr.data-parent]="setMenuId(menu,i,1)">
+                <a data-toggle="collapse" (click)="menuClick(cmenu,$event)" [attr.href]="setMenuId(cmenu,i,'herf')" [attr.data-parent]="setMenuId(menu,i,1)">
                   <i [ngClass]="setIconClasses(cmenu)"></i> 
                   {{cmenu.t}} 
                   <span *ngIf="cmenu.c" class="fa fa-chevron-down"></span>
                 </a>
-                <ul *ngIf="cmenu.c" [id]="setMenuId(cmenu,i)" aria-expanded="false" [attr.aria-controls]="setMenuId(cmenu,i)" class="nav child_menu collapse">
+                <ul *ngIf="cmenu.c" [attr.id]="setMenuId(cmenu,i)" aria-expanded="false" [attr.aria-controls]="setMenuId(cmenu,i)" class="nav child_menu collapse">
                   <li *ngFor="let ccmenu of cmenu.c;let i = index" [ngClass]="setOtherLiClass(ccmenu)">
-                      <a (click)="menuClick(ccmenu,$event)" data-toggle="collapse" [href]="setMenuId(ccmenu,i,'herf')" [attr.data-parent]="setMenuId(cmenu,i,1)">
+                      <a (click)="menuClick(ccmenu,$event)" data-toggle="collapse" [attr.href]="setMenuId(ccmenu,i,'herf')" [attr.data-parent]="setMenuId(cmenu,i,1)">
                         <!--<i [ngClass]="setIconClasses(ccmenu)"></i> -->
                         {{ccmenu.t}}
                         <span *ngIf="ccmenu.c" class="fa fa-chevron-down"></span>

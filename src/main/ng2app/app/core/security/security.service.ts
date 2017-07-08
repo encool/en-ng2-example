@@ -10,7 +10,7 @@ export class SecurityService {
 
     $window: any
 
-    get subject() {
+    subject() {
         if (!_.isUndefined(this.$window.sessionStorage.subject)
             && "undefined" != this.$window.sessionStorage.subject) {
             return JSON.parse(this.$window.sessionStorage.subject);
