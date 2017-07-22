@@ -8,7 +8,7 @@ import { FormEditComponent } from './form-edit.component'
 import { RelAddComponent } from './rel-add.component'
 import { RelEditComponent } from './rel-edit.component'
 import { ModalService } from '../../service/modal.service'
-import { WorkflowService } from '../service/workflow.service'
+import { WorkflowService } from '../../core/workflow/workflow.service'
 
 @Component({
     selector: 'form-manage',

@@ -7,7 +7,7 @@ import { TextComponent } from '../../shared/form/widget/text.component'
 import { TextField } from '../../shared/form/text-field'
 import { DropdownField } from '../../shared/form/dropdown-field'
 
-import { WorkflowService } from '../service/workflow.service'
+import { WorkflowService } from '../../core/workflow/workflow.service'
 
 @Component({
     selector: 'wf-task-form',

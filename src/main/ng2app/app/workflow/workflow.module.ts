@@ -31,7 +31,7 @@ import { CustomComponent } from './template/custom.component'
 
 import { routing } from './workflow.routing';
 
-import { WorkflowService } from './service/workflow.service'
+// import { WorkflowService } from './service/workflow.service'
 import { WorkprocessService } from './service/workprocess.service'
 
 @NgModule({
@@ -73,7 +73,10 @@ import { WorkprocessService } from './service/workprocess.service'
         BpmnViewerComponent,
         UsertaskDoComponent,
     ],
-    providers: [WorkflowService, WorkprocessService],
+    providers: [
+        // WorkflowService,
+        WorkprocessService
+    ],
     entryComponents: [
         ProcessModelInfoComponent,
         BpmnEditorComponent,

@@ -3,7 +3,7 @@ import { Component, OnInit, ViewContainerRef, Compiler, Type, ComponentFactoryRe
 import { JqgridSetting, JqgridAction, JqgridEvent, JqgridCallback, DefaultJqgridCallback, ColModel, JqgridComponent} from '../../shared/jqgrid.module'
 
 import { ModalService } from '../../service/modal.service'
-import { WorkflowService } from '../service/workflow.service'
+import { WorkflowService } from '../../core/workflow/workflow.service'
 
 import { ProcessModelInfoComponent } from './process-model-info.component'
 import { BpmnEditorComponent } from '../bpmn2/bpmn-editor.component'

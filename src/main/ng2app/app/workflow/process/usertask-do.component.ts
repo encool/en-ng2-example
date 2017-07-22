@@ -9,7 +9,7 @@ import { Headers, Http, URLSearchParams, RequestOptions } from '@angular/http';
 import { DynamicFormHorizontalComponent } from '../../shared/form/dynamic-form-horizontal.component'
 
 import { WorkprocessService } from '../service/workprocess.service'
-import { WorkflowService } from '../service/workflow.service'
+import { WorkflowService } from '../../core/workflow/workflow.service'
 import { SecurityService } from '../../core/security/security.service'
 import { ModalService } from '../../service/modal.service'
 

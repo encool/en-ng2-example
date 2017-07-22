@@ -6,6 +6,8 @@ const sourcemaps = require('gulp-sourcemaps');
 
 var webpack = require("webpack");
 var webpackConfig = require("./webpack.config.js");
+var webpackMobileConfig = require("./webpack.mobile.config.js");
+
 
 var paths = {
     ts: [
@@ -60,10 +62,11 @@ var paths = {
         font: [
             'node_modules/font-awesome/fonts/*',
             'node_modules/bootstrap/fonts/*',
+            'node_modules/material-design-icons/iconfont/*',
         ],
         img: [
             'bower_components/bootstrap/dist/images/*'
-        ]
+        ],
     }
 };
 var asoutput = "../webapp/dist/assets"; // output 
@@ -110,7 +113,7 @@ gulp.task('clean', function () {
         .pipe(clean({ force: true }));
 });
 
-gulp.task("webpack:build", function (callback) { 
+gulp.task("webpack:build", function (callback) {
     // modify some webpack config options
     // var myConfig = Object.create(webpackConfig);
     // myConfig.plugins = myConfig.plugins.concat(
@@ -134,7 +137,8 @@ gulp.task("webpack:build", function (callback) {
     });
 });
 
-gulp.task('webpack:w',  function (callback) {debugger
+gulp.task('webpack:w', function (callback) {
+    debugger
     // modify some webpack config options
     var myConfig = Object.create(webpackConfig);
     myConfig.watch = true
@@ -144,12 +148,22 @@ gulp.task('webpack:w',  function (callback) {debugger
         gutil.log("[webpack:w]", stats.toString({
             colors: true
         }));
-        
-    });    
+
+    });
+    var myMobileConfig = Object.create(webpackMobileConfig);
+    myMobileConfig.watch = true
+    // console.log("1111111111", myConfig.toString());    
+    webpack(myMobileConfig, function (err, stats) {
+        if (err) throw new gutil.PluginError("webpack:w", err);
+        gutil.log("[webpack:w]", stats.toString({
+            colors: true
+        }));
+
+    });
     callback();
 });
 
-gulp.task("bpmn:build", function (callback) { 
+gulp.task("bpmn:build", function (callback) {
     // modify some webpack config options
     // var myConfig = Object.create(webpackConfig);
     // myConfig.plugins = myConfig.plugins.concat(

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router'
 
-import { WorkflowService } from '../service/workflow.service'
+import { WorkflowService } from '../../core/workflow/workflow.service'
 
 @Component({
     selector: 'wf-sp-entry',

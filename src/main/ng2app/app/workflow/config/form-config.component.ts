@@ -3,7 +3,7 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/forkJoin'
 // import { Headers, Http, URLSearchParams, RequestOptions } from '@angular/http';
 
-import { WorkflowService } from '../service/workflow.service'
+import { WorkflowService } from '../../core/workflow/workflow.service'
 
 
 @Component({

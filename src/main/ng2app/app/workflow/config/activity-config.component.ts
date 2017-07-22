@@ -6,7 +6,7 @@ import { Observable } from 'rxjs/Observable'
 
 import { FieldBase } from '../../shared/form/field-base'
 import { TextField } from '../../shared/form/text-field'
-import { WorkflowService } from '../service/workflow.service'
+import { WorkflowService } from '../../core/workflow/workflow.service'
 import { ModalService } from '../../service/modal.service'
 
 import { ChooseCandidateComponent } from './choose-candidate.component'

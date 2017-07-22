@@ -174,6 +174,7 @@ export class BpmnEditorComponent implements OnInit {
                 // create modeler
                 this._bpmnModeler = new BpmnModeler({
                     container: canvas,
+                    zoomScroll: { enable: false },
                     propertiesPanel: {
                         parent: '#js-properties-panel'
                     },
@@ -208,10 +209,12 @@ export class BpmnEditorComponent implements OnInit {
                 })
             }, 2000)
         } else if (this.model.params.type == "edit") {
+            debugger
             if (this._bpmnModeler == undefined) {
                 // create modeler
                 this._bpmnModeler = new BpmnModeler({
                     container: canvas,
+                    zoomScroll: { enabled: false },
                     propertiesPanel: {
                         parent: '#js-properties-panel'
                     },

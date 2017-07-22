@@ -6,16 +6,15 @@ var AotPlugin = require('@ngtools/webpack')
 
 module.exports = {
   entry: {
-    'polyfills': './app/polyfills.ts',
-    'vendor': './app/vendor.ts',
-    'app': './app/main.ts',
-    // 'mobileapp': './app/mobileapp/main.ts'
+    'mobilepolyfills': './app/polyfills.ts',
+    'mobilevendor': './app/mobileapp/vendor.ts',
+    'mobileapp': './app/mobileapp/main.ts'
   },
 
-  externals: {
-    jquery: 'window.$',
-    toastr: 'toastr',
-  },
+  // externals: {
+  //   jquery: 'window.$',
+  //   toastr: 'toastr',
+  // },
 
   resolve: {
     extensions: ['.ts', '.js']
@@ -70,14 +69,14 @@ module.exports = {
     ),
 
     new webpack.optimize.CommonsChunkPlugin({
-      name: ['vendor', 'polyfills']
+      name: ['mobilevendor', 'mobilepolyfills']
     }),
 
-    new webpack.ProvidePlugin({
-      jQuery: 'jquery',
-      $: 'jquery',
-      jquery: 'jquery',
-    }),
+    // new webpack.ProvidePlugin({
+    //   jQuery: 'jquery',
+    //   $: 'jquery',
+    //   jquery: 'jquery',
+    // }),
     // new AotPlugin({
     //   tsConfigPath: helpers.root('/', 'tsconfig.json'),
     //   entryModule: 'app/app.module#AppModule'

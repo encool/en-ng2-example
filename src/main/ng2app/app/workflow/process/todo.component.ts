@@ -4,7 +4,7 @@ import { JqgridFormatter } from '../../shared'
 
 import { Router } from '@angular/router'
 
-import { WorkflowService } from '../service/workflow.service'
+import { WorkflowService } from '../../core/workflow/workflow.service'
 import { DictdataService } from '../../service/dictdata.service'
 
 @Component({

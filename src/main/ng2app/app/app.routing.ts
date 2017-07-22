@@ -62,7 +62,6 @@ export function projectChildren() {
                     path: 'project', loadChildren: projectChildren
                 },],
         },
-
     ])],
     exports: [RouterModule]
 })

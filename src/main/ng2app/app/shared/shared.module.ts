@@ -35,7 +35,7 @@ import { FileUploadComponent } from './form/widget/file-upload.component'
 import { FileUploadInrowComponent } from './form/widget/file-upload-inrow.component'
 import { EchartsComponent } from './component/echarts.component'
 
-import { FieldDataService } from './form/field-data.service'
+// import { FieldDataService } from './form/field-data.service'
 @NgModule({
   imports: [CommonModule,
     FormsModule,
@@ -122,7 +122,7 @@ export class SharedModule {
   static forRoot(): ModuleWithProviders {
     return {
       ngModule: SharedModule,
-      providers: [FieldDataService]
+      // providers: [FieldDataService]
     };
   }
 }
