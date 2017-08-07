@@ -13,7 +13,7 @@ import { SharedModule } from '../shared/shared.module'
 // import { FormEditComponent } from './form/form-edit.component'
 // import { RelEditComponent } from './form/rel-edit.component'
 // import { RelAddComponent } from './form/rel-add.component'
-// import { UsertaskDoComponent } from './process/usertask-do.component'
+import { UsertaskDoComponent } from './process/usertask-do.component'
 // import { UsertaskDoCommonComponent } from './process/usertask-do-common.component'
 // import { TaskFormComponent } from './process/task-form.component'
 // import { ServiceproductEntryComponent } from './entry/serviceproduct-entry.component'
@@ -25,11 +25,11 @@ import { TodoComponent } from './process/todo.component'
 // import { BpmnMonitorComponent } from './bpmn2/bpmn-monitor.component'
 // import { TemplateMgtComponent } from './template/template-mgt.component'
 // import { TemplateInfoComponent } from './template/template-info.component'
-// import { WftitleComponent } from './template/wftitle.component'
+import { WftitleComponent } from './template/wftitle.component'
 // import { AuditinfoComponent } from './template/auditinfo.component'
 // import { CustomComponent } from './template/custom.component'
 
-// import { routing } from './workflow.routing';
+import { routing } from './workflow.routing';
 
 // import { WorkflowService } from './service/workflow.service'
 // import { WorkprocessService } from './service/workprocess.service'
@@ -37,7 +37,7 @@ import { TodoComponent } from './process/todo.component'
 @NgModule({
     imports: [
         SharedModule,
-        // routing
+        routing
     ],
     declarations: [
         // ProcessDefinitionComponent,
@@ -62,16 +62,16 @@ import { TodoComponent } from './process/todo.component'
         // BpmnViewerComponent,
         // TemplateMgtComponent,
         // TemplateInfoComponent,
-        // WftitleComponent,
+        WftitleComponent,
         // BpmnMonitorComponent,
         // AuditinfoComponent,
         // CustomComponent,
-        // UsertaskDoCommonComponent,
+        UsertaskDoComponent,
     ],
     exports: [
         // BpmnEditorComponent,
         // BpmnViewerComponent,
-        // UsertaskDoComponent,
+        UsertaskDoComponent,
     ],
     providers: [
         // WorkflowService,
@@ -90,7 +90,7 @@ import { TodoComponent } from './process/todo.component'
         // ChooseCandidateComponent,
         // BpmnViewerComponent,
         // TemplateInfoComponent,
-        // WftitleComponent,
+        WftitleComponent,
         // BpmnMonitorComponent,
         // AuditinfoComponent,
         // CustomComponent,

@@ -27,12 +27,12 @@ import { TemplateMgtComponent } from './template/template-mgt.component'
 import { TemplateInfoComponent } from './template/template-info.component'
 import { WftitleComponent } from './template/wftitle.component'
 import { AuditinfoComponent } from './template/auditinfo.component'
-import { CustomComponent } from './template/custom.component'
+// import { CustomComponent } from './template/custom.component'
 
 import { routing } from './workflow.routing';
 
 // import { WorkflowService } from './service/workflow.service'
-import { WorkprocessService } from './service/workprocess.service'
+import { WorkprocessService } from '../core/workflow/workprocess.service'
 
 @NgModule({
     imports: [
@@ -65,7 +65,7 @@ import { WorkprocessService } from './service/workprocess.service'
         WftitleComponent,
         BpmnMonitorComponent,
         AuditinfoComponent,
-        CustomComponent,
+        // CustomComponent,
         UsertaskDoCommonComponent,
     ],
     exports: [
@@ -93,7 +93,7 @@ import { WorkprocessService } from './service/workprocess.service'
         WftitleComponent,
         BpmnMonitorComponent,
         AuditinfoComponent,
-        CustomComponent,
+        // CustomComponent,
     ]
 })
 export class WorkflowModule {

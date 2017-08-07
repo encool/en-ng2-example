@@ -4,7 +4,7 @@ import { Headers, Http, URLSearchParams, RequestOptions } from '@angular/http';
 import { JqgridSetting, JqgridAction, JqgridEvent, JqgridCallback, DefaultJqgridCallback, ColModel, JqgridComponent} from '../../shared/jqgrid.module'
 
 import { DropdownField } from '../../shared/form/dropdown-field';
-import { FieldBase }     from '../../shared/form/field-base';
+import { FieldBase } from '../../commonshared/form/field-base'
 import { TextField }  from '../../shared/form/text-field';
 import { DynamicFormComponent } from '../../shared/form/dynamic-form.component'
 

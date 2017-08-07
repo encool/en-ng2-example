@@ -8,10 +8,20 @@ import { Headers, Http, URLSearchParams, RequestOptions } from '@angular/http';
 
 import { DynamicFormHorizontalComponent } from '../../shared/form/dynamic-form-horizontal.component'
 
-import { WorkprocessService } from '../service/workprocess.service'
+import { WorkprocessService } from '../../core/workflow/workprocess.service'
 import { WorkflowService } from '../../core/workflow/workflow.service'
 import { SecurityService } from '../../core/security/security.service'
 import { ModalService } from '../../service/modal.service'
+
+import { TextField } from '../../shared'
+import { DropdownField } from '../../shared'
+import { DatetimePickField } from '../../shared'
+import { TextareaField } from '../../shared'
+import { Select2Field } from '../../shared'
+import { CheckboxField } from '../../shared'
+import { CheckboxGroupField } from '../../shared'
+import { FileUploadField } from '../../shared'
+import { CustomTemplateField } from '../../commonshared'
 
 import { BpmnMonitorComponent } from '../bpmn2/bpmn-monitor.component'
 // import { BpmnViewerComponent } from '../bpmn2/bpmn-viewer.component'
@@ -53,6 +63,7 @@ export class UsertaskDoComponent implements OnInit {
     transitions: any[]
     transition: any
     properties: any
+    UITypes: any
 
     formDataSubject: Subject<any> = new Subject();
     onFieldInit: Subject<any> = new Subject();
@@ -124,7 +135,8 @@ export class UsertaskDoComponent implements OnInit {
                 this.flowService.getformdata(this.formId, formBusinessKey, this.processInsId),
                 this.securityService.getSubject(),
                 this.flowService.getformfield(this.formId, null, false),
-                this.flowService.getActions(this.moduleId, this.taskDefKey)
+                this.flowService.getActions(this.moduleId, this.taskDefKey),
+                this.flowService.getAllUItypesInMap()
             ]
             //开始流程
             if (this.processInsId == undefined) {
@@ -143,10 +155,11 @@ export class UsertaskDoComponent implements OnInit {
                 this.formDataSubject.next(formValue)
                 this.modelinit.emit(formValue)
                 this.properties = res[4]
-                if (res.length === 6) { //开始 有获取开始信息
-                    this.startInfo = res[5]
-                    this.taskDefKey = res[5].startActivity.id
-                    this.processDefinitionId = res[5].processDefinitionId
+                this.UITypes = res[5]
+                if (res.length === 7) { //开始 有获取开始信息
+                    this.startInfo = res[6]
+                    this.taskDefKey = res[6].startActivity.id
+                    this.processDefinitionId = res[6].processDefinitionId
                 }
                 Observable.forkJoin(
                     this.flowService.getfieldpermissiondata(this.product, this.taskDefKey),
@@ -155,7 +168,7 @@ export class UsertaskDoComponent implements OnInit {
                     this.permissiondata = res[0]
                     this.transitions = res[1]
                     this.transition = res[1][0]
-                    this.fields = this.flowService.toWfFormGroupField(this.formfields, this.permissiondata, this)
+                    this.fields = UsertaskDoComponent.toWfFormGroupField(this.formfields, this.permissiondata, this, this.UITypes)
                     setTimeout(() => {
                         this.formCom.form.patchValue(formValue)
                         this.onFieldInit.next("data")
@@ -184,7 +197,6 @@ export class UsertaskDoComponent implements OnInit {
     }
 
     submitFlow() {
-        debugger
         if (this.formCom && !this.formCom.form.valid) {
             toastr.warning('验证失败')
             return
@@ -492,5 +504,166 @@ export class UsertaskDoComponent implements OnInit {
         return this.moduleId + "_" + new Date().getTime();
     }
 
+    static toWfFormGroupField(fields: any[], permissiondata: any, params: any, UITypes: any): any[] {
+        let newFields = new Array()
+        fields.forEach(field => {
+            switch (UITypes[field.webDisplayTypeId].url) {
+                case "dropdowninput":
+                    newFields.push(new DropdownField({
+                        key: field.fieldNo,
+                        label: field.displayName || field.fieldId.fieldName,
+                        labelWidth: field.labelWidth,
+                        span: field.displaySpan,
+                        dictName: field.dictName,
+                        required: permissiondata[field.fieldNo].fillnecessary,
+                        disable: !permissiondata[field.fieldNo].writePermission,
+                        hidden: !permissiondata[field.fieldNo].visible,
+                    }))
+                    break
+                case "datetimepick":
+                    newFields.push(new DatetimePickField({
+                        key: field.fieldNo,
+                        label: field.displayName || field.fieldId.fieldName,
+                        labelWidth: field.labelWidth,
+                        span: field.displaySpan,
+                        required: permissiondata[field.fieldNo].fillnecessary,
+                        disable: !permissiondata[field.fieldNo].writePermission,
+                        hidden: !permissiondata[field.fieldNo].visible,
+                    }))
+                    break
+                case "textarea":
+                    newFields.push(new TextareaField({
+                        key: field.fieldNo,
+                        label: field.displayName || field.fieldId.fieldName,
+                        labelWidth: field.labelWidth,
+                        span: field.displaySpan,
+                        required: permissiondata[field.fieldNo].fillnecessary,
+                        disable: !permissiondata[field.fieldNo].writePermission,
+                        hidden: !permissiondata[field.fieldNo].visible,
+                    }))
+                    break
+                case "select2":
+                    newFields.push(new Select2Field({
+                        key: field.fieldNo,
+                        label: field.displayName || field.fieldId.fieldName,
+                        labelWidth: field.labelWidth,
+                        span: field.displaySpan,
+                        required: permissiondata[field.fieldNo].fillnecessary,
+                        disable: !permissiondata[field.fieldNo].writePermission,
+                        hidden: !permissiondata[field.fieldNo].visible,
+                        dictName: field.dictName,
+                        optionsUrl: field.remark1,
+                        optionId: field.remark2,
+                        optionName: field.remark3,
+                        multiple: (field.remark4 === "true" || field.remark4 == true) ? true : false
+                    }))
+                    break
+                case "checkbox":
+                    newFields.push(new CheckboxField({
+                        key: field.fieldNo,
+                        label: field.displayName || field.fieldId.fieldName,
+                        labelWidth: field.labelWidth,
+                        span: field.displaySpan,
+                        required: permissiondata[field.fieldNo].fillnecessary,
+                        disable: !permissiondata[field.fieldNo].writePermission,
+                        hidden: !permissiondata[field.fieldNo].visible,
+                    }))
+                    break
+                case "f-checkbox-group":
+                    newFields.push(new CheckboxGroupField({
+                        key: field.fieldNo,
+                        label: field.displayName || field.fieldId.fieldName,
+                        labelWidth: field.labelWidth,
+                        span: field.displaySpan,
+                        dictName: field.dictName,
+                        optionsUrl: field.remark1,
+                        optionId: field.remark2,
+                        optionName: field.remark3,
+                        required: permissiondata[field.fieldNo].fillnecessary,
+                        disable: !permissiondata[field.fieldNo].writePermission,
+                        hidden: !permissiondata[field.fieldNo].visible,
+                    }))
+                    break
+                case "fileupload":
+                    newFields.push(new FileUploadField({
+                        key: field.fieldNo,
+                        label: field.displayName || field.fieldId.fieldName,
+                        labelWidth: field.labelWidth,
+                        span: field.displaySpan,
+                        required: permissiondata[field.fieldNo].fillnecessary,
+                        disable: !permissiondata[field.fieldNo].writePermission,
+                        hidden: !permissiondata[field.fieldNo].visible,
+                        params: {
+                            writePermission: permissiondata[field.fieldNo].writePermission,
+                            businessKey: params.businessKey,
+                            businessType: params.productNo
+                        }
+                    }))
+                    break
+                case "f-file-upload-inrow":
+                    newFields.push(new FileUploadField({
+                        key: field.fieldNo,
+                        type: "inrow",
+                        label: field.displayName || field.fieldId.fieldName,
+                        labelWidth: field.labelWidth,
+                        span: field.displaySpan,
+                        required: permissiondata[field.fieldNo].fillnecessary,
+                        disable: !permissiondata[field.fieldNo].writePermission,
+                        hidden: !permissiondata[field.fieldNo].visible,
+                        params: {
+                            writePermission: permissiondata[field.fieldNo].writePermission,
+                            businessKey: params.businessKey,
+                            businessType: params.product.productNo
+                        }
+                    }))
+                    break
+                case "f-text-input":
+                    newFields.push(new TextField({
+                        key: field.fieldNo,
+                        type: field.fieldType == 'INT' ? 'number' : null,
+                        label: field.displayName || field.fieldId.fieldName,
+                        labelWidth: field.labelWidth,
+                        span: field.displaySpan,
+                        required: permissiondata[field.fieldNo].fillnecessary,
+                        disable: !permissiondata[field.fieldNo].writePermission,
+                        hidden: !permissiondata[field.fieldNo].visible,
+                        click: field.click || (() => { })
+                    }))
+                    break
+                default:
+                    newFields.push(new CustomTemplateField({
+                        selector: UITypes[field.webDisplayTypeId].url,
+                        key: field.fieldNo,
+                        label: field.displayName || field.fieldId.fieldName,
+                        labelWidth: field.labelWidth,
+                        span: field.displaySpan,
+                        required: permissiondata[field.fieldNo].fillnecessary,
+                        disable: !permissiondata[field.fieldNo].writePermission,
+                        hidden: !permissiondata[field.fieldNo].visible,
+                        click: field.click || (() => { }),
+                        params: {
+                            remark1: field.remark1,
+                            remark2: field.remark2,
+                            remark3: field.remark3,
+                            remark4: field.remark4,
+                            processDefinitionId: params.processDefinitionId,
+                            processInsId: params.processInsId,
+                            moduleId: params.moduleId,
+                            product: params.product,
+                            taskDefKey: params.taskDefKey,
+                            taskId: params.taskId,
+                            formId: params.formId,
+                            businessKey: params.businessKey,
+                            transitions: params.transitions,
+                            permissiondata: permissiondata[field.fieldNo],
+                            properties: params.properties,
+                            global: params.global,
+                            preview: params.preview || false
+                        }
+                    }))
+            }
 
+        })
+        return newFields
+    }
 }

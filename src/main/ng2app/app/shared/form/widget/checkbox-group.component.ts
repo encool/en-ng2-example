@@ -6,7 +6,7 @@ import { Observable } from 'rxjs/Observable';
 
 import { CheckboxGroupField } from './checkbox-group.field'
 
-import { UIComponent } from '../../decorators/ui-component.decorator'
+import { UIComponent } from '../../../commonshared/decorators/ui-component.decorator'
 
 @UIComponent({
     selector: 'f-checkbox-group',

@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, ContentChild } from '@angular/core';
 
 import { DropdownField } from '../../shared/form/dropdown-field';
-import { FieldBase } from '../../shared/form/field-base';
+import { FieldBase } from '../../commonshared/form/field-base';
 import { TextField } from '../../shared/form/text-field';
 import { DatetimePickField } from '../../shared/form/widget/datetime-pick.field'
 import { DynamicFormHorizontalComponent } from '../../shared/form/dynamic-form-horizontal.component'

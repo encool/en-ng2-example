@@ -1,4 +1,4 @@
-import { FieldBase } from './field-base';
+import { FieldBase } from '../../commonshared/form/field-base';
 
 export class CustomTemplateField extends FieldBase<string> {
     controlType = 'customtemplate';

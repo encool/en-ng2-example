@@ -18,7 +18,9 @@ import { Component, OnInit } from '@angular/core';
         -webkit-box-orient: vertical;
         -webkit-box-direction: normal;
         flex-direction: column;
+        padding: 20px 20px 50px;
     }
+
     `
     ]
 })

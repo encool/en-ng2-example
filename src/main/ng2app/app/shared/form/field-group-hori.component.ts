@@ -1,9 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { FieldGroup } from './field-group';
-import { FieldControlService } from './field-control.service';
+import { FieldGroup } from '../../commonshared/form/field-group'
+import { FieldControlService } from '../../commonshared/form/field-control.service';
 
-import { UIComponent } from '../decorators/ui-component.decorator'
+import { UIComponent } from '../../commonshared/decorators/ui-component.decorator'
 
 @UIComponent({
     selector: 'df-field-group-hori',

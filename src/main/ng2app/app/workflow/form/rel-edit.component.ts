@@ -2,8 +2,8 @@ import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { Headers, Http, URLSearchParams, RequestOptions } from '@angular/http';
 
 import { DropdownField } from '../../shared/form/dropdown-field';
-import { FieldBase } from '../../shared/form/field-base';
-import { FieldGroup } from '../../shared/form/field-group';
+import { FieldBase } from '../../commonshared/form/field-base'
+import { FieldGroup } from '../../commonshared/form/field-group';
 import { TextField } from '../../shared/form/text-field';
 import { DynamicFormComponent } from '../../shared/form/dynamic-form.component'
 
@@ -50,7 +50,21 @@ export class RelEditComponent implements OnInit {
                         order: 2,
                         isObject: true,
                         disable: true
-                    }),]
+                    }),
+                    new DropdownField({
+                        key: 'webDisplayTypeId',
+                        label: '模板类型',
+                        required: true,
+                        disable: true,
+                        span: 6,
+                        order: 3,
+                        optionsOb: this.http.get('flowservice/gettemplateslist', new RequestOptions({
+                            headers: new Headers({ 'Content-Type': 'application/json;charset=UTF-8' }),
+                        })).map(data => data.json()),
+                        optionId: "categoryNo",
+                        optionName: "categoryName"
+                    }),
+                ]
             }),
 
             new TextField({
@@ -128,7 +142,7 @@ export class RelEditComponent implements OnInit {
     onModalAction(): Promise<any> {
         if (this.modelForm.form.valid) {
             let formdata = this.modelForm.form.value
-            let data = Object.assign(this.$model.model,formdata)
+            let data = Object.assign(this.$model.model, formdata)
             let body = JSON.stringify(this.$model.model);
             let headers = new Headers({ 'Content-Type': 'application/json;charset=UTF-8' });
             let options = new RequestOptions({

@@ -53,14 +53,15 @@ export function projectChildren() {
                 { path: '', redirectTo: '/index', pathMatch: 'full' },
                 { path: 'index', component: IndexComponent },
                 {
-                    path: 'sysmgt', loadChildren: sysmgtChildren
+                    path: 'sysmgt', loadChildren: sysmgtChildren as any
                 },
                 {
-                    path: 'workflow', loadChildren: workflowChildren
+                    path: 'workflow', loadChildren: workflowChildren as any
                 },
                 {
-                    path: 'project', loadChildren: projectChildren
-                },],
+                    path: 'project', loadChildren: projectChildren as any
+                },
+            ],
         },
     ])],
     exports: [RouterModule]

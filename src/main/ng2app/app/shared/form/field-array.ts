@@ -1,5 +1,5 @@
-import { FieldBase } from './field-base'
-import { FieldGroup } from './field-group'
+import { FieldBase } from '../../commonshared/form/field-base';
+import { FieldGroup } from '../../commonshared/form/field-group'
 
 export class FieldArray {
     arrayName: string

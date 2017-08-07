@@ -6,7 +6,7 @@ import { RouterModule } from '@angular/router'
 // import { ProcessConfigComponent } from './config/process-config.component'
 // import { FieldManageComponent } from './form/field-manage.component'
 // import { FormManageComponent } from './form/form-manage.component'
-// import { UsertaskDoCommonComponent } from './process/usertask-do-common.component'
+import { UsertaskDoComponent } from './process/usertask-do.component'
 // import { ServiceproductEntryComponent } from './entry/serviceproduct-entry.component'
 import { TodoComponent } from './process/todo.component'
 // import { TemplateMgtComponent } from './template/template-mgt.component'
@@ -20,5 +20,6 @@ export const routing: ModuleWithProviders = RouterModule.forChild([
   // { path: 'usertaskdo', component: UsertaskDoCommonComponent },
   // { path: 'serviceproductentry', component: ServiceproductEntryComponent },
   { path: 'tasktodo', component: TodoComponent },
+  { path: 'usertaskdo', component: UsertaskDoComponent },
   // { path: 'templatemgt', component: TemplateMgtComponent },
 ]);

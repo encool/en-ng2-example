@@ -3,7 +3,7 @@ import { Component, OnInit, Input } from '@angular/core';
 @Component({
     selector: 'my-div',
     template: `
-        <div [ngStyle]="setStyles()" [ngClass]="setClass()">
+        <div [ngStyle]="stylesExpression" [ngClass]="classExpression">
             <ng-content></ng-content>
         <div>
     `
@@ -14,12 +14,24 @@ export class MydivComponent implements OnInit {
     @Input() padding: any = true
     @Input() hidden: boolean = false
     @Input() styles: string
+    @Input() classes: string
+
+    classExpression: any = {}
+    stylesExpression: any = {}
+
     setClass() {
         var colClassName = "col-sm-" + (this.span == undefined ? 12 : this.span);
         var classOb = {};
         classOb[colClassName] = true
         // classOb['form-horizontal'] = true
         classOb["col-md-offset-" + this.offset] = this.offset == undefined ? false : true;
+        if (this.classes) {           
+            let classes = this.classes.split(" ")
+            for (let i in classes) {
+                // let kvs = classes[i].split(":")
+                classOb[classes[i]] = true
+            }
+        }
         return classOb;
     }
 
@@ -45,7 +57,8 @@ export class MydivComponent implements OnInit {
 
     ngOnInit() {
         // debugger
-        this
+        this.classExpression = this.setClass()
+        this.stylesExpression = this.setStyles()
     }
 
 }

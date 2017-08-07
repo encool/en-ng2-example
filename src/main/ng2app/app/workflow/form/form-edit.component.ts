@@ -3,7 +3,7 @@ import { Headers, Http, URLSearchParams, RequestOptions } from '@angular/http';
 import { Validators } from '@angular/forms'
 
 import { DropdownField } from '../../shared/form/dropdown-field';
-import { FieldBase } from '../../shared/form/field-base';
+import { FieldBase } from '../../commonshared/form/field-base'
 import { TextField } from '../../shared/form/text-field';
 import { RadioGroupField } from '../../shared/form/widget/radio-group.field';
 import { DynamicFormComponent } from '../../shared/form/dynamic-form.component'

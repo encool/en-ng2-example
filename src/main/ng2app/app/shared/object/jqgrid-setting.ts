@@ -1,5 +1,5 @@
 import { JqgridAction } from './jqgrid-action'
-import { FieldBase } from '../form/field-base'
+import { FieldBase } from '../../commonshared/form/field-base';
 
 export class JqgridSetting {
     primaryKey: string

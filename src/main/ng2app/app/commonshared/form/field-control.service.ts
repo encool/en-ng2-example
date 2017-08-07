@@ -11,7 +11,6 @@ export class FieldControlService {
 
   toFormGroup(fields: any[]) {
     let group: any = {};
-
     fields.forEach(field => {
       if (field instanceof FieldArray) {
         const arraygroups = new Array()
@@ -45,7 +44,7 @@ export class FieldControlService {
         }
       }
 
-    }); 
+    });
     return new FormGroup(group);
   }
 }

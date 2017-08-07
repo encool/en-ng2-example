@@ -1,6 +1,6 @@
 import { Component, Input ,OnInit ,AfterViewInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { FieldBase }     from './field-base';
+import { FieldBase } from '../../commonshared/form/field-base';
 @Component({
     selector: 'df-field',
     templateUrl: './dynamic-field.component.html'

@@ -1,4 +1,4 @@
-import { FieldBase } from '../field-base';
+import { FieldBase } from '../../../commonshared/form/field-base';
 import { Observable } from 'rxjs/Observable';
 
 export class Select2Field extends FieldBase<string> {

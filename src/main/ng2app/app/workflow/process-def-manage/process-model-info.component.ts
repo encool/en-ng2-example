@@ -1,9 +1,9 @@
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
-import { AbstractControl }                 from '@angular/forms';
+import { AbstractControl } from '@angular/forms';
 
 import { DropdownField } from '../../shared/form/dropdown-field';
-import { FieldBase }     from '../../shared/form/field-base';
-import { TextField }  from '../../shared/form/text-field';
+import { FieldBase } from '../../commonshared/form/field-base'
+import { TextField } from '../../shared/form/text-field';
 import { DynamicFormComponent } from '../../shared/form/dynamic-form.component'
 
 import { UserService } from '../../service/user.service'
@@ -49,8 +49,8 @@ export class ProcessModelInfoComponent implements OnInit, onModalAction {
         ];
     }
 
-    ngOnInit() { 
-        
+    ngOnInit() {
+
     }
 
     onModalAction(action: ModalAction) {
@@ -64,7 +64,7 @@ export class ProcessModelInfoComponent implements OnInit, onModalAction {
                 if (this.modelForm.form.valid) {
                     return new Promise((resolve, reject) => {
                         resolve("true");
-                    });                   
+                    });
                 } else {
                     toastr.warning("验证不通过");
                     return new Promise((resolve, reject) => {

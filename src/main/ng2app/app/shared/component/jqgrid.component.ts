@@ -7,7 +7,7 @@ import { JqgridCallback } from '../interface/jqgrid.callback'
 import { JqgridSetting } from '../object/jqgrid-setting'
 import { DynamicFormHorizontalComponent } from '../form/dynamic-form-horizontal.component'
 
-import { FieldBase } from '../form/field-base'
+import { FieldBase } from '../../commonshared/form/field-base';
 import { Rule } from '../object/query/rule'
 import { Conditions } from '../object/query/conditions'
 

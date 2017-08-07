@@ -7,10 +7,14 @@ import { PanelComponent } from './component/panel.component'
 import { ZtreeComponent } from './component/ztree.component'
 import { JqgridComponent } from './component/jqgrid.component'
 
-import { ContainerComponent } from './layout/container.component'
-import { MycolComponent } from './layout/mycol.component'
-import { MyrowComponent } from './layout/myrow.component'
-import { MydivComponent } from './layout/mydiv.component'
+// import { ContainerComponent } from './layout/container.component'
+// import { MycolComponent } from './layout/mycol.component'
+// import { MyrowComponent } from './layout/myrow.component'
+// import { MydivComponent } from './layout/mydiv.component'
+// import { MyformComponent } from './layout/myform.component'
+
+import { CommonsharedModule } from '../commonshared/commonshared.module'
+
 import { TabsComponent } from './form/widget/tabs.component'
 import { TabpanelComponent } from './form/widget/tabpanel.component'
 
@@ -27,7 +31,6 @@ import { TextComponent } from './form/widget/text.component'
 import { RadioGroupComponent } from './form/widget/radio-group.component'
 import { CheckboxGroupComponent } from './form/widget/checkbox-group.component'
 import { KeysPipe } from './pipes/keys.pipe'
-import { MyformComponent } from './layout/myform.component'
 import { DatetimePickComponent } from './form/widget/datetime-pick.component'
 import { TextareaComponent } from './form/widget/textarea.component'
 import { Select2Component } from './form/widget/select2.component'
@@ -44,9 +47,9 @@ import { EchartsComponent } from './component/echarts.component'
   declarations: [
     PanelComponent,
     ZtreeComponent,
-    MyrowComponent,
-    MycolComponent,
-    ContainerComponent,
+    // MyrowComponent,
+    // MycolComponent,
+    // ContainerComponent,
     DynamicFormComponent,
     DynamicFormfieldComponent,
     DynamicFormHorizontalComponent,
@@ -56,7 +59,7 @@ import { EchartsComponent } from './component/echarts.component'
     // BpmnEditorComponent,
     TabsComponent,
     TabpanelComponent,
-    MydivComponent,
+    // MydivComponent,
     SimpleModalComponent,
     DropdownComponent,
     CheckboxComponent,
@@ -64,7 +67,7 @@ import { EchartsComponent } from './component/echarts.component'
     TextComponent,
     RadioGroupComponent,
     KeysPipe,
-    MyformComponent,
+    // MyformComponent,
     DatetimePickComponent,
     TextareaComponent,
     Select2Component,
@@ -78,9 +81,7 @@ import { EchartsComponent } from './component/echarts.component'
     ReactiveFormsModule,
     PanelComponent,
     ZtreeComponent,
-    MyrowComponent,
-    MycolComponent,
-    ContainerComponent,
+    CommonsharedModule,
     DynamicFormComponent,
     DynamicFormfieldComponent,
     DynamicFormHorizontalComponent,
@@ -89,13 +90,13 @@ import { EchartsComponent } from './component/echarts.component'
     // BpmnEditorComponent, 
     TabsComponent,
     TabpanelComponent,
-    MydivComponent,
+    // MydivComponent,
     DropdownComponent,
     CheckboxComponent,
     TextComponent,
     RadioGroupComponent,
     KeysPipe,
-    MyformComponent,
+    // MyformComponent,
     DatetimePickComponent,
     TextareaComponent,
     Select2Component,

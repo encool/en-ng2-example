@@ -10,6 +10,8 @@ import { RelEditComponent } from './rel-edit.component'
 import { ModalService } from '../../service/modal.service'
 import { WorkflowService } from '../../core/workflow/workflow.service'
 
+import { UsertaskDoComponent } from '../process/usertask-do.component'
+
 @Component({
     selector: 'form-manage',
     template: `
@@ -107,6 +109,8 @@ export class FormManageComponent implements OnInit {
 
     fields: any[] = []
 
+    UITypes: any
+
     constructor(private http: Http, private vcRef: ViewContainerRef, private componentFactoryResolver: ComponentFactoryResolver,
         private modalService: ModalService, private flowService: WorkflowService) {
         this._modalContext = {
@@ -115,7 +119,11 @@ export class FormManageComponent implements OnInit {
         }
     }
 
-    ngOnInit() { }
+    ngOnInit() {
+        this.flowService.getAllUItypesInMap().subscribe(data => {
+            this.UITypes = data
+        })
+    }
 
     reloadPreviewFields(formId?: string) {
         if (formId == null) {
@@ -129,11 +137,12 @@ export class FormManageComponent implements OnInit {
             // debugger
             let fields = data.all
             let pms = this.getfakePermission(fields)
-            this.fields = this.flowService.toWfFormGroupField(data.all, pms,
+            this.fields = UsertaskDoComponent.toWfFormGroupField(fields, pms,
                 {
                     product: { productNo: "productNo" },
                     preview: true
-                })
+                },
+                this.UITypes)
         })
     }
 

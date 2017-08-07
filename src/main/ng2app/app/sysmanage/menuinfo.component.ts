@@ -4,7 +4,7 @@ import { FieldDataService } from '../shared/form/field-data.service'
 import { MenuService } from '../core/menu/menu.service'
 
 import { DropdownField } from '../shared/form/dropdown-field';
-import { FieldBase } from '../shared/form/field-base';
+import { FieldBase } from '../commonshared/form/field-base'
 import { TextField } from '../shared/form/text-field';
 
 import { onModalAction } from '../shared/interface/modal_hook'

@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { Headers, Http, URLSearchParams, RequestOptions, Response } from '@angular/http';
 
 import { DropdownField } from '../../shared/form/dropdown-field';
-import { FieldBase } from '../../shared/form/field-base';
+import { FieldBase } from '../../commonshared/form/field-base'
 import { TextField } from '../../shared/form/text-field';
 import { DynamicFormHorizontalComponent } from '../../shared/form/dynamic-form-horizontal.component'
 import { DynamicFormComponent } from '../../shared/form/dynamic-form.component'
@@ -69,11 +69,17 @@ export class TemplateInfoComponent implements OnInit {
             }),
             new TextField({
                 key: 'url',
-                label: '组件名称',
+                label: '组件编码',
                 required: true,
                 span: 6,
                 order: 3
             }),
+            new TextField({
+                key: 'mobileUrl',
+                label: '移动组件编码',
+                span: 6,
+                order: 3
+            }),            
             new TextField({
                 key: 'describe',
                 label: '描述',

@@ -3,7 +3,7 @@ import { FormGroup } from '@angular/forms';
 
 import { TextareaField } from './textarea.field'
 
-import { UIComponent } from '../../decorators/ui-component.decorator'
+import { UIComponent } from '../../../commonshared/decorators/ui-component.decorator'
 
 @UIComponent({
     selector: 'f-textarea',

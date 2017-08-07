@@ -36,6 +36,7 @@ export class TemplateMgtComponent implements OnInit {
         new ColModel({ label: "编码", name: "categoryNo", width: 20 }),
         new ColModel({ label: "名称", name: "categoryName", width: 20 }),
         new ColModel({ label: "组件", name: "url", width: 20 }),
+        new ColModel({ label: "移动组件", name: "mobileUrl", width: 20 }),
         new ColModel({ label: "描述", name: "describe", width: 20 }),
     ]
     _grid_actions = [

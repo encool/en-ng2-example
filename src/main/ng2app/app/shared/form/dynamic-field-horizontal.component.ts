@@ -4,10 +4,10 @@ import {
     ComponentFactoryResolver, ComponentRef
 } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { FieldBase } from './field-base';
+import { FieldBase } from '../../commonshared/form/field-base';
 import { DropdownField } from './dropdown-field'
 
-import { uimap } from '../decorators/ui-component.decorator'
+import { uimap } from '../../commonshared/decorators/ui-component.decorator'
 
 // <f-text - input * ngSwitchCase="'textinput'"[simple] = "false"[form] = "form"[field] = "field"[model] = "model" > </f-text-input>
 // <f-dropdown - input * ngSwitchCase="'dropdowninput'"[simple] = "false"[form] = "form"[field] = "field"[model] = "model" > </f-dropdown-input>
@@ -57,7 +57,6 @@ export class DynamicfieldHorizontalComponent implements OnInit, AfterViewInit {
     ngOnChanges(changes: { [propertyName: string]: SimpleChange }) {
         if (changes['fields'] && changes['fields'].currentValue) {
             setTimeout(() => {
-                // debugger
                 this.fields.forEach((field) => {
                     // debugger
                     let comp: Type<any> = uimap.get(field.selector)

@@ -2,7 +2,7 @@ import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
 
 import { DropdownField } from '../shared/form/dropdown-field';
-import { FieldBase } from '../shared/form/field-base';
+import { FieldBase } from '../commonshared/form/field-base'
 import { TextField } from '../shared/form/text-field';
 import { DynamicFormHorizontalComponent } from '../shared/form/dynamic-form-horizontal.component'
 

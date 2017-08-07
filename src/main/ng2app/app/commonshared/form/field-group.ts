@@ -1,4 +1,4 @@
-import { FieldBase } from './field-base'
+import { FieldBase } from '../../commonshared/form/field-base';
 import { ValidatorFn, AsyncValidatorFn, Validators } from '@angular/forms';
 
 export class FieldGroup extends FieldBase<any>{

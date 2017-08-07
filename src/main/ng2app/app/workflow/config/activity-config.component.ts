@@ -4,7 +4,7 @@ import { Tab } from '../../shared/form/widget/tab'
 import { FormGroup } from '@angular/forms'
 import { Observable } from 'rxjs/Observable'
 
-import { FieldBase } from '../../shared/form/field-base'
+import { FieldBase } from '../../commonshared/form/field-base'
 import { TextField } from '../../shared/form/text-field'
 import { WorkflowService } from '../../core/workflow/workflow.service'
 import { ModalService } from '../../service/modal.service'

@@ -1,7 +1,7 @@
 import { Component, Input, OnInit }  from '@angular/core';
 import { FormGroup }                 from '@angular/forms';
-import { FieldBase }              from './field-base';
-import { FieldControlService }    from './field-control.service';
+import { FieldBase } from '../../commonshared/form/field-base';
+import { FieldControlService } from '../../commonshared/form/field-control.service';
 @Component({
     selector: 'dynamic-form',
     templateUrl: './dynamic-form.component.html',

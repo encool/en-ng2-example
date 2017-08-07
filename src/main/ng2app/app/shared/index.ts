@@ -23,13 +23,13 @@ export { RadioGroupField } from './form/widget/radio-group.field'
 export { Select2Field } from './form/widget/select2.field'
 export { TextareaField } from './form/widget/textarea.field'
 export { DropdownField } from './form/dropdown-field'
-export { FieldGroup } from './form/field-group'
+export { FieldGroup } from '../commonshared/form/field-group'
 export { TextField } from './form/text-field'
-export { FieldBase } from './form/field-base'
-export { CustomTemplateField } from './form/custom-template.field'
+export { FieldBase } from '../commonshared/form/field-base';
+// export { CustomTemplateField } from './form/custom-template.field'
 
 export { TextQueryField } from './form/text.query.field'
 
-export { UIComponent } from './decorators/ui-component.decorator'
+export { UIComponent } from '../commonshared/decorators/ui-component.decorator'
 
 export { SharedModule } from './shared.module'

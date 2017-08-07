@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { UIComponent } from '../../shared/decorators/ui-component.decorator'
+import { UIComponent } from '../../commonshared//decorators/ui-component.decorator'
 
 
 @UIComponent({

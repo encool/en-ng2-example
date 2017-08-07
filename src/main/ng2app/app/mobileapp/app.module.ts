@@ -12,7 +12,7 @@ import { AppComponent } from './app.component';
 // import { MenusidebarComponent } from './core/sidebar/menusidebar.component'
 // import { IndexComponent } from './index.component'
 
-import { AppRoutingModule } from './app.routing';
+import { AppRouting } from './app.routing';
 
 import { SecurityService } from '../core/security/security.service'
 import { UserService } from '../service/user.service'
@@ -31,28 +31,26 @@ import { TodoComponent } from './workflow/process/todo.component'
 
 // import { BreadcrumbmenuGuard } from '../core'
 
-import { CoreModule } from './core/core.module'
 import { WorkflowModule } from './workflow/workflow.module'
+import { CoreModule } from './core/core.module'
 
+import 'hammerjs';
 // import { ModalModule } from 'angular2-modal';
 // import { BootstrapModalModule } from 'angular2-modal/plugins/bootstrap';
 
 @NgModule({
   imports: [
-    ReactiveFormsModule,
-    CommonModule,
     BrowserModule,
-    FormsModule,
     HttpModule,
     JsonpModule,
     BrowserAnimationsModule,
-    // AppRoutingModule,
-    RouterModule.forRoot([
-      {
-        path: 'd',
-        component: TodoComponent
-      }
-    ]),
+    AppRouting,
+    // RouterModule.forRoot([
+    //   {
+    //     path: 'd',
+    //     component: TodoComponent
+    //   }
+    // ]),
     SharedModule.forRoot(),
     CoreModule,
     WorkflowModule
