@@ -5,7 +5,7 @@ import 'rxjs/add/observable/forkJoin'
 
 import { TextComponent } from '../../shared/form/widget/text.component'
 import { TextField } from '../../shared/form/text-field'
-import { DropdownField } from '../../shared/form/dropdown-field'
+import { DropdownField } from '../../commonshared/form/dropdown-field'
 
 import { WorkflowService } from '../../core/workflow/workflow.service'
 

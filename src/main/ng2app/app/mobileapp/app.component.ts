@@ -57,6 +57,16 @@ export class AppComponent {
     }
 
     menuClick(menu) {
-        this.router.navigate(['workflow/tasktodo', menu])
+        switch (menu) {
+            case "todo":
+                this.router.navigate(['workflow/tasktodo',])
+                break;
+            case "start":
+                this.router.navigate(['workflow/serviceproductentry',])
+                break;
+            default:
+                break;
+        }
+
     }
 }

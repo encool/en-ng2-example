@@ -23,7 +23,7 @@ import { uimap } from '../../../commonshared/decorators/ui-component.decorator'
 @Component({
     selector: 'df-field-m',
     template: `
-    <div fxLayout='row' fxLayoutWrap fxLayoutGap="15px" fxLayoutAlign="start baseline" style="padding:10px;align-content:flex-start">
+    <div class="formContainer" fxLayout='row' fxLayoutWrap fxLayoutGap="15px" fxLayoutAlign="start baseline" style="padding:10px;align-content:flex-start">
         <ng-template #wrapper>
         </ng-template>    
     </div>
@@ -78,6 +78,7 @@ export class DynamicfieldMComponent implements OnInit, AfterViewInit {
                         comp = uimap.get("m-custom")
                         myComponentFactory
                             = this.componentFactoryResolver.resolveComponentFactory(comp)
+                        console.warn("create component error:" + comp)
                     }
                     let cmpRef: ComponentRef<any>
 

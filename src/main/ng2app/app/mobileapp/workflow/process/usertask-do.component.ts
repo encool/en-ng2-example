@@ -1,10 +1,12 @@
-import { Component, OnInit, ViewContainerRef, ComponentFactoryResolver, ViewChild, Output, Input, EventEmitter } from '@angular/core';
+import { Component, OnInit, ViewContainerRef, ComponentFactoryResolver, ViewChild, Output, Input, EventEmitter, Type } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject'
 import 'rxjs/Subject'
 import 'rxjs/add/observable/forkJoin'
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Headers, Http, URLSearchParams, RequestOptions } from '@angular/http';
+
+import { MdSnackBar } from '@angular/material';
 
 import { DynamicFormMComponent } from '../../shared/form/dynamic-form-m.component'
 
@@ -16,13 +18,15 @@ import { ModalService } from '../../../service/modal.service'
 // import { TextInputComponent } from '../../shared/form/textinput/textinput.component'
 import { CustomTemplateField } from '../../../commonshared/form/custom-template.field'
 
+import { uimap } from '../../../commonshared/decorators/ui-component.decorator'
+
 // import { BpmnMonitorComponent } from '../bpmn2/bpmn-monitor.component'
 // import { BpmnViewerComponent } from '../bpmn2/bpmn-viewer.component'
 // <button type="button" *ngIf="processInsId" class="btn btn-default">退回</button>    
 @Component({
     selector: 'usertask-do',
     template: `
-        <my-div [classes]="'container-viewer'" [hidden]="completed" [styles]="'background: #fff; border: 2px solid #dadada; box-shadow: 0 0 10px #d0d0d0;'">
+        <my-div [classes]="'container-viewer'" [hidden]="completed" [styles]="'padding: 10px 15mm; max-width:180mm;background: #fff; border: 2px solid #dadada; box-shadow: 0 0 10px #d0d0d0;'">
             <my-div span=12 [hidden]="global.handleinline">
                 <button md-button *ngIf="isstart" class="btn btn-primary" (click)="submitFlow()">提交</button>
                 <button md-button *ngIf="!isstart" class="btn btn-primary" (click)="autoswitchcommit()">提交</button>
@@ -91,7 +95,7 @@ export class UsertaskDoComponent implements OnInit {
 
     constructor(private vcRef: ViewContainerRef, private componentFactoryResolver: ComponentFactoryResolver,
         private securityService: SecurityService, private http: Http, private route: ActivatedRoute,
-        private flowService: WorkflowService, private modalService: ModalService) {
+        private flowService: WorkflowService, public snackBar: MdSnackBar) {
         this._modalContext = {
             vcRef: vcRef,
             componentFactoryResolver: componentFactoryResolver
@@ -113,8 +117,8 @@ export class UsertaskDoComponent implements OnInit {
             this.processDefinitionId = data["processDefinitionId"] || data["PROC_DEF_ID_"]
             this.taskId = data["taskId"]
 
-            if (!this.taskId) {
-                setTimeout(function () {
+            if (this.taskId) {
+                setTimeout(() => {
                     this.isstart = false
                 });
             }
@@ -162,13 +166,26 @@ export class UsertaskDoComponent implements OnInit {
                     this.transitions = res[1]
                     this.transition = res[1][0]
                     this.fields = UsertaskDoComponent.toWfFormGroupField(this.formfields, this.permissiondata, this, this.UITypes)
+
+                    this.handleValuesIn(this.fields, formValue)
                     setTimeout(() => {
+                        // debugger
                         this.formCom.form.patchValue(formValue)
                         this.onFieldInit.next("data")
                     })
                 })
 
             });
+        })
+    }
+
+    handleValuesIn(field: any[], formValue: any) {
+
+        field.forEach(field => {
+            let comp: any = uimap.get(field.selector)
+            if (comp && comp.handleValue) {
+                formValue[field.key] = comp.handleValue('in', formValue[field.key], field)
+            }
         })
     }
 
@@ -191,8 +208,12 @@ export class UsertaskDoComponent implements OnInit {
 
     submitFlow() {
         debugger
+        // this.formCom.ngForm.submitted = true
+        // this.formCom.ngForm.
         if (this.formCom && !this.formCom.form.valid) {
-            toastr.warning('验证失败')
+            this.snackBar.open('验证失败', 'x', {
+                duration: 3000
+            })
             return
         }
 
@@ -226,9 +247,13 @@ export class UsertaskDoComponent implements OnInit {
             .then((data) => {
                 if (data.json().result == "200") {
                     this.completed = true
-                    toastr.success('操作成功！')
+                    this.snackBar.open('操作成功！', 'x', {
+                        duration: 3000
+                    })
                 } else {
-                    toastr.warning('something wrong！')
+                    this.snackBar.open('操作失败！请刷新后重试，联系系统维护人员。', 'x', {
+                        duration: 3000
+                    })
                 }
             })
 
@@ -276,10 +301,10 @@ export class UsertaskDoComponent implements OnInit {
                 && this.properties.freechoose != undefined
                 && this.properties.freechoose != "";
             if (!hasSelectPage) {
-                this.modalService.openConfirm(this._modalContext, { title: "是否确认", message: '确定提交？' }, (data) => {
-                    // debugger
-                    this.completeTask()
-                })
+                // this.modalService.openConfirm(this._modalContext, { title: "是否确认", message: '确定提交？' }, (data) => {
+                debugger
+                //     this.completeTask()
+                // })
                 // Modal.openConfirm({ message: '确定提交？' }, function () {
                 //     functions.commit($event)
                 // })
@@ -315,9 +340,10 @@ export class UsertaskDoComponent implements OnInit {
             }
 
             //否定意见 退回流程
-            this.modalService.openConfirm(this._modalContext, { title: "是否确认", message: '确定提交？' }, (data) => {
-                this.rejectTask()
-            })
+            // this.modalService.openConfirm(this._modalContext, { title: "是否确认", message: '确定提交？' }, (data) => {
+            debugger
+            this.rejectTask()
+            // })
             // this.modalService.openConfirm({ message: '确定提交？' }, function () {
             //     functions.newField_click($event)
             // })
@@ -640,6 +666,7 @@ export class UsertaskDoComponent implements OnInit {
                         hidden: !permissiondata[field.fieldNo].visible,
                         click: field.click || (() => { }),
                         params: {
+                            primaryField: field,
                             inputType: field.fieldType == 'INT' ? 'number' : null,
                             remark1: field.remark1,
                             remark2: field.remark2,

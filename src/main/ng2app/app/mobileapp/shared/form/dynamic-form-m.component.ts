@@ -1,5 +1,5 @@
-import { Component, Input, OnInit, SimpleChange } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { Component, Input, OnInit, SimpleChange, ViewChild } from '@angular/core';
+import { FormGroup, FormGroupDirective } from '@angular/forms';
 import { FieldBase } from '../../../commonshared/form/field-base';
 import { FieldControlService } from '../../../commonshared/form/field-control.service';
 @Component({
@@ -14,6 +14,8 @@ import { FieldControlService } from '../../../commonshared/form/field-control.se
 export class DynamicFormMComponent implements OnInit {
     @Input() fields: FieldBase<any>[] = [];
     @Input() model: any = {};
+
+    @ViewChild(FormGroupDirective) ngForm: FormGroupDirective
     form: FormGroup;
     payLoad = '';
     constructor(private fcs: FieldControlService) {

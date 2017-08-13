@@ -1,5 +1,5 @@
 import { Injectable }       from '@angular/core';
-import { DropdownField } from './dropdown-field';
+import { DropdownField } from '../../commonshared/form/dropdown-field';
 import { FieldBase } from '../../commonshared/form/field-base';
 import { TextField }  from './text-field';
 @Injectable()

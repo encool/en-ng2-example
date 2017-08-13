@@ -5,7 +5,7 @@ import {
 } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { FieldBase } from '../../commonshared/form/field-base';
-import { DropdownField } from './dropdown-field'
+import { DropdownField } from '../../commonshared/form/dropdown-field'
 
 import { uimap } from '../../commonshared/decorators/ui-component.decorator'
 

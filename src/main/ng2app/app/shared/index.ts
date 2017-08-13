@@ -22,7 +22,7 @@ export { FileUploadField } from './form/widget/file-upload.field'
 export { RadioGroupField } from './form/widget/radio-group.field'
 export { Select2Field } from './form/widget/select2.field'
 export { TextareaField } from './form/widget/textarea.field'
-export { DropdownField } from './form/dropdown-field'
+export { DropdownField } from '../commonshared/form/dropdown-field'
 export { FieldGroup } from '../commonshared/form/field-group'
 export { TextField } from './form/text-field'
 export { FieldBase } from '../commonshared/form/field-base';

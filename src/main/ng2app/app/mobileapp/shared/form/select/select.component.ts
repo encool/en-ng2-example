@@ -1,43 +1,33 @@
 import { Component, Input, OnInit, AfterViewInit, SimpleChanges } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, AbstractControl } from '@angular/forms';
 import { Headers, Http, URLSearchParams, RequestOptions } from '@angular/http';
 
 import { Observable } from 'rxjs/Observable';
 
-import { DropdownField } from '../../commonshared/form/dropdown-field'
+import { DropdownField } from '../../../../commonshared/form/dropdown-field'
 
-import { UIComponent } from '../../commonshared/decorators/ui-component.decorator'
-
+import { UIComponent } from '../../../../commonshared/decorators/ui-component.decorator'
+// 
+// [(ngModel)]="model" 
 @UIComponent({
-    selector: 'f-dropdown-input',
-    component: DropdownComponent
+    selector: 'm-selector',
+    component: SelectComponent
 })
 @Component({
-    selector: 'f-dropdown-input',
+    selector: 'm-selector',
     template: `
-    <div [ngSwitch]="simple">
-        <div *ngSwitchCase="false" [formGroup]="form" [style.display]="field.hidden ? 'none':'inline'" [ngClass]="classExpression">
-    	    <label [attr.for]="field.key" class="control-label" style="float: left;width:75px">{{field.label}}</label>
-            <div style="margin-left:85px">
-                <select [id]="field.key" [formControlName]="field.key"
-                        class="form-control"> 
-                    <option *ngFor="let opt of field.options" [value]="opt[field.optionId]">{{opt[field.optionName]}}</option>
-                </select>
-            </div>  
-        </div>
-        <div *ngSwitchCase="true"  [style.display]="hidden ? 'none':'inline'" [ngClass]="ngclasses()">
-    	    <label [attr.for]="key" class="control-label" style="float: left;width:75px">{{label}}</label>
-            <div class="" style="margin-left:85px">
-                <select [id]="key" [(ngModel)]="model[key]" [disabled]="disabled"
-                        class="form-control"> 
-                    <option *ngFor="let opt of options" [value]="opt[optionId]">{{opt[optionName]}}</option>
-                </select>
-            </div>       
-        </div>  
-    </div>                                   
-    `
+        <md-select [eNfxFlex]="eNfxFlex" [eNfxFlex.xs]="eNfxFlexXs" fxShrink="0" fxGrow="0" style="min-height: 55px;padding-top: 15px;width: 100%;" 
+            [floatPlaceholder]="true" [placeholder]="label"            
+            [formControl]="controll"
+            floatPlaceholder="never"
+            [multiple]="multiple" 
+            (change)=OnChange($event)>           
+            <md-option>无</md-option>
+            <md-option *ngFor="let option of options" [value]="option[optionId]">{{ option[optionName] }}</md-option>
+        </md-select>      
+    `,
 })
-export class DropdownComponent implements OnInit {
+export class SelectComponent implements OnInit {
     @Input() simple: boolean = true
     @Input() key: string = 'dropdowninput'
     @Input() label: string = ''
@@ -49,15 +39,18 @@ export class DropdownComponent implements OnInit {
     @Input() options: any[] = []
     @Input() optionId: string = 'key'
     @Input() optionName: string = 'value'
+    @Input() multiple: boolean = false
+
 
     @Input() field: DropdownField;
     @Input() form: FormGroup;
-    @Input() model: any = {};
+    @Input() model: any;
 
-    _tipmsg: string = "必填项";
+    controll: AbstractControl
+    dictName: string
 
-    key1: string
-    key2: string
+    eNfxFlex: string
+    eNfxFlexXs: string
 
     classExpression: any = {}
 
@@ -66,34 +59,34 @@ export class DropdownComponent implements OnInit {
     }
 
     ngOnInit() {
-        if (this.model == undefined) {
-            this.model = {}
-        }
+        // debugger
         if (!this.simple) {
+            this.label = this.field.label
+            this.key = this.field.key
             this.field._view = this
-            this.field._control = this.form.get(this.field.key)
+            this.controll = this.field._control = this.form.get(this.field.key)
+            this.span = this.field.span == undefined ? 4 : this.field.span
+            this.eNfxFlex = "calc(" + (this.span / 12) * 100 + "% - 15px)"
+            // this.eNfxFlexXs = "calc(100% - 15px)"
+            this.eNfxFlexXs = "100%"
+            this.multiple = SelectComponent.isMutipleField(this.field)
+            this.dictName = this.field.params.primaryField.dictName
 
-            // let key = this.field.key
-            // if (this.field.isObject && key.indexOf(".") != -1) {
-            //     let keys = key.split(".")
-            //     this.key1 = keys[0]
-            //     if (this.model[this.key1] == undefined) {
-            //         this.model[this.key1] = {}
-            //     }
-            //     this.key2 = keys[1]
-            // }
+            this.patchValueToView()
+            this.controll.valueChanges.forEach(
+                (data) => {
+                    this.patchValueToView()
+                }
+            )
+
             if (this.field.options == undefined
                 || this.field.options.length == 0) {
                 if (this.field.optionsOb) {
-                    this.field.optionsOb.subscribe(data => this.field.options = data)
-                } else if (this.field.dictName) {
-                    this.getDictDataObserable(this.field.dictName).subscribe(data => this.field.options = data)
-                    if (this.field.optionId == "key") {
-                        this.field.optionId = 'dictdataName'
-                    }
-                    if (this.field.optionName == "value") {
-                        this.field.optionName = 'dictdataValue'
-                    }
+                    this.field.optionsOb.subscribe(data => this.options = data)
+                } else if (this.dictName) {
+                    this.getDictDataObserable(this.dictName).subscribe(data => this.options = data)
+                    this.optionId = 'dictdataName'
+                    this.optionName = 'dictdataValue'
                 }
             }
         } else {
@@ -115,6 +108,31 @@ export class DropdownComponent implements OnInit {
             this.classExpression["col-sm-" + span] = true;
         }
 
+    }
+
+    patchValueToView() {
+        if (this.controll.value && this.multiple && typeof this.controll.value == 'string') {
+            let v: string = this.controll.value
+            this.model = v.split(',')
+        } else if (this.controll.value && !this.multiple) {
+            this.model = this.controll.value
+        } else {
+            this.model = {}
+        }
+    }
+
+    OnChange(change) {
+        let value
+        if (this.multiple) {
+            value = change.value.join(",")
+        } else {
+            value = change.value
+        }
+        this.form.patchValue(
+            {
+                [this.key]: value
+            }
+        )
     }
 
     ngclasses() {
@@ -180,5 +198,32 @@ export class DropdownComponent implements OnInit {
             })
         }
         return null
+    }
+
+    static handleValue(type: string, input: any, field): any {
+        switch (type) {
+            case 'in':
+                if (typeof input === 'string' && SelectComponent.isMutipleField(field)) {
+                    return input.split(',')
+                } else if (input == null) {
+                    return []
+                } else {
+                    return input
+                }
+            case 'out':
+                if (Array.isArray(input)) {
+                    return input.join(',')
+                } else {
+                    return input
+                }
+
+            default:
+                break;
+        }
+    }
+
+    static isMutipleField(field) {
+        return field.params.primaryField.multiple ||
+            field.params.primaryField.webDisplayTypeId === "Select2Component" //电脑端的多选组件
     }
 }

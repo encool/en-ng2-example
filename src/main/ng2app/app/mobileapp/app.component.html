@@ -36,13 +36,13 @@
     <md-nav-list>
       <!-- 只是为了初始化一下md-menu，这样md-menu-item样式就不会出错 -->
       <md-menu></md-menu>
-      <button md-menu-item (click)='menuClick($event)'>
+      <button md-menu-item (click)='menuClick("todo")'>
         <md-icon>dialpad</md-icon>
         <span>待办</span>
       </button>
-      <button md-menu-item disabled>
+      <button md-menu-item (click)='menuClick("start")'>
         <md-icon>voicemail</md-icon>
-        <span>Check voicemail</span>
+        <span>流程发起</span>
       </button>
       <button md-menu-item>
         <md-icon>notifications_off</md-icon>

@@ -16,7 +16,7 @@ import { SharedModule } from '../shared/shared.module'
 import { UsertaskDoComponent } from './process/usertask-do.component'
 // import { UsertaskDoCommonComponent } from './process/usertask-do-common.component'
 // import { TaskFormComponent } from './process/task-form.component'
-// import { ServiceproductEntryComponent } from './entry/serviceproduct-entry.component'
+import { ServiceproductEntryComponent } from './entry/serviceproduct-entry.component'
 // import { FormConfigComponent } from './config/form-config.component'
 // import { ActivityConfigComponent } from './config/activity-config.component'
 // import { ChooseCandidateComponent } from './config/choose-candidate.component'
@@ -53,7 +53,7 @@ import { routing } from './workflow.routing';
         // RelAddComponent,
         // UsertaskDoComponent,
         // TaskFormComponent,
-        // ServiceproductEntryComponent,
+        ServiceproductEntryComponent,
         // BpmnEditorComponent,
         // FormConfigComponent,
         // ActivityConfigComponent,
@@ -94,6 +94,7 @@ import { routing } from './workflow.routing';
         // BpmnMonitorComponent,
         // AuditinfoComponent,
         // CustomComponent,
+        ServiceproductEntryComponent,
     ]
 })
 export class WorkflowModule {

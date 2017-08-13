@@ -4,22 +4,20 @@ import { FormGroup, FormControl, AbstractControl, Validators } from '@angular/fo
 import { UIComponent } from '../../../../commonshared//decorators/ui-component.decorator'
 
 @UIComponent({
-    selector: 'm-text-input',
-    component: TextInputComponent
+    selector: 'm-textarea',
+    component: TextareaComponent
 })
 @Component({
-    selector: 'm-text-input',
+    selector: 'm-textarea',
     template:
     `
-        <md-input-container [eNfxFlex]="eNfxFlex" [eNfxFlex.xs]="eNfxFlexXs" 
-            [hideRequiredMarker]="false"
-            fxShrink="1" fxGrow="0" style="width:100%">
-          <input mdInput [type]="field.params.inputType" [placeholder]="lable" [formControl]="fieldControl">
+        <md-input-container [eNfxFlex]="eNfxFlex" [eNfxFlex.xs]="eNfxFlexXs" fxShrink="1" fxGrow="0" style="width:100%">
+          <textarea  mdInput [type]="field.params.inputType" [placeholder]="lable" [formControl]="formControl"></textarea>
         </md-input-container>      
   
     `
 })
-export class TextInputComponent implements OnInit {
+export class TextareaComponent implements OnInit {
 
     @Input() field: any;
     @Input() form: FormGroup;
@@ -30,21 +28,17 @@ export class TextInputComponent implements OnInit {
     eNfxFlex: string
     eNfxFlexXs: string
 
-    fieldControl: AbstractControl
+    formControl: AbstractControl
     constructor() { }
 
     ngOnInit() {
-        this.fieldControl = this.form.get(this.field.key)
+        this.formControl = this.form.get(this.field.key)
         this.span = this.field.span == undefined ? 4 : this.field.span
         this.lable = this.field.label
         this.eNfxFlex = "calc(" + (this.span / 12) * 100 + "% - 15px)"
         // this.eNfxFlexXs = "calc(100% - 15px)"
         this.eNfxFlexXs = "100%"
         // debugger
-
-        this.fieldControl.statusChanges.subscribe(data => {
-            // debugger
-        })
     }
 
 }

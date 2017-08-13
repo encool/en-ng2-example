@@ -18,3 +18,12 @@
     line-height: 1.1;
     color: inherit;
 }
+.formContainer > * {
+  margin: 5px 0;
+}
+.mat-select:not(:focus).ng-invalid:not(.mat-select-disabled) .mat-select-arrow,.mat-select:not(:focus).ng-invalid:not(.mat-select-disabled) .mat-select-trigger {
+  color: #f44336
+}
+.mat-select:not(:focus).ng-invalid:not(.mat-select-disabled) .mat-select-underline {
+    background-color: #f44336;
+}

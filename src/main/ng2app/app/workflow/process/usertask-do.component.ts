@@ -30,7 +30,7 @@ import { BpmnMonitorComponent } from '../bpmn2/bpmn-monitor.component'
     selector: 'usertask-do',
     template: `
         <my-div [hidden]="completed" [styles]="'background: #fff; border: 2px solid #dadada; box-shadow: 0 0 10px #d0d0d0;'">
-            <my-div span=12 [hidden]="global.handleinline">
+            <my-div span=12 *ngIf="global.handleinline == undefined">
                 <button type="button" *ngIf="isstart" class="btn btn-primary" (click)="submitFlow()">提交</button>
                 <button type="button" *ngIf="!isstart" class="btn btn-primary" (click)="autoswitchcommit()">提交</button>
                 <button type="button" *ngIf="!isstart" class="btn btn-primary" (click)="processMonitor()">流程监控</button>                
@@ -119,9 +119,9 @@ export class UsertaskDoComponent implements OnInit {
             this.processInsId = data["PROC_INST_ID_"]
             this.processDefinitionId = data["processDefinitionId"] || data["PROC_DEF_ID_"]
             this.taskId = data["taskId"]
-
-            if (!this.taskId) {
-                setTimeout(function () {
+            
+            if (this.taskId) {
+                setTimeout(() => {
                     this.isstart = false
                 });
             }

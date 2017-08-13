@@ -10,7 +10,7 @@ import {
   MdListModule, MdMenuModule, MdProgressBarModule, MdProgressSpinnerModule,
   MdRadioModule, MdSelectModule, MdSidenavModule, MdSliderModule, MdSortModule,
   MdSlideToggleModule, MdSnackBarModule, MdTableModule, MdTabsModule, MdToolbarModule,
-  MdTooltipModule
+  MdTooltipModule, MdNativeDateModule,
 } from '@angular/material';
 // import { FlexLayoutModule } from '@angular/flex-layout'
 
@@ -21,6 +21,11 @@ import { DynamicfieldMComponent } from './form/dynamic-field-m.component'
 import { DynamicFormMComponent } from './form/dynamic-form-m.component'
 
 import { TextInputComponent } from './form/textinput/textinput.component'
+import { TextareaComponent } from './form/textinput/textarea.component'
+
+import { SelectComponent } from './form/select/select.component'
+import { DatepickerComponent } from './form/datepicker/datepicker.component'
+import { CheckBoxComponent } from './form/checkbox/checkbox.component'
 
 @NgModule({
   imports: [
@@ -56,6 +61,7 @@ import { TextInputComponent } from './form/textinput/textinput.component'
     MdPaginatorModule,
     MdSortModule,
     MdTableModule,
+    MdNativeDateModule,
     // FlexLayoutModule,
   ],
   declarations: [
@@ -63,6 +69,10 @@ import { TextInputComponent } from './form/textinput/textinput.component'
     DynamicfieldMComponent,
     DynamicFormMComponent,
     TextInputComponent,
+    SelectComponent,
+    DatepickerComponent,
+    CheckBoxComponent,
+    TextareaComponent,
   ],
   exports: [
     CommonModule,
@@ -103,9 +113,17 @@ import { TextInputComponent } from './form/textinput/textinput.component'
     DynamicfieldMComponent,
     DynamicFormMComponent,
     TextInputComponent,
+    TextareaComponent,
+    SelectComponent,
+    DatepickerComponent,
+    CheckBoxComponent,
   ],
   entryComponents: [
     TextInputComponent,
+    SelectComponent,
+    DatepickerComponent,
+    CheckBoxComponent,
+    TextareaComponent,
   ]
 })
 export class SharedModule {
